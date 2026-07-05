@@ -11,9 +11,9 @@ Our project is organized as a high-performance Turborepo Monorepo managed with Y
 - **Monorepo Manager:** Turborepo
 - **Package Manager:** Yarn Workspaces
 - **Frontend Applications:** Next.js (located in `apps/web/`)
-- **Backend / API Applications:** Node.js / Next.js API (located in `apps/api/`)
+- **Backend / API Applications:** Node.js / Nest.js API (located in `apps/api/`)
 - **Shared UI Libraries:** React + Tailwind CSS (located in `packages/ui/`)
-- **Core Frameworks:** React 19 & Next.js 15
+- **Core Frameworks:** React 19 & Next.js 16
 - **Language:** TypeScript (Strict Mode)
 
 ## 🚀 Getting Started
