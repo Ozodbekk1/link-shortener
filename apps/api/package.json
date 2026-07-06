@@ -1,5 +1,5 @@
 {
-  "name": "Backend of link shortner",
+  "name": "api",
   "version": "0.0.1",
   "description": "This is link shortner with build using nestjs and nextjs. For architecture used monorepo (turborepo)",
   "author": "Ozodbekk1",
