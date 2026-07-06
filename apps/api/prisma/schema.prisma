@@ -6,12 +6,413 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
 
-  @@map("user")
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
+  BILLING
+}
+
+enum TeamRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum LinkStatus {
+  ACTIVE
+  DISABLED
+  EXPIRED
+  ARCHIVED
+}
+
+enum DomainStatus {
+  PENDING
+  VERIFIED
+  FAILED
+}
+
+enum RedirectType {
+  COUNTRY
+  DEVICE
+  LANGUAGE
+  OS
+}
+
+enum WebhookEventStatus {
+  PENDING
+  DELIVERED
+  FAILED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+model User {
+  id               String     @id @default(uuid())
+  email            String     @unique
+  passwordHash     String     @map("password_hash")
+  name             String
+  avatar           String?
+  emailVerified    Boolean    @default(false) @map("email_verified")
+  twoFactorEnabled Boolean    @default(false) @map("two_factor_enabled")
+  status           UserStatus @default(PENDING)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  ownedOrganizations Organization[]       @relation("OrganizationOwner")
+  memberships        OrganizationMember[]
+  teamMemberships    TeamMember[]
+  links              Link[]
+  notifications      Notification[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String   @unique
+  ownerId   String   @map("owner_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  owner        User                 @relation("OrganizationOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  members      OrganizationMember[]
+  workspaces   Workspace[]
+  roles        Role[]
+
+  @@index([ownerId])
+  @@map("organizations")
+}
+
+model OrganizationMember {
+  id             String           @id @default(uuid())
+  organizationId String           @map("organization_id")
+  userId         String           @map("user_id")
+  role           OrganizationRole @default(MEMBER)
+  joinedAt       DateTime         @default(now()) @map("joined_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+  @@map("organization_members")
+}
+
+model Workspace {
+  id             String   @id @default(uuid())
+  organizationId String   @map("organization_id")
+  name           String
+  slug           String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  teams        Team[]
+  links        Link[]
+  campaigns    Campaign[]
+  domains      Domain[]
+  webhooks     Webhook[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+  @@map("workspaces")
+}
+
+model Team {
+  id          String   @id @default(uuid())
+  workspaceId String   @map("workspace_id")
+  name        String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  members   TeamMember[]
+
+  @@index([workspaceId])
+  @@map("teams")
+}
+
+model TeamMember {
+  id     String   @id @default(uuid())
+  teamId String   @map("team_id")
+  userId String   @map("user_id")
+  role   TeamRole @default(MEMBER)
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@map("team_members")
+}
+
+model Role {
+  id             String  @id @default(uuid())
+  name           String
+  description    String?
+  organizationId String  @map("organization_id")
+
+  organization Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  permissions  RolePermission[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+  @@map("roles")
+}
+
+model Permission {
+  id       String @id @default(uuid())
+  action   String
+  resource String
+
+  roles RolePermission[]
+
+  @@unique([action, resource])
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String @map("role_id")
+  permissionId String @map("permission_id")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@map("role_permissions")
+}
+
+model Link {
+  id                String     @id @default(uuid())
+  userId            String     @map("user_id")
+  workspaceId       String     @map("workspace_id")
+  campaignId        String?    @map("campaign_id")
+  title             String?
+  originalUrl       String     @map("original_url")
+  shortSlug         String     @unique @map("short_slug")
+  customDomain      String?    @map("custom_domain")
+  status            LinkStatus @default(ACTIVE)
+  clickLimit        Int?       @map("click_limit")
+  expiresAt         DateTime?  @map("expires_at")
+  passwordProtected Boolean    @default(false) @map("password_protected")
+  passwordHash      String?    @map("password_hash")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace         Workspace          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  campaign          Campaign?          @relation("PrimaryCampaignLinks", fields: [campaignId], references: [id], onDelete: SetNull)
+  campaignLinks     CampaignLink[]
+  tags              LinkTag[]
+  redirectRules     RedirectRule[]
+  qrCodes           QRCode[]
+  clicks            Click[]
+  dailyAnalytics    DailyAnalytics[]
+  realtimeAnalytics RealtimeAnalytics?
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@index([campaignId])
+  @@index([shortSlug])
+  @@map("links")
+}
+
+model LinkTag {
+  id     String @id @default(uuid())
+  linkId String @map("link_id")
+  tag    String
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@unique([linkId, tag])
+  @@index([linkId])
+  @@map("link_tags")
+}
+
+model RedirectRule {
+  id             String       @id @default(uuid())
+  linkId         String       @map("link_id")
+  type           RedirectType
+  value          String
+  destinationUrl String       @map("destination_url")
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@index([linkId])
+  @@map("redirect_rules")
+}
+
+model Campaign {
+  id          String   @id @default(uuid())
+  workspaceId String   @map("workspace_id")
+  name        String
+  utmSource   String?  @map("utm_source")
+  utmMedium   String?  @map("utm_medium")
+  utmCampaign String?  @map("utm_campaign")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  workspace    Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  links        CampaignLink[]
+  primaryLinks Link[]         @relation("PrimaryCampaignLinks")
+  clicks       Click[]
+
+  @@index([workspaceId])
+  @@map("campaigns")
+}
+
+model CampaignLink {
+  campaignId String @map("campaign_id")
+  linkId     String @map("link_id")
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  link     Link     @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@id([campaignId, linkId])
+  @@index([linkId])
+  @@map("campaign_links")
+}
+
+model Domain {
+  id         String       @id @default(uuid())
+  workspaceId String      @map("workspace_id")
+  domain     String       @unique
+  status     DomainStatus @default(PENDING)
+  sslEnabled Boolean      @default(false) @map("ssl_enabled")
+  verifiedAt DateTime?    @map("verified_at")
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+  @@map("domains")
+}
+
+model QRCode {
+  id        String   @id @default(uuid())
+  linkId    String   @map("link_id")
+  imageUrl  String   @map("image_url")
+  styleJson Json     @map("style_json")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@index([linkId])
+  @@map("qr_codes")
+}
+
+model Click {
+  id         String   @id @default(uuid())
+  linkId     String   @map("link_id")
+  campaignId String?  @map("campaign_id")
+  ip         String?
+  country    String?
+  city       String?
+  region     String?
+  device     String?
+  browser    String?
+  os         String?
+  referrer   String?
+  language   String?
+  isBot      Boolean  @default(false) @map("is_bot")
+  clickedAt  DateTime @default(now()) @map("clicked_at")
+
+  link     Link      @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  campaign Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@index([linkId])
+  @@index([linkId, clickedAt])
+  @@index([campaignId])
+  @@index([country])
+  @@index([device])
+  @@index([isBot])
+  @@index([clickedAt])
+  @@map("clicks")
+}
+
+model DailyAnalytics {
+  id           String   @id @default(uuid())
+  linkId       String   @map("link_id")
+  day          DateTime
+  totalClicks  Int      @default(0) @map("total_clicks")
+  uniqueClicks Int      @default(0) @map("unique_clicks")
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@unique([linkId, day])
+  @@index([day])
+  @@map("daily_analytics")
+}
+
+model RealtimeAnalytics {
+  id             String   @id @default(uuid())
+  linkId         String   @unique @map("link_id")
+  activeVisitors Int      @default(0) @map("active_visitors")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@map("realtime_analytics")
+}
+
+model Webhook {
+  id          String  @id @default(uuid())
+  workspaceId String  @map("workspace_id")
+  url         String
+  secret      String
+  active      Boolean @default(true)
+
+  workspace Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  events    WebhookEvent[]
+
+  @@index([workspaceId])
+  @@index([active])
+  @@map("webhooks")
+}
+
+model WebhookEvent {
+  id        String             @id @default(uuid())
+  webhookId String             @map("webhook_id")
+  eventType String             @map("event_type")
+  payload   Json
+  status    WebhookEventStatus @default(PENDING)
+  createdAt DateTime           @default(now()) @map("created_at")
+
+  webhook Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId])
+  @@index([eventType])
+  @@index([status])
+  @@index([createdAt])
+  @@map("webhook_events")
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String           @map("user_id")
+  type      NotificationType @default(INFO)
+  message   String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, read])
+  @@index([createdAt])
+  @@map("notifications")
 }
