@@ -64,8 +64,11 @@ model User {
   id               String     @id @default(uuid())
   email            String     @unique
   passwordHash     String     @map("password_hash")
+  refreshTokenHash String?    @map("refresh_token_hash")
   name             String
   avatar           String?
+  otpCode          String?
+  otpExpires       DateTime?
   emailVerified    Boolean    @default(false) @map("email_verified")
   twoFactorEnabled Boolean    @default(false) @map("two_factor_enabled")
   status           UserStatus @default(PENDING)
@@ -89,10 +92,10 @@ model Organization {
   ownerId   String   @map("owner_id")
   createdAt DateTime @default(now()) @map("created_at")
 
-  owner        User                 @relation("OrganizationOwner", fields: [ownerId], references: [id], onDelete: Restrict)
-  members      OrganizationMember[]
-  workspaces   Workspace[]
-  roles        Role[]
+  owner      User                 @relation("OrganizationOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  members    OrganizationMember[]
+  workspaces Workspace[]
+  roles      Role[]
 
   @@index([ownerId])
   @@map("organizations")
@@ -289,12 +292,12 @@ model CampaignLink {
 }
 
 model Domain {
-  id         String       @id @default(uuid())
-  workspaceId String      @map("workspace_id")
-  domain     String       @unique
-  status     DomainStatus @default(PENDING)
-  sslEnabled Boolean      @default(false) @map("ssl_enabled")
-  verifiedAt DateTime?    @map("verified_at")
+  id          String       @id @default(uuid())
+  workspaceId String       @map("workspace_id")
+  domain      String       @unique
+  status      DomainStatus @default(PENDING)
+  sslEnabled  Boolean      @default(false) @map("ssl_enabled")
+  verifiedAt  DateTime?    @map("verified_at")
 
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
