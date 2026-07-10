@@ -8,6 +8,15 @@ const schema = z.object({
   PORT: z.coerce.number().default(8080),
   DATABASE_URL: z.string().url(),
   JWT_SECRET: z.string().min(32),
+  JWT_ACCESS_SECRET: z.string().min(32).optional(),
+  JWT_REFRESH_SECRET: z.string().min(32).optional(),
+  ACCESS_TOKEN_EXPIRY: z.string().default('15m'),
+  REFRESH_TOKEN_EXPIRY: z.string().default('7d'),
+  WEB_ORIGIN: z.string().optional(),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().default(587),
+  SMTP_USER: z.string(),
+  SMTP_PASS: z.string(),
 });
 
 export const env = schema.parse(process.env);
