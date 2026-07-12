@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { env } from 'src/config/env.config';
+import crypto from 'node:crypto';
 
 @Injectable()
 export class EmailService {
@@ -39,9 +40,14 @@ export class EmailService {
     try {
       await this.transporter.sendMail(mailOptions);
       this.logger.log(`OTP email sent successfully to ${to}`);
+      console.log('otp sucessfully sent');
     } catch (error) {
       this.logger.error(`Failed to send OTP email to ${to}:`, error);
       throw new Error('Email delivery failed');
     }
+  }
+
+  generateOTP(): string {
+    return crypto.randomInt(100000, 1000000).toString();
   }
 }

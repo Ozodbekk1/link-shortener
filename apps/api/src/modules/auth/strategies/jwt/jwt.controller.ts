@@ -11,9 +11,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { LoginDto, RegisterDto } from '../../dto/auth.dto';
+import { LoginDto, RegisterDto, verifyEmailDto } from '../../dto/auth.dto';
 import { REFRESH_TOKEN_COOKIE, type AuthTokenPayload } from './jwt.types';
-// import { AuthService } from './jwt.service';
 import { CookieService } from 'src/common/utils/cookie.util';
 import { JwtService } from './jwt.service';
 import { JwtAuthGuard } from 'src/common/guards/jwtAuth.guard';
@@ -32,6 +31,18 @@ export class JwtController {
   ) {
     const { user, accessToken, refreshToken } =
       await this.authService.register(dto);
+    this.cookieService.setAuthCookies(res, accessToken, refreshToken);
+    return { user };
+  }
+
+  @Post('verify-email')
+  @HttpCode(HttpStatus.OK)
+  async verifyEmail(
+    @Body() dto: verifyEmailDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { user, accessToken, refreshToken } =
+      await this.authService.verifyEmail(dto);
     this.cookieService.setAuthCookies(res, accessToken, refreshToken);
     return { user };
   }
