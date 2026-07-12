@@ -1,13 +1,16 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma.service';
-import { LoginDto, RegisterDto } from '../../dto/auth.dto';
+import { LoginDto, RegisterDto, verifyEmailDto } from '../../dto/auth.dto';
 import type { PublicUser } from './jwt.types';
 import { TokenService } from 'src/common/utils/jwt.util';
+import { EmailService } from 'src/common/utils/sendEmail.utils';
 
 type SessionResult = {
   user: PublicUser;
@@ -20,9 +23,12 @@ export class JwtService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly tokenService: TokenService,
+    private readonly emailService: EmailService,
   ) {}
 
   async register(dto: RegisterDto): Promise<SessionResult> {
+    const otp = this.emailService.generateOTP();
+
     const normalizedEmail = dto.email.toLowerCase();
     const existingUser = await this.prisma.user.findUnique({
       where: { email: normalizedEmail },
@@ -31,7 +37,7 @@ export class JwtService {
     if (existingUser) {
       throw new ConflictException('Email is already registered');
     }
-
+    await this.emailService.sendOtpEmail(normalizedEmail, otp);
     const passwordHash = await this.tokenService.hashData(dto.password);
     const user = await this.prisma.user.create({
       data: {
@@ -39,10 +45,48 @@ export class JwtService {
         passwordHash,
         name: dto.name,
         avatar: dto.avatar,
+        otpCode: otp,
+        otpExpires: new Date(Date.now() + 10 * 60 * 1000),
       },
     });
 
     return this.issueSession(user);
+  }
+
+  async verifyEmail(dto: verifyEmailDto) {
+    const normalizedEmail = dto.email.toLowerCase();
+
+    const user = await this.prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!user.otpCode || !user.otpExpires) {
+      throw new BadRequestException('No verification code found');
+    }
+
+    if (user.otpExpires < new Date()) {
+      throw new BadRequestException('Verification code has expired');
+    }
+
+    if (user.otpCode !== dto.otpCode) {
+      throw new BadRequestException('Invalid verification code');
+    }
+
+    const verifiedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        emailVerified: true,
+        otpCode: null,
+        otpExpires: null,
+        status: 'ACTIVE',
+      },
+    });
+
+    return this.issueSession(verifiedUser);
   }
 
   async login(dto: LoginDto): Promise<SessionResult> {

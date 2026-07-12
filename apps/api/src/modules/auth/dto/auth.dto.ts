@@ -35,3 +35,14 @@ export class LoginDto {
   @MaxLength(100)
   password!: string;
 }
+
+export class verifyEmailDto {
+  @IsEmail()
+  @MaxLength(100)
+  email!: string;
+
+  @IsString()
+  @MinLength(6)
+  @MaxLength(7)
+  otpCode!: string;
+}

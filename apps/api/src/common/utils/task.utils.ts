@@ -14,15 +14,13 @@ export class UserCleanupService {
       'Initiating periodic cleanup for expired pending accounts...',
     );
 
-    const tenMinutesAgo = new Date();
-    tenMinutesAgo.setMinutes(tenMinutesAgo.getMinutes() - 10);
-
     try {
+      const now = new Date();
       const deleteResult = await this.prisma.user.deleteMany({
         where: {
           status: 'PENDING',
-          createdAt: {
-            lt: tenMinutesAgo,
+          otpExpires: {
+            lt: now,
           },
         },
       });

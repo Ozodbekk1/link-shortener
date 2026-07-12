@@ -8,6 +8,8 @@ import { GlobalExceptionFilter } from './common/filters/global-exception.filter'
 import { GoogleModule } from './modules/auth/strategies/google/google.module';
 import { JwtStrategyModule } from './modules/auth/strategies/jwt/jwt.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LoggerModule } from 'nestjs-pino';
+import { UserCleanupService } from './common/utils/task.utils';
 
 @Module({
   imports: [
@@ -16,12 +18,27 @@ import { ScheduleModule } from '@nestjs/schedule';
       isGlobal: true,
       load: [databaseConfig],
     }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport:
+          process.env.NODE_ENV !== 'production'
+            ? {
+                target: 'pino-pretty',
+                options: {
+                  singleLine: true,
+                  colorize: true,
+                },
+              }
+            : undefined,
+      },
+    }),
     DatabaseModule,
     JwtStrategyModule,
     GoogleModule,
   ],
   controllers: [],
   providers: [
+    UserCleanupService,
     {
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,

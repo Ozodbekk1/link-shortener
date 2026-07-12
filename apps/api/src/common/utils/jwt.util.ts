@@ -48,7 +48,7 @@ export class TokenService {
   }
 
   async hashData(data: string): Promise<string> {
-    return bcrypt.hash(data, 12);
+    return bcrypt.hash(data, 10);
   }
 
   async compareData(data: string, hash: string): Promise<boolean> {
