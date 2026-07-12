@@ -3,10 +3,14 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { env } from './config/env.config';
 import cookieParser from 'cookie-parser';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
   app.use(cookieParser());
+  app.useLogger(app.get(Logger));
 
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
   app.enableCors({
