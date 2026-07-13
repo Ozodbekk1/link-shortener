@@ -15,7 +15,7 @@ import { LoginDto, RegisterDto, verifyEmailDto } from '../../dto/auth.dto';
 import { REFRESH_TOKEN_COOKIE, type AuthTokenPayload } from './jwt.types';
 import { CookieService } from 'src/common/utils/cookie.util';
 import { JwtService } from './jwt.service';
-import { JwtAuthGuard } from 'src/common/guards/jwtAuth.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
 
 @Controller('jwt/auth')
 export class JwtController {
@@ -91,7 +91,6 @@ export class JwtController {
     return { status: 'logout' };
   }
 
-  // Assuming an AuthGuard assigns the payload to req.user beforehand
   @UseGuards(JwtAuthGuard)
   @Get('me')
   async me(@Req() req: Request & { user?: AuthTokenPayload }) {

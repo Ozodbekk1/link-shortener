@@ -4,7 +4,11 @@ import { PrismaService } from 'src/database/prisma.service';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { EmailService } from 'src/common/utils/sendEmail.utils';
 import { TokenService } from 'src/common/utils/jwt.util';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 
 describe('JwtService', () => {
   let service: JwtService;
@@ -18,6 +22,7 @@ describe('JwtService', () => {
     signToken: jest.Mock;
     hashData: jest.Mock;
     compareData: jest.Mock;
+    verifyToken: jest.Mock;
   };
 
   beforeEach(async () => {
@@ -32,6 +37,7 @@ describe('JwtService', () => {
       signToken: jest.fn(),
       hashData: jest.fn(),
       compareData: jest.fn(),
+      verifyToken: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -176,5 +182,61 @@ describe('JwtService', () => {
         otpCode: '123456',
       }),
     ).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('rejects login for an unverified account', async () => {
+    const now = new Date();
+    prismaService.user.findUnique.mockResolvedValue({
+      id: 'user-1',
+      email: 'test@example.com',
+      passwordHash: 'hashed-password',
+      refreshTokenHash: null,
+      name: 'Test User',
+      avatar: null,
+      otpCode: '123456',
+      otpExpires: new Date(now.getTime() + 60_000),
+      emailVerified: false,
+      twoFactorEnabled: false,
+      status: 'PENDING',
+      createdAt: now,
+      updatedAt: now,
+    });
+    tokenService.compareData.mockResolvedValue(true);
+
+    await expect(
+      service.login({
+        email: 'test@example.com',
+        password: 'password',
+      }),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+  });
+
+  it('rejects refresh for an unverified account', async () => {
+    const now = new Date();
+    prismaService.user.findUnique.mockResolvedValue({
+      id: 'user-1',
+      email: 'test@example.com',
+      passwordHash: 'hashed-password',
+      refreshTokenHash: 'refresh-token-hash',
+      name: 'Test User',
+      avatar: null,
+      otpCode: '123456',
+      otpExpires: new Date(now.getTime() + 60_000),
+      emailVerified: false,
+      twoFactorEnabled: false,
+      status: 'PENDING',
+      createdAt: now,
+      updatedAt: now,
+    });
+    tokenService.verifyToken.mockResolvedValue({
+      sub: 'user-1',
+      email: 'test@example.com',
+      tokenKind: 'refresh',
+    });
+    tokenService.compareData.mockResolvedValue(true);
+
+    await expect(service.refresh('refresh-token')).rejects.toBeInstanceOf(
+      UnauthorizedException,
+    );
   });
 });

@@ -17,6 +17,8 @@ const schema = z.object({
   SMTP_PORT: z.coerce.number().default(587),
   SMTP_USER: z.string(),
   SMTP_PASS: z.string(),
+  TELEGRAM_BOT_TOKEN: z.string(),
+  TG_AUTH_BYPASS_SECRET: z.string(),
 });
 
 export const env = schema.parse(process.env);
