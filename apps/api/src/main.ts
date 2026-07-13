@@ -12,6 +12,10 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
 
+  app.enableCors({
+    origin: '*', // For local testing purposes
+  });
+
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
   app.enableCors({
     origin: env.WEB_ORIGIN

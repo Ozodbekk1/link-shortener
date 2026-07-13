@@ -10,6 +10,8 @@ import { JwtStrategyModule } from './modules/auth/strategies/jwt/jwt.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { UserCleanupService } from './common/utils/task.utils';
+import { TelegramAuthModule } from './modules/auth/strategies/telegram/telegram.module';
+// import { TelegramModule } from './modules/auth/strategies/telegram/telegram.module';
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { UserCleanupService } from './common/utils/task.utils';
     DatabaseModule,
     JwtStrategyModule,
     GoogleModule,
+    TelegramAuthModule,
   ],
   controllers: [],
   providers: [
