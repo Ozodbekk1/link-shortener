@@ -102,6 +102,14 @@ export class JwtService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    if (!user.emailVerified) {
+      throw new UnauthorizedException('Email is not verified');
+    }
+
+    if (user.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Account is not active');
+    }
+
     return this.issueSession(user);
   }
 
@@ -122,6 +130,14 @@ export class JwtService {
       ))
     ) {
       throw new UnauthorizedException('Refresh session is not active');
+    }
+
+    if (!user.emailVerified) {
+      throw new UnauthorizedException('Email is not verified');
+    }
+
+    if (user.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Account is not active');
     }
 
     return this.issueSession(user);
@@ -160,7 +176,7 @@ export class JwtService {
     return this.toPublicUser(user);
   }
 
-  private async issueSession(user: User): Promise<SessionResult> {
+  async issueSession(user: User): Promise<SessionResult> {
     const accessToken = await this.tokenService.signToken(user, 'access');
     const refreshToken = await this.tokenService.signToken(user, 'refresh');
     const refreshTokenHash = await this.tokenService.hashData(refreshToken);
