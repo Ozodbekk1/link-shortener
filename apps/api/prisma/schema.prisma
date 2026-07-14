@@ -7,6 +7,36 @@ datasource db {
 }
 
 model User {
+<<<<<<< HEAD
+=======
+  id               String     @id @default(uuid())
+  email            String     @unique
+  googleId         String?    @unique
+  phone_number     String?    @unique
+  passwordHash     String     @map("password_hash")
+  refreshTokenHash String?    @map("refresh_token_hash")
+  name             String
+  avatar           String?
+  otpCode          String?
+  otpExpires       DateTime?
+  emailVerified    Boolean    @default(false) @map("email_verified")
+  twoFactorEnabled Boolean    @default(false) @map("two_factor_enabled")
+  status           UserStatus @default(PENDING)
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  ownedOrganizations Organization[]       @relation("OrganizationOwner")
+  memberships        OrganizationMember[]
+  teamMemberships    TeamMember[]
+  links              Link[]
+  notifications      Notification[]
+
+  @@index([email])
+  @@map("users")
+}
+
+model Organization {
+>>>>>>> c91e73c (implemented google oauth)
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
