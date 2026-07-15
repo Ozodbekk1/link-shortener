@@ -23,6 +23,7 @@ export class TokenService {
       {
         sub: user.id,
         email: user.email,
+        userRole: user.userRole,
         tokenKind,
       } satisfies AuthTokenPayload,
       {

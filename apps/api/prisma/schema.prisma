@@ -13,6 +13,11 @@ enum UserStatus {
   DELETED
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 enum OrganizationRole {
   OWNER
   ADMIN
@@ -74,6 +79,7 @@ model User {
   emailVerified    Boolean    @default(false) @map("email_verified")
   twoFactorEnabled Boolean    @default(false) @map("two_factor_enabled")
   status           UserStatus @default(PENDING)
+  userRole         UserRole   @default(USER)
   createdAt        DateTime   @default(now()) @map("created_at")
   updatedAt        DateTime   @updatedAt @map("updated_at")
 
