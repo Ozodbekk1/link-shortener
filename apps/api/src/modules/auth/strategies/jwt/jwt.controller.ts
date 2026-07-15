@@ -16,6 +16,9 @@ import { REFRESH_TOKEN_COOKIE, type AuthTokenPayload } from './jwt.types';
 import { CookieService } from 'src/common/utils/cookie.util';
 import { JwtService } from './jwt.service';
 import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { RolesGuard } from 'src/common/guards/role.guard';
+import { Roles } from 'src/common/decorators/role.decorator';
+import { Role } from 'src/common/constants/role.enums';
 
 @Controller('jwt/auth')
 export class JwtController {
@@ -91,8 +94,9 @@ export class JwtController {
     return { status: 'logout' };
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('me')
+  @Roles(Role.USER)
   async me(@Req() req: Request & { user?: AuthTokenPayload }) {
     if (!req.user)
       throw new UnauthorizedException('Missing authenticated user');

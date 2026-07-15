@@ -195,6 +195,7 @@ export class JwtService {
       email: user.email,
       name: user.name,
       avatar: user.avatar,
+      userRole: user.userRole,
       emailVerified: user.emailVerified,
       twoFactorEnabled: user.twoFactorEnabled,
       status: user.status,
