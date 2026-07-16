@@ -7,10 +7,17 @@ import {
 } from '@nestjs/common';
 import type { User } from '@prisma/client';
 import { PrismaService } from 'src/database/prisma.service';
-import { LoginDto, RegisterDto, verifyEmailDto } from '../../dto/auth.dto';
+import {
+  ForgotPasswordDto,
+  LoginDto,
+  RegisterDto,
+  ResetPasswordDto,
+  verifyEmailDto,
+} from '../../dto/auth.dto';
 import type { PublicUser } from './jwt.types';
 import { TokenService } from 'src/common/utils/jwt.util';
 import { EmailService } from 'src/common/utils/sendEmail.utils';
+import * as bcrypt from 'bcryptjs';
 
 type SessionResult = {
   user: PublicUser;
@@ -201,6 +208,79 @@ export class JwtService {
       status: user.status,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
+    };
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const otp = this.emailService.generateOTP();
+
+    // const hashedOtp = await bcrypt.hash(otp, 10);
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        otpCode: otp,
+        otpExpires: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+      },
+    });
+
+    await this.emailService.sendPasswordResetEmail(user.email, otp);
+
+    return {
+      message: 'OTP sent successfully',
+    };
+  }
+
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    if (!user.otpCode || !user.otpExpires) {
+      throw new BadRequestException('OTP not found');
+    }
+
+    if (user.otpExpires < new Date()) {
+      throw new BadRequestException('OTP expired');
+    }
+
+    if (user.otpCode !== dto.otp) {
+      throw new BadRequestException('Invalid verification code');
+    }
+
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 10);
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        passwordHash: hashedPassword,
+        otpCode: null,
+        otpExpires: null,
+      },
+    });
+
+    return {
+      message: 'Password reset successfully',
     };
   }
 }
