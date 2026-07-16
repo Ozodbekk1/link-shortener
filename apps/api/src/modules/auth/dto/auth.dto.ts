@@ -12,7 +12,7 @@ export class RegisterDto {
   email!: string;
 
   @IsString()
-  @MinLength(8)
+  @MinLength(6)
   password!: string;
 
   @IsString()
@@ -31,7 +31,7 @@ export class LoginDto {
   email!: string;
 
   @IsString()
-  @MinLength(8)
+  @MinLength(6)
   @MaxLength(100)
   password!: string;
 }
@@ -45,4 +45,21 @@ export class verifyEmailDto {
   @MinLength(6)
   @MaxLength(7)
   otpCode!: string;
+}
+
+export class ForgotPasswordDto {
+  @IsEmail()
+  email!: string;
+}
+
+export class ResetPasswordDto {
+  @IsEmail()
+  email!: string;
+
+  @IsString()
+  otp!: string;
+
+  @IsString()
+  @MinLength(6)
+  newPassword!: string;
 }
