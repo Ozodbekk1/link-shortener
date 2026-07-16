@@ -11,7 +11,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
-import { LoginDto, RegisterDto, verifyEmailDto } from '../../dto/auth.dto';
+import {
+  ForgotPasswordDto,
+  LoginDto,
+  RegisterDto,
+  ResetPasswordDto,
+  verifyEmailDto,
+} from '../../dto/auth.dto';
 import { REFRESH_TOKEN_COOKIE, type AuthTokenPayload } from './jwt.types';
 import { CookieService } from 'src/common/utils/cookie.util';
 import { JwtService } from './jwt.service';
@@ -92,6 +98,16 @@ export class JwtController {
     }
     this.cookieService.clearAuthCookies(res);
     return { status: 'logout' };
+  }
+
+  @Post('forgot-password')
+  forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('reset-password')
+  resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

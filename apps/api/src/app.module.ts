@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { UserCleanupService } from './common/utils/task.utils';
 import { TelegramAuthModule } from './modules/auth/strategies/telegram/telegram.module';
+import { UsersModule } from './modules/users/users.module';
 // import { TelegramModule } from './modules/auth/strategies/telegram/telegram.module';
 
 @Module({
@@ -38,6 +39,7 @@ import { TelegramAuthModule } from './modules/auth/strategies/telegram/telegram.
     JwtStrategyModule,
     GoogleModule,
     TelegramAuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [
