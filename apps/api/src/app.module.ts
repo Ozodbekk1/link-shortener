@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { databaseConfig } from './config/db.config';
 import { DatabaseModule } from './database/database.module';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
 import { GoogleModule } from './modules/auth/strategies/google/google.module';
@@ -12,7 +12,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { UserCleanupService } from './common/utils/task.utils';
 import { TelegramAuthModule } from './modules/auth/strategies/telegram/telegram.module';
 import { UsersModule } from './modules/users/users.module';
-// import { TelegramModule } from './modules/auth/strategies/telegram/telegram.module';
+import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -35,6 +35,13 @@ import { UsersModule } from './modules/users/users.module';
             : undefined,
       },
     }),
+    ThrottlerModule.forRoot([
+      {
+        name: 'default', // If name is not provided, the name is given as default
+        ttl: minutes(1), // Time window in minutes
+        limit: 80, // Number of allowed requests in that window
+      },
+    ]),
     DatabaseModule,
     JwtStrategyModule,
     GoogleModule,
@@ -51,6 +58,10 @@ import { UsersModule } from './modules/users/users.module';
     {
       provide: APP_FILTER,
       useClass: GlobalExceptionFilter,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
