@@ -10,7 +10,9 @@ import type { Response } from 'express';
 import { CookieService } from 'src/common/utils/cookie.util';
 import type { TelegramAuthPayload } from './telegram.service';
 import { TelegramService } from './telegram.service';
+import { Throttle } from '@nestjs/throttler';
 
+@Throttle({ default: { limit: 3, ttl: 60000 } })
 @Controller('telegram/auth')
 export class TelegramController {
   constructor(
