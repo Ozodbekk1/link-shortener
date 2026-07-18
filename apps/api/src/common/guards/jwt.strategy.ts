@@ -31,21 +31,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       select: {
         id: true,
         email: true,
-        googleId: true,
-        phone_number: true,
         name: true,
         avatar: true,
         emailVerified: true,
         twoFactorEnabled: true,
         status: true,
         userRole: true,
-        createdAt: true,
-        updatedAt: true,
-        ownedOrganizations: true,
-        memberships: true,
-        teamMemberships: true,
-        links: true,
-        notifications: true,
       },
     });
 

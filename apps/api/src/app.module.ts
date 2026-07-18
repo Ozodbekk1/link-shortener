@@ -13,6 +13,7 @@ import { UserCleanupService } from './common/utils/task.utils';
 import { TelegramAuthModule } from './modules/auth/strategies/telegram/telegram.module';
 import { UsersModule } from './modules/users/users.module';
 import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { OrganizationsModule } from './modules/organizations/organizations.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     GoogleModule,
     TelegramAuthModule,
     UsersModule,
+    OrganizationsModule,
   ],
   controllers: [],
   providers: [
