@@ -5,7 +5,9 @@ import { GoogleAuthService } from './google.service';
 import { GoogleAuthGuard } from 'src/common/guards/google.guard';
 import { CookieService } from 'src/common/utils/cookie.util';
 import { type GoogleOAuthUserData } from './google.service';
+import { Throttle } from '@nestjs/throttler';
 
+@Throttle({ default: { limit: 3, ttl: 60000 } })
 @Controller('google/auth')
 export class GoogleAuthController {
   constructor(
