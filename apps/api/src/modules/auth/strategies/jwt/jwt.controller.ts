@@ -25,7 +25,9 @@ import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/common/constants/role.enums';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
+@Throttle({ default: { limit: 3, ttl: 60000 } })
 @Controller('jwt/auth')
 export class JwtController {
   constructor(
@@ -110,6 +112,7 @@ export class JwtController {
     return this.authService.resetPassword(dto);
   }
 
+  @SkipThrottle()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('me')
   @Roles(Role.USER)
