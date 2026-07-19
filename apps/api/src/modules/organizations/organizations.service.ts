@@ -47,6 +47,16 @@ export class OrganizationsService {
         },
       });
 
+      // Auto-create default workspace for newly created organization
+      // Requirement: workspace name must be "personal"
+      await tx.workspace.create({
+        data: {
+          name: 'personal',
+          slug: 'personal',
+          organizationId: newOrganization.id,
+        },
+      });
+
       return newOrganization;
     });
   }
