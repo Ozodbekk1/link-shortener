@@ -14,6 +14,7 @@ import { TelegramAuthModule } from './modules/auth/strategies/telegram/telegram.
 import { UsersModule } from './modules/users/users.module';
 import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
+import { WorkspacesModule } from './modules/workspaces/workspaces.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { OrganizationsModule } from './modules/organizations/organizations.modul
     TelegramAuthModule,
     UsersModule,
     OrganizationsModule,
+    WorkspacesModule,
   ],
   controllers: [],
   providers: [
