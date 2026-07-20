@@ -15,6 +15,7 @@ import { UsersModule } from './modules/users/users.module';
 import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module';
+import { TeamsModule } from './modules/teams/teams.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
     UsersModule,
     OrganizationsModule,
     WorkspacesModule,
+    TeamsModule,
   ],
   controllers: [],
   providers: [
