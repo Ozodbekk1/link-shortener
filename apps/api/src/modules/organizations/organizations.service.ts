@@ -15,6 +15,8 @@ export class OrganizationsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createOrganization(dto: CreateOrganizationDto, ownerId: string) {
+    let start = Date.now();
+
     const { name, slug } = dto;
 
     if (BLOCKED_DOMAINS.includes(slug.toLowerCase())) {
@@ -26,6 +28,11 @@ export class OrganizationsService {
     const existingOrg = await this.prisma.organization.findUnique({
       where: { slug: slug.toLowerCase() },
     });
+
+    console.log('user query:', Date.now() - start);
+
+    start = Date.now();
+
     if (existingOrg) {
       throw new ConflictException('This subdomain is already taken.');
     }
@@ -56,12 +63,18 @@ export class OrganizationsService {
           organizationId: newOrganization.id,
         },
       });
+      start = Date.now();
 
       return newOrganization;
     });
   }
 
   async getAllOrganizations(userId: string) {
+    let start = Date.now();
+
+    console.log('SELECT 1:', Date.now() - start, 'ms');
+    start = Date.now();
+
     const organizations = await this.prisma.organizationMember.findMany({
       where: {
         userId,
@@ -88,6 +101,12 @@ export class OrganizationsService {
         joinedAt: 'asc',
       },
     });
+
+    console.log('DB query:', Date.now() - start, 'ms');
+
+    const mapStart = Date.now();
+
+    console.log('Mapping:', Date.now() - mapStart, 'ms');
 
     return {
       organizations: organizations.map((item) => ({
