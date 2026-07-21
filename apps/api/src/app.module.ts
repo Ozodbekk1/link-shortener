@@ -18,6 +18,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
 import { TeamsModule } from './modules/teams/teams.module';
 import { MembersModule } from './modules/members/members.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
 
 @Module({
   imports: [
@@ -57,6 +58,7 @@ import { RolesModule } from './modules/roles/roles.module';
     TeamsModule,
     MembersModule,
     RolesModule,
+    PermissionsModule,
   ],
   controllers: [],
   providers: [
