@@ -16,6 +16,8 @@ import { minutes, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module';
 import { TeamsModule } from './modules/teams/teams.module';
+import { MembersModule } from './modules/members/members.module';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -53,6 +55,8 @@ import { TeamsModule } from './modules/teams/teams.module';
     OrganizationsModule,
     WorkspacesModule,
     TeamsModule,
+    MembersModule,
+    RolesModule,
   ],
   controllers: [],
   providers: [
