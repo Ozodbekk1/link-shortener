@@ -19,6 +19,7 @@ import { TeamsModule } from './modules/teams/teams.module';
 import { MembersModule } from './modules/members/members.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
+import { LinksModule } from './modules/links/links.module';
 
 @Module({
   imports: [
@@ -59,6 +60,7 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
     MembersModule,
     RolesModule,
     PermissionsModule,
+    LinksModule,
   ],
   controllers: [],
   providers: [
