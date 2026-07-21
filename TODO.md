@@ -1,8 +1,17 @@
-# TODO
+# Task: Fix ESLint errors in invite member service/controller
 
-## Google OAuth integration finish
+## Plan
 
-- [ ] Update `google.service.ts` to issue JWT cookies using existing `JwtService.issueSession()` after `googleLogin()`.
-- [ ] Update `google.controller.ts` to use existing `CookieService.setAuthCookies()` and fix missing `Response` import.
-- [ ] Update `google.module.ts` to register `GoogleStrategy` provider.
-- [ ] Quick sanity check by running API build/start and hitting `/google/auth`.
+- **File**: `apps/api/src/modules/members/invite.member.controller.ts`
+
+### Steps
+
+- [x] 1. Analyze codebase and identify actual ESLint errors (controller, not service)
+- [x] 2. Get user approval on edit plan
+- [x] 3. Edit `invite.member.controller.ts`:
+  - Add `Request` from `express` import
+  - Add `AuthTokenPayload` from `jwt.types` import
+  - Type `req` as `Request & { user?: AuthTokenPayload }` on both endpoints
+  - Remove unnecessary `as string` casts
+- [x] 4. Run ESLint to verify no errors
+- [x] 5. Update TODO.md as completed
