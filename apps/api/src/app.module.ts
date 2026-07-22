@@ -20,6 +20,9 @@ import { MembersModule } from './modules/members/members.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { LinksModule } from './modules/links/links.module';
+import { RedirectModule } from './modules/redirect/redirect.module';
+import { AdminModule } from './modules/admin/admin.module';
+import { QrModule } from './modules/qr/qr.module';
 
 @Module({
   imports: [
@@ -61,6 +64,9 @@ import { LinksModule } from './modules/links/links.module';
     RolesModule,
     PermissionsModule,
     LinksModule,
+    RedirectModule,
+    AdminModule,
+    QrModule,
   ],
   controllers: [],
   providers: [
