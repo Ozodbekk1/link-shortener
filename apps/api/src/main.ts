@@ -13,8 +13,13 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
 
+  const allowedOrigins = env.WEB_ORIGIN?.split(',') || [];
+
   app.enableCors({
-    origin: '*', // For local testing purposes
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
