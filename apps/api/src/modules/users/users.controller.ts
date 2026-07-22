@@ -3,24 +3,20 @@ import {
   Get,
   Param,
   Query,
-  Req,
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { AuthTokenPayload } from '../auth/strategies/jwt/jwt.types';
-import { JwtService } from '../auth/strategies/jwt/jwt.service';
+import type { AuthTokenPayload } from '../auth/strategies/jwt/jwt.types';
 import { RolesGuard } from 'src/common/guards/role.guard';
 import { Roles } from 'src/common/decorators/role.decorator';
 import { Role } from 'src/common/constants/role.enums';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private userService: UsersService,
-    private authService: JwtService,
-  ) {}
+  constructor(private userService: UsersService) {}
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
@@ -35,12 +31,16 @@ export class UsersController {
     return this.userService.getUserById(id);
   }
 
+  /**
+   * GET /users/me
+   * Returns the authenticated user's full profile with all related entities:
+   * organizations, workspaces, teams, memberships, links, notifications, etc.
+   */
   @UseGuards(JwtAuthGuard)
   @Get('me')
-  async me(@Req() req: Request & { user?: AuthTokenPayload }) {
-    if (!req.user)
+  async me(@User() user: AuthTokenPayload) {
+    if (!user?.sub)
       throw new UnauthorizedException('Missing authenticated user');
-    const user = await this.authService.getProfile(req.user.sub);
-    return { user };
+    return this.userService.getUserProfile(user.sub);
   }
 }

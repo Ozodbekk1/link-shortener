@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { env } from './config/env.config';
 import cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -23,7 +24,14 @@ async function bootstrap() {
       : true,
     credentials: true,
   });
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix('api/v1', {
+    exclude: [
+      // Redirect routes must be at root level for clean short URLs
+      { path: 'r/:slug', method: 0 as const }, // GET /r/:slug — Core redirect
+      { path: 'redirect/:slug', method: 0 as const }, // GET /redirect/:slug — Validate
+      { path: 'redirect/rules/:slug', method: 0 as const }, // GET /redirect/rules/:slug — Rules preview
+    ],
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -31,6 +39,17 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  const config = new DocumentBuilder()
+    .setTitle('API')
+    .setDescription('API documentation')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+
+  SwaggerModule.setup('docs', app, document);
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
