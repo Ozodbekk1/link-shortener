@@ -2,6 +2,7 @@
 
 import React from "react"
 import { useLocale } from "@/hooks/use-locale"
+import { useTranslation } from "@/hooks/use-translation"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -13,78 +14,79 @@ import {
   Lock,
 } from "lucide-react"
 
-const sections = [
+const sectionKeys = [
   {
     id: "information-we-collect",
     icon: <Database className="h-5 w-5" />,
-    title: "Information We Collect",
-    content: [
-      "Account Information: When you sign up, we collect your name and email address to create and manage your account.",
-      "Link Data: We store the original URLs you shorten, along with analytics data such as click counts, geographic locations, referrers, and device information.",
-      "Usage Data: We automatically collect information about how you interact with our service, including pages visited, features used, and session duration.",
-      "Cookies: We use essential cookies to maintain your session and optional analytics cookies to improve our service (you can disable these).",
+    titleKey: "privacy.section1Title",
+    itemKeys: [
+      "privacy.section1Item1",
+      "privacy.section1Item2",
+      "privacy.section1Item3",
+      "privacy.section1Item4",
     ],
   },
   {
     id: "how-we-use-your-data",
     icon: <Users className="h-5 w-5" />,
-    title: "How We Use Your Data",
-    content: [
-      "To provide, maintain, and improve our URL shortening and analytics services.",
-      "To display click analytics and insights for the links you create.",
-      "To communicate with you about service updates, security alerts, and support inquiries.",
-      "To detect, prevent, and address fraudulent or abusive usage of our platform.",
+    titleKey: "privacy.section2Title",
+    itemKeys: [
+      "privacy.section2Item1",
+      "privacy.section2Item2",
+      "privacy.section2Item3",
+      "privacy.section2Item4",
     ],
   },
   {
     id: "data-sharing",
     icon: <Shield className="h-5 w-5" />,
-    title: "Data Sharing & Disclosure",
-    content: [
-      "We do not sell your personal data to third parties. Period.",
-      "We may share anonymized, aggregated data (e.g., total click counts) for service improvement purposes.",
-      "We may disclose your data if required by law or to protect our legal rights.",
-      "We use third-party cloud infrastructure providers (e.g., AWS) to host our service, who are contractually bound to protect your data.",
+    titleKey: "privacy.section3Title",
+    itemKeys: [
+      "privacy.section3Item1",
+      "privacy.section3Item2",
+      "privacy.section3Item3",
+      "privacy.section3Item4",
     ],
   },
   {
     id: "cookies",
     icon: <Cookie className="h-5 w-5" />,
-    title: "Cookies & Tracking",
-    content: [
-      "Essential Cookies: Required for the service to function (session management, authentication).",
-      "Analytics Cookies: Help us understand how you use the platform so we can improve it.",
-      "You can control cookie preferences through your browser settings at any time.",
-      "We do not use cookies for third-party advertising or tracking across other websites.",
+    titleKey: "privacy.section4Title",
+    itemKeys: [
+      "privacy.section4Item1",
+      "privacy.section4Item2",
+      "privacy.section4Item3",
+      "privacy.section4Item4",
     ],
   },
   {
     id: "data-security",
     icon: <Lock className="h-5 w-5" />,
-    title: "Data Security",
-    content: [
-      "We use industry-standard encryption (TLS/SSL) for all data in transit.",
-      "Passwords are hashed and salted using bcrypt — we never store plain-text passwords.",
-      "Regular security audits and penetration testing are performed on our infrastructure.",
-      "We maintain strict access controls to any systems containing personal data.",
+    titleKey: "privacy.section5Title",
+    itemKeys: [
+      "privacy.section5Item1",
+      "privacy.section5Item2",
+      "privacy.section5Item3",
+      "privacy.section5Item4",
     ],
   },
   {
     id: "your-rights",
     icon: <Mail className="h-5 w-5" />,
-    title: "Your Rights",
-    content: [
-      "Access: You can request a copy of the personal data we hold about you.",
-      "Correction: You can update your account information at any time through your settings.",
-      "Deletion: You can delete your account and all associated data at any time.",
-      "Portability: You can request your data in a machine-readable format.",
-      "To exercise any of these rights, contact us at privacy@uurl.uz.",
+    titleKey: "privacy.section6Title",
+    itemKeys: [
+      "privacy.section6Item1",
+      "privacy.section6Item2",
+      "privacy.section6Item3",
+      "privacy.section6Item4",
+      "privacy.section6Item5",
     ],
   },
 ]
 
 export default function PrivacyPage() {
   const locale = useLocale()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-white">
@@ -94,7 +96,7 @@ export default function PrivacyPage() {
           className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-[#6B7280] transition-colors hover:text-[#F45B69]"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Home
+          {t("privacy.backToHome")}
         </Link>
       </div>
 
@@ -108,19 +110,17 @@ export default function PrivacyPage() {
         <div className="mx-auto max-w-[1200px] px-[32px]">
           <div className="mx-auto max-w-[800px]">
             <div className="mb-4 inline-block rounded-full bg-[#F45B69]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#F45B69] uppercase">
-              Legal
+              {t("privacy.badge")}
             </div>
             <h1 className="mb-4 text-4xl font-black tracking-tight text-[#111827] sm:text-5xl">
-              Privacy Policy
+              {t("privacy.title")}
             </h1>
             <p className="mb-2 text-[#6B7280]">
-              Last updated:{" "}
+              {t("privacy.lastUpdated")}{" "}
               <span className="font-medium text-[#111827]">July 15, 2025</span>
             </p>
             <p className="max-w-[600px] text-base leading-relaxed text-[#6B7280]">
-              At Uurl, we take your privacy seriously. This policy explains how
-              we collect, use, and protect your personal information when you
-              use our URL shortening service.
+              {t("privacy.description")}
             </p>
           </div>
         </div>
@@ -131,16 +131,16 @@ export default function PrivacyPage() {
           <aside className="hidden w-[260px] shrink-0 lg:block">
             <div className="sticky top-[120px] space-y-1 rounded-2xl border border-[#E5E7EB] bg-white p-5">
               <h3 className="mb-3 text-xs font-bold tracking-wider text-[#6B7280] uppercase">
-                On this page
+                {t("privacy.onThisPage")}
               </h3>
-              {sections.map((section) => (
+              {sectionKeys.map((section) => (
                 <a
                   key={section.id}
                   href={`#${section.id}`}
                   className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-[#6B7280] transition-colors hover:bg-[#FFF5F5] hover:text-[#F45B69]"
                 >
                   <span className="shrink-0">{section.icon}</span>
-                  <span>{section.title}</span>
+                  <span>{t(section.titleKey)}</span>
                 </a>
               ))}
             </div>
@@ -148,7 +148,7 @@ export default function PrivacyPage() {
 
           <div className="min-w-0 flex-1 pb-[80px]">
             <div className="space-y-10">
-              {sections.map((section, index) => (
+              {sectionKeys.map((section, index) => (
                 <section
                   key={section.id}
                   id={section.id}
@@ -161,20 +161,20 @@ export default function PrivacyPage() {
                       </span>
                     </div>
                     <h2 className="text-xl font-bold text-[#111827]">
-                      {section.title}
+                      {t(section.titleKey)}
                     </h2>
                   </div>
                   <div className="ml-12 space-y-3">
-                    {section.content.map((item, i) => (
+                    {section.itemKeys.map((itemKey, i) => (
                       <div key={i} className="flex items-start gap-3">
                         <div className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#F45B69]/40" />
                         <p className="text-sm leading-relaxed text-[#6B7280]">
-                          {item}
+                          {t(itemKey)}
                         </p>
                       </div>
                     ))}
                   </div>
-                  {index < sections.length - 1 && (
+                  {index < sectionKeys.length - 1 && (
                     <div className="mt-8 border-t border-[#E5E7EB]" />
                   )}
                 </section>
@@ -183,17 +183,16 @@ export default function PrivacyPage() {
 
             <div className="mt-16 rounded-2xl border border-[#E5E7EB] bg-[#FFF8F8] p-8">
               <h3 className="mb-3 text-lg font-bold text-[#111827]">
-                Have questions about privacy?
+                {t("privacy.ctaTitle")}
               </h3>
               <p className="mb-4 text-sm text-[#6B7280]">
-                If you have any questions or concerns about this privacy policy
-                or how we handle your data, dont hesitate to reach out.
+                {t("privacy.ctaDesc")}
               </p>
               <Link
                 href={`/${locale}/contact`}
                 className="inline-flex items-center gap-2 rounded-xl bg-[#F45B69] px-5 py-2.5 text-sm font-bold text-white transition-all hover:opacity-90"
               >
-                Contact Us
+                {t("privacy.ctaButton")}
               </Link>
             </div>
           </div>
@@ -202,3 +201,4 @@ export default function PrivacyPage() {
     </div>
   )
 }
+

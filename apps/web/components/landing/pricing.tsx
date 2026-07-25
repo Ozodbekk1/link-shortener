@@ -1,10 +1,15 @@
+"use client"
+
 import React from "react"
+import { useTranslation } from "@/hooks/use-translation"
 
 export default function Pricing() {
+  const { t } = useTranslation()
+
   const perks = [
     {
-      label: "Unlimited links",
-      sub: "Create as many as you need",
+      labelKey: "perkLinksLabel",
+      subKey: "perkLinksSub",
       icon: (
         <svg
           className="h-[38px] w-[38px] text-[#F45B69]"
@@ -22,8 +27,8 @@ export default function Pricing() {
       ),
     },
     {
-      label: "Unlimited clicks",
-      sub: "No traffic caps, ever",
+      labelKey: "perkClicksLabel",
+      subKey: "perkClicksSub",
       icon: (
         <svg
           className="h-[38px] w-[38px] text-[#F45B69]"
@@ -41,8 +46,8 @@ export default function Pricing() {
       ),
     },
     {
-      label: "Unlimited QR codes",
-      sub: "Generate without restriction",
+      labelKey: "perkQrLabel",
+      subKey: "perkQrSub",
       icon: (
         <svg
           className="h-[38px] w-[38px] text-[#F45B69]"
@@ -60,8 +65,8 @@ export default function Pricing() {
       ),
     },
     {
-      label: "Unlimited analytics",
-      sub: "Full data, no paywalls",
+      labelKey: "perkAnalyticsLabel",
+      subKey: "perkAnalyticsSub",
       icon: (
         <svg
           className="h-[38px] w-[38px] text-[#F45B69]"
@@ -79,8 +84,8 @@ export default function Pricing() {
       ),
     },
     {
-      label: "Unlimited teams",
-      sub: "Invite everyone you want",
+      labelKey: "perkTeamsLabel",
+      subKey: "perkTeamsSub",
       icon: (
         <svg
           className="h-[38px] w-[38px] text-[#F45B69]"
@@ -98,8 +103,8 @@ export default function Pricing() {
       ),
     },
     {
-      label: "Unlimited workspaces",
-      sub: "Organize freely",
+      labelKey: "perkWorkspacesLabel",
+      subKey: "perkWorkspacesSub",
       icon: (
         <svg
           className="h-[38px] w-[38px] text-[#F45B69]"
@@ -168,39 +173,40 @@ export default function Pricing() {
           </div>
 
           <h2 className="mb-[16px] text-[clamp(28px,4vw,54px)] leading-[1.05] font-black tracking-[-2px] text-[#151515]">
-            Everything is free.
+            {t("pricing.heading")}
             <br />
-            <span className="text-[#F45B69]">Forever.</span>
+            <span className="text-[#F45B69]">
+              {t("pricing.headingHighlight")}
+            </span>
           </h2>
 
           <p className="mx-auto max-w-[480px] text-[17px] leading-[1.6] text-[#6B7280]">
-            No credit card. No trial. No limits. No &ldquo;unlimited*&rdquo;
-            fine print.
-            <br />
-            Just the full product, always free.
+            {t("pricing.description")}
           </p>
         </div>
 
         <div className="mx-auto mb-[48px] grid max-w-[900px] grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {perks.map(({ icon, label, sub }) => (
+          {perks.map(({ icon, labelKey, subKey }) => (
             <div
-              key={label}
+              key={labelKey}
               className="group flex flex-col items-center justify-center rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] p-[24px_26px] text-center transition-all duration-200 hover:-translate-y-1 hover:border-[#FFCCCC] hover:bg-[#FFE5E5] hover:shadow-[0_12px_36px_rgba(244,91,105,0.12)]"
             >
               <div className="mb-[12px] flex h-[48px] w-[48px] items-center justify-center transition-transform duration-200 group-hover:scale-110">
                 {icon}
               </div>
               <div className="mb-[4px] text-[15.5px] font-extrabold tracking-[-0.2px] text-[#151515]">
-                ∞ {label}
+                ∞ {t(`pricing.${labelKey}`)}
               </div>
-              <div className="text-[13px] text-[#6B7280]">{sub}</div>
+              <div className="text-[13px] text-[#6B7280]">
+                {t(`pricing.${subKey}`)}
+              </div>
             </div>
           ))}
         </div>
 
         <div className="text-center">
           <button className="rounded-[14px] bg-gradient-to-r from-[#F45B69] to-[#FF6B7A] px-[34px] py-[16px] text-[17px] font-extrabold tracking-[-0.3px] text-white shadow-[0_8px_32px_rgba(244,91,105,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_44px_rgba(244,91,105,0.45)] active:translate-y-0">
-            Get started free — no card needed
+            {t("pricing.ctaButton")}
           </button>
         </div>
       </div>

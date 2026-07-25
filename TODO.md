@@ -1,8 +1,19 @@
-# Footer Pages Implementation
+# i18n Translation Task - Main Page
 
-- [x] Create TODO.md
-- [x] 1. Update `footer.tsx` - Fix company link hrefs to use locale-aware routes
-- [x] 2. Build About page (`about/page.tsx`) - Hero, mission, stats, values
-- [x] 3. Build Privacy Policy page (`privacy/page.tsx`) - Legal sections, TOC sidebar
-- [x] 4. Build Terms of Service page (`terms/page.tsx`) - Legal sections, TOC sidebar
-- [x] 5. Build Contact page (`contact/page.tsx`) - Form, contact info cards, socials
+## Steps
+
+- [x] Analyze codebase and understand i18n setup
+- [x] Get user approval for plan
+- [x] **Step 1**: Add missing translation keys to `en/common.json`
+- [x] **Step 2**: Add missing translation keys to `uz/common.json`
+- [x] **Step 3**: Add missing translation keys to `ru/common.json`
+- [x] **Step 4**: Update `features.tsx` - use `t()` for all text
+- [x] **Step 5**: Update `demo.tsx` - use `t()` for UI text
+- [x] **Step 6**: Update `custom-domain.tsx` - use `t()` for all text
+- [x] **Step 7**: Update `pricing.tsx` - use `t()` for all text
+- [x] **Step 8**: Update `cta.tsx` - use `t()` for all text
+- [x] **Step 9**: Update `footer.tsx` - use `t()` for all text
+
+## ✅ Complete
+
+All main page components now use the i18n translation system:

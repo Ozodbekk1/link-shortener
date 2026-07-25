@@ -4,22 +4,12 @@ import React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useLocale } from "@/hooks/use-locale"
+import { useTranslation } from "@/hooks/use-translation"
 
 const productLinks = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
-  // { label: "Integrations", href: "#" },
-  // { label: "API", href: "#" },
-  // { label: "Changelog", href: "#" },
 ]
-
-// const resourceLinks = [
-//   { label: "Documentation", href: "#" },
-//   { label: "Guides", href: "#" },
-//   { label: "Blog", href: "#" },
-//   { label: "Community", href: "#" },
-//   { label: "Support", href: "#" },
-// ]
 
 const companyLinks = [
   { label: "About", href: "about" },
@@ -29,15 +19,6 @@ const companyLinks = [
 ]
 
 const socialLinks = [
-  // {
-  //   label: "X (Twitter)",
-  //   href: "#",
-  //   icon: (
-  //     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-  //       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  //     </svg>
-  //   ),
-  // },
   {
     label: "GitHub",
     href: "#",
@@ -69,6 +50,7 @@ const socialLinks = [
 
 export default function Footer() {
   const locale = useLocale()
+  const { t } = useTranslation()
 
   return (
     <footer id="about" className="relative bg-white">
@@ -94,9 +76,7 @@ export default function Footer() {
             </Link>
 
             <p className="mb-[24px] max-w-[320px] text-[14px] leading-[1.7] text-[#6B7280]">
-              The free forever URL shortener with powerful analytics, custom
-              domains, QR codes, and smart redirect rules. No limits. No
-              subscriptions.
+              {t("footer.description")}
             </p>
 
             <div className="flex items-center gap-[10px]">
@@ -115,7 +95,7 @@ export default function Footer() {
 
           <div className="sm:col-span-1 lg:col-span-2 lg:col-start-7">
             <h3 className="mb-[16px] text-[13px] font-extrabold tracking-wider text-[#151515] uppercase">
-              Product
+              {t("footer.productTitle")}
             </h3>
             <ul className="flex flex-col gap-[12px]">
               {productLinks.map((link) => (
@@ -124,34 +104,16 @@ export default function Footer() {
                     href={link.href}
                     className="text-[14px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
                   >
-                    {link.label}
+                    {t(`footer.${link.label.toLowerCase()}`)}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* <div className="sm:col-span-1 lg:col-span-2">
-            <h3 className="mb-[16px] text-[13px] font-extrabold tracking-wider text-[#151515] uppercase">
-              Resources
-            </h3>
-            {/* <ul className="flex flex-col gap-[12px]">
-              {resourceLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="text-[14px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul> */}
-          {/* </div> */}
-
           <div className="sm:col-span-1 lg:col-span-2">
             <h3 className="mb-[16px] text-[13px] font-extrabold tracking-wider text-[#151515] uppercase">
-              Company
+              {t("footer.companyTitle")}
             </h3>
             <ul className="flex flex-col gap-[12px]">
               {companyLinks.map((link) => (
@@ -160,7 +122,7 @@ export default function Footer() {
                     href={`/${locale}/${link.href}`}
                     className="text-[14px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
                   >
-                    {link.label}
+                    {t(`footer.${link.label.toLowerCase()}`)}
                   </Link>
                 </li>
               ))}
@@ -176,7 +138,7 @@ export default function Footer() {
         >
           <div className="flex flex-col items-center justify-between gap-[16px] sm:flex-row">
             <p className="text-[13px] text-[#6B7280]">
-              &copy; {new Date().getFullYear()} Uurl. All rights reserved.
+              &copy; {new Date().getFullYear()} Uurl. {t("footer.copyright")}
             </p>
 
             <div className="flex items-center gap-[20px]">
@@ -184,19 +146,19 @@ export default function Footer() {
                 href={`/${locale}/privacy`}
                 className="text-[13px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
               >
-                Privacy Policy
+                {t("footer.privacyPolicy")}
               </Link>
               <Link
                 href={`/${locale}/terms`}
                 className="text-[13px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
               >
-                Terms of Service
+                {t("footer.termsOfService")}
               </Link>
               <Link
                 href={`/${locale}/contact`}
                 className="text-[13px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
               >
-                Contact Us
+                {t("footer.contactUs")}
               </Link>
             </div>
           </div>

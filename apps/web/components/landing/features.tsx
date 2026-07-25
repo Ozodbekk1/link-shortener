@@ -1,6 +1,11 @@
+"use client"
+
 import React from "react"
+import { useTranslation } from "@/hooks/use-translation"
 
 export default function FeaturesSection() {
+  const { t } = useTranslation()
+
   return (
     <section id="features" className="relative bg-gray-50 py-24">
       <div
@@ -14,10 +19,10 @@ export default function FeaturesSection() {
       <div className="mx-auto max-w-[1200px] px-8">
         <div className="mb-15 text-center opacity-100 transition-opacity duration-700">
           <h2 className="mb-3.5 text-[clamp(28px,4vw,48px)] leading-tight font-black tracking-tight text-[#151515]">
-            Not just a simple link shortener
+            {t("features.heading")}
           </h2>
           <p className="mx-auto max-w-[500px] text-[17px] leading-relaxed text-gray-500">
-            Everything you need to manage, analyze, and grow your links.
+            {t("features.subheading")}
           </p>
         </div>
 
@@ -221,20 +226,19 @@ export default function FeaturesSection() {
               </div>
               <div>
                 <h3 className="mb-[7px] text-[16px] font-extrabold tracking-tight text-[#151515]">
-                  Global Analytics
+                  {t("features.analytics.title")}
                 </h3>
                 <p className="m-0 text-[13.5px] leading-relaxed text-gray-500">
-                  Track every click with pinpoint detail. Countries, cities,
-                  devices, browsers, OS — all in real-time.
+                  {t("features.analytics.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-[5px]">
                 {[
-                  "Countries",
-                  "Cities",
-                  "Devices",
-                  "Browsers",
-                  "Real-time",
+                  t("features.analytics.tags.0"),
+                  t("features.analytics.tags.1"),
+                  t("features.analytics.tags.2"),
+                  t("features.analytics.tags.3"),
+                  t("features.analytics.tags.4"),
                 ].map((tag) => (
                   <span
                     key={tag}
@@ -396,24 +400,27 @@ export default function FeaturesSection() {
               </div>
               <div>
                 <h3 className="mb-[7px] text-[16px] font-extrabold tracking-tight text-[#151515]">
-                  Smart Redirect Rules
+                  {t("features.redirects.title")}
                 </h3>
                 <p className="m-0 text-[13.5px] leading-relaxed text-gray-500">
-                  Route visitors based on country, device, browser, language, or
-                  time. Personalize every click.
+                  {t("features.redirects.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-[5px]">
-                {["Country", "Device", "Browser", "Language", "Time-based"].map(
-                  (tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  )
-                )}
+                {[
+                  t("features.redirects.tags.0"),
+                  t("features.redirects.tags.1"),
+                  t("features.redirects.tags.2"),
+                  t("features.redirects.tags.3"),
+                  t("features.redirects.tags.4"),
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -589,15 +596,18 @@ export default function FeaturesSection() {
               </div>
               <div>
                 <h3 className="mb-[7px] text-[16px] font-extrabold tracking-tight text-[#151515]">
-                  Beautiful QR Codes
+                  {t("features.qr.title")}
                 </h3>
                 <p className="m-0 text-[13.5px] leading-relaxed text-gray-500">
-                  Branded QR codes with custom colors and your logo inside.
-                  Download as PNG or SVG.
+                  {t("features.qr.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-[5px]">
-                {["Custom colors", "Logo inside", "PNG / SVG"].map((tag) => (
+                {[
+                  t("features.qr.tags.0"),
+                  t("features.qr.tags.1"),
+                  t("features.qr.tags.2"),
+                ].map((tag) => (
                   <span
                     key={tag}
                     className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
@@ -725,15 +735,18 @@ export default function FeaturesSection() {
               </div>
               <div>
                 <h3 className="mb-[7px] text-[16px] font-extrabold tracking-tight text-[#151515]">
-                  Custom Domains
+                  {t("features.domains.title")}
                 </h3>
                 <p className="m-0 text-[13.5px] leading-relaxed text-gray-500">
-                  Use your own brand domain. go.yourcompany.com instead of
-                  uurl.uz — for every link.
+                  {t("features.domains.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-[5px]">
-                {["Brand domain", "Auto SSL", "Zero config"].map((tag) => (
+                {[
+                  t("features.domains.tags.0"),
+                  t("features.domains.tags.1"),
+                  t("features.domains.tags.2"),
+                ].map((tag) => (
                   <span
                     key={tag}
                     className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
@@ -948,15 +961,18 @@ export default function FeaturesSection() {
               </div>
               <div>
                 <h3 className="mb-[7px] text-[16px] font-extrabold tracking-tight text-[#151515]">
-                  Organizations
+                  {t("features.organizations.title")}
                 </h3>
                 <p className="m-0 text-[13.5px] leading-relaxed text-gray-500">
-                  Create company workspaces, invite teammates, and manage
-                  permissions across every department.
+                  {t("features.organizations.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-[5px]">
-                {["Workspace", "Members", "Roles"].map((tag) => (
+                {[
+                  t("features.organizations.tags.0"),
+                  t("features.organizations.tags.1"),
+                  t("features.organizations.tags.2"),
+                ].map((tag) => (
                   <span
                     key={tag}
                     className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
@@ -1157,24 +1173,26 @@ export default function FeaturesSection() {
               </div>
               <div>
                 <h3 className="mb-[7px] text-[16px] font-extrabold tracking-tight text-[#151515]">
-                  Workspaces &amp; Teams
+                  {t("features.workspaces.title")}
                 </h3>
                 <p className="m-0 text-[13.5px] leading-relaxed text-gray-500">
-                  Organize links into projects. Assign roles, collaborate in
-                  real-time, and keep everyone aligned.
+                  {t("features.workspaces.description")}
                 </p>
               </div>
               <div className="flex flex-wrap gap-[5px]">
-                {["Projects", "Permissions", "Collaboration", "Sharing"].map(
-                  (tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  )
-                )}
+                {[
+                  t("features.workspaces.tags.0"),
+                  t("features.workspaces.tags.1"),
+                  t("features.workspaces.tags.2"),
+                  t("features.workspaces.tags.3"),
+                ].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-gray-50 px-2.5 py-0.75 text-[11.5px] font-semibold text-gray-500 transition-colors"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
