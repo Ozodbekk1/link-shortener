@@ -2,12 +2,12 @@
 
 import React from "react"
 import { useLocale } from "@/hooks/use-locale"
+import { useTranslation } from "@/hooks/use-translation"
 import Link from "next/link"
 import {
   ArrowLeft,
   Target,
   Eye,
-  Heart,
   Shield,
   Zap,
   Globe,
@@ -15,41 +15,38 @@ import {
 } from "lucide-react"
 
 const stats = [
-  { value: "10M+", label: "Links Created" },
-  { value: "50K+", label: "Active Users" },
-  { value: "99.9%", label: "Uptime" },
-  { value: "150+", label: "Countries" },
+  { value: "10M+", key: "about.statsLinks" },
+  { value: "50K+", key: "about.statsUsers" },
+  { value: "99.9%", key: "about.statsUptime" },
+  { value: "150+", key: "about.statsCountries" },
 ]
 
 const values = [
   {
     icon: <Shield className="h-6 w-6" />,
-    title: "Privacy First",
-    description:
-      "We believe your data belongs to you. No tracking, no selling — just transparent analytics you control.",
+    titleKey: "about.valuePrivacyTitle",
+    descKey: "about.valuePrivacyDesc",
   },
   {
     icon: <Zap className="h-6 w-6" />,
-    title: "Lightning Fast",
-    description:
-      "Every millisecond counts. Our infrastructure is optimized for sub-50ms redirects worldwide.",
+    titleKey: "about.valueSpeedTitle",
+    descKey: "about.valueSpeedDesc",
   },
   {
     icon: <Globe className="h-6 w-6" />,
-    title: "Globally Accessible",
-    description:
-      "Free for everyone, everywhere. No credit card required, no limits, no hidden fees.",
+    titleKey: "about.valueGlobalTitle",
+    descKey: "about.valueGlobalDesc",
   },
   {
     icon: <BarChart3 className="h-6 w-6" />,
-    title: "Data-Driven",
-    description:
-      "Every click tells a story. We give you the insights you need to make smarter decisions.",
+    titleKey: "about.valueDataTitle",
+    descKey: "about.valueDataDesc",
   },
 ]
 
 export default function AboutPage() {
   const locale = useLocale()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-white">
@@ -59,7 +56,7 @@ export default function AboutPage() {
           className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-[#6B7280] transition-colors hover:text-[#F45B69]"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Home
+          {t("about.backToHome")}
         </Link>
       </div>
 
@@ -73,25 +70,24 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1200px] px-[32px] pb-[80px]">
           <div className="mx-auto max-w-[800px] text-center">
             <h1 className="mb-6 text-4xl font-black tracking-tight text-[#111827] sm:text-5xl lg:text-[56px] lg:leading-[1.1]">
-              We believe links should be{" "}
-              <span className="text-[#F45B69]">free</span>.
+              {t("about.headline")}{" "}
+              <span className="text-[#F45B69]">{t("about.headlineHighlight")}</span>.
             </h1>
             <p className="mx-auto mb-10 max-w-[600px] text-lg leading-relaxed text-[#6B7280]">
-              Uurl was built to democratize link management. No subscriptions,
-              no hidden limits — just powerful tools for everyone, free forever.
+              {t("about.description")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
             {stats.map((stat) => (
               <div
-                key={stat.label}
+                key={stat.key}
                 className="group rounded-2xl border border-[#E5E7EB] bg-white p-6 text-center transition-all duration-300 hover:border-[#F45B69]/30 hover:shadow-lg hover:shadow-[#F45B69]/5"
               >
                 <div className="mb-1 text-3xl font-black text-[#111827] group-hover:text-[#F45B69]">
                   {stat.value}
                 </div>
-                <div className="text-sm text-[#6B7280]">{stat.label}</div>
+                <div className="text-sm text-[#6B7280]">{t(stat.key)}</div>
               </div>
             ))}
           </div>
@@ -102,29 +98,17 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1200px] px-[32px]">
           <div className="mx-auto max-w-[800px]">
             <div className="mb-4 inline-block rounded-full bg-[#F45B69]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#F45B69] uppercase">
-              Our Story
+              {t("about.storyBadge")}
             </div>
             <h2 className="mb-6 text-3xl font-black tracking-tight text-[#111827] sm:text-4xl">
-              Built out of frustration with{" "}
-              <span className="text-[#F45B69]">overpriced</span> link tools
+              {t("about.storyTitle")}{" "}
+              <span className="text-[#F45B69]">{t("about.storyTitleHighlight")}</span>{" "}
+              {t("about.storyTitleEnd")}
             </h2>
             <div className="space-y-4 text-base leading-relaxed text-[#6B7280]">
-              <p>
-                Every URL shortener on the market either caps your links, hides
-                analytics behind a paywall, or charges a monthly fee that just
-                We knew there had to be a better way.
-              </p>
-              <p>
-                So we built Uurl — a modern, blazing-fast link management
-                platform that stays free forever. No tricks, no
-                &ldquo;enterprise&rdquo; plans, no features locked behind
-                paywalls. Just honest, powerful tools for creators, marketers,
-                and developers.
-              </p>
-              <p>
-                Today, Uurl powers over 10 million links for thousands of teams
-                worldwide — from solo creators to Fortune 500 companies.
-              </p>
+              <p>{t("about.storyP1")}</p>
+              <p>{t("about.storyP2")}</p>
+              <p>{t("about.storyP3")}</p>
             </div>
           </div>
         </div>
@@ -138,12 +122,10 @@ export default function AboutPage() {
                 <Target className="h-6 w-6" />
               </div>
               <h3 className="mb-3 text-xl font-bold text-[#111827]">
-                Our Mission
+                {t("about.missionTitle")}
               </h3>
               <p className="leading-relaxed text-[#6B7280]">
-                To make link management accessible to everyone by providing
-                powerful, reliable, and completely free tools that help people
-                understand and optimize their online presence.
+                {t("about.missionDesc")}
               </p>
             </div>
             <div className="group rounded-2xl border border-[#E5E7EB] bg-white p-8 transition-all duration-300 hover:border-[#F45B69]/30 hover:shadow-lg">
@@ -151,12 +133,10 @@ export default function AboutPage() {
                 <Eye className="h-6 w-6" />
               </div>
               <h3 className="mb-3 text-xl font-bold text-[#111827]">
-                Our Vision
+                {t("about.visionTitle")}
               </h3>
               <p className="leading-relaxed text-[#6B7280]">
-                A world where understanding your links is as simple as creating
-                them — where data empowers decisions without corporate
-                gatekeeping or expensive subscriptions.
+                {t("about.visionDesc")}
               </p>
             </div>
           </div>
@@ -167,26 +147,27 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1200px] px-[32px]">
           <div className="mb-12 text-center">
             <div className="mb-4 inline-block rounded-full bg-[#F45B69]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#F45B69] uppercase">
-              Core Values
+              {t("about.valuesBadge")}
             </div>
             <h2 className="text-3xl font-black tracking-tight text-[#111827] sm:text-4xl">
-              What we <span className="text-[#F45B69]">stand for</span>
+              {t("about.valuesTitle")}{" "}
+              <span className="text-[#F45B69]">{t("about.valuesTitleHighlight")}</span>
             </h2>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((value) => (
               <div
-                key={value.title}
+                key={value.titleKey}
                 className="group rounded-2xl border border-[#E5E7EB] bg-white p-6 transition-all duration-300 hover:border-[#F45B69]/30 hover:shadow-lg"
               >
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#F45B69]/10 text-[#F45B69] transition-colors group-hover:bg-[#F45B69] group-hover:text-white">
                   {value.icon}
                 </div>
                 <h3 className="mb-2 text-lg font-bold text-[#111827]">
-                  {value.title}
+                  {t(value.titleKey)}
                 </h3>
                 <p className="text-sm leading-relaxed text-[#6B7280]">
-                  {value.description}
+                  {t(value.descKey)}
                 </p>
               </div>
             ))}
@@ -204,16 +185,16 @@ export default function AboutPage() {
               }}
             />
             <h2 className="relative mb-4 text-3xl font-black text-white sm:text-4xl">
-              Ready to get started?
+              {t("about.ctaTitle")}
             </h2>
             <p className="relative mb-8 text-[#9CA3AF]">
-              Join thousands of teams who trust Uurl for their link management.
+              {t("about.ctaDesc")}
             </p>
             <Link
               href={`/${locale}/auth/register`}
               className="relative inline-block rounded-xl bg-[#F45B69] px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#F45B69]/30 transition-all hover:opacity-90 active:scale-[0.98]"
             >
-              Create Free Account →
+              {t("about.ctaButton")}
             </Link>
           </div>
         </div>
@@ -221,3 +202,4 @@ export default function AboutPage() {
     </div>
   )
 }
+

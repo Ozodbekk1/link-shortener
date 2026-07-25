@@ -1,6 +1,11 @@
+"use client"
+
 import React from "react"
+import { useTranslation } from "@/hooks/use-translation"
 
 export default function CustomDomainSection() {
+  const { t } = useTranslation()
+
   return (
     <section
       id="domains"
@@ -10,23 +15,24 @@ export default function CustomDomainSection() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
           <div className="opacity-100 transition-all duration-800">
             <h2 className="mb-[18px] text-[clamp(28px,4vw,48px)] leading-[1.1] font-black tracking-[-1.5px] text-[#151515]">
-              Your brand.
+              {t("customDomain.heading")}
               <br />
-              <span className="text-[#F45B69]">Your links.</span>
+              <span className="text-[#F45B69]">
+                {t("customDomain.headingHighlight")}
+              </span>
             </h2>
 
             <p className="mb-[36px] text-[17px] leading-[1.65] text-[#6B7280]">
-              Stop sending people to uurl.uz. Connect your own domain and every
-              link reinforces your brand identity.
+              {t("customDomain.description")}
             </p>
 
             <div className="mb-[36px] flex flex-col gap-[10px]">
               <div className="flex items-center gap-[12px]">
                 <span className="w-[48px] shrink-0 text-[13px] font-bold text-[#6B7280]">
-                  Before
+                  {t("customDomain.beforeLabel")}
                 </span>
                 <code className="flex-1 rounded-[10px] border border-[#E5E7EB] bg-[#F9FAFB] px-[14px] py-[10px] text-[13px] text-[#6B7280] line-through">
-                  uurl.uz/company-sale
+                  {t("customDomain.beforeExample")}
                 </code>
               </div>
 
@@ -36,20 +42,20 @@ export default function CustomDomainSection() {
 
               <div className="flex items-center gap-[12px]">
                 <span className="w-[48px] shrink-0 text-[13px] font-bold text-[#F45B69]">
-                  After
+                  {t("customDomain.afterLabel")}
                 </span>
                 <code className="flex-1 rounded-[10px] border border-[#FFCCCC] bg-[#FFE5E5] px-[14px] py-[10px] text-[13px] font-bold text-[#151515]">
-                  go.company.com/sale
+                  {t("customDomain.afterExample")}
                 </code>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-[8px]">
               {[
-                "Auto SSL",
-                "Zero config",
-                "Instant setup",
-                "Multiple domains",
+                t("customDomain.tag1"),
+                t("customDomain.tag2"),
+                t("customDomain.tag3"),
+                t("customDomain.tag4"),
               ].map((tag) => (
                 <span
                   key={tag}

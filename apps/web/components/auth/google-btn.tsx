@@ -12,7 +12,7 @@ export function GoogleButton({ onClick, loading }: GoogleButtonProps) {
     <Button
       type="button"
       variant="outline"
-      className="w-full"
+      className="w-full rounded-xl border border-gray-200/80 bg-white py-5 text-sm font-semibold text-gray-700 shadow-xs transition-all hover:bg-gray-50 hover:border-gray-300 active:scale-[0.98]"
       onClick={onClick}
       disabled={loading}
     >

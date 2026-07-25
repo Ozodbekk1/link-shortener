@@ -68,7 +68,9 @@
     "copyright": "Все права защищены.",
     "privacyPolicy": "Политика Конфиденциальности",
     "termsOfService": "Условия Использования",
-    "contactUs": "Связаться с нами"
+    "contactUs": "Связаться с нами",
+    "features": "возможность",
+    "pricing": "Цены"
   },
   "about": {
     "backToHome": "На главную",
@@ -142,6 +144,7 @@
     "section6Item2": "Исправление: Вы можете обновить данные аккаунта в настройках.",
     "section6Item3": "Удаление: Вы можете удалить аккаунт и все данные в любое время.",
     "section6Item4": "Переносимость: Вы можете запросить данные в машиночитаемом формате.",
+    "section6Item5": "Чтобы воспользоваться любым из этих прав, свяжитесь с нами по адресу privacy@uurl.uz.",
     "ctaTitle": "Есть вопросы о конфиденциальности?",
     "ctaDesc": "Если у вас есть вопросы о нашей политике или обработке данных, свяжитесь с нами.",
     "ctaButton": "Связаться с нами"
@@ -215,10 +218,119 @@
     "followTitle": "Мы в соцсетях",
     "followDesc": "Следите за последними обновлениями и новыми функциями."
   },
+  "demo": {
+    "heading": "Сократите ссылку за",
+    "headingHighlight": "секунды",
+    "description": "Вставьте длинный URL и получите чистую, отслеживаемую короткую ссылку мгновенно.",
+    "urlLabel": "Ваш длинный URL",
+    "urlPlaceholder": "Вставьте ваш длинный URL сюда...",
+    "shortenButton": "Сократить",
+    "shortenLoading": "Сокращаем...",
+    "urlExample": "Попробуйте: https://example.com/products/summer-sale-2024?ref=email",
+    "resultLabel": "Ваша короткая ссылка",
+    "copyButton": "Копировать",
+    "copiedButton": "Скопировано",
+    "resultPlaceholder": "Ваша короткая ссылка появится здесь",
+    "resultHint": "Вставьте URL и нажмите Сократить",
+    "statClicks": "Клики",
+    "statCountries": "Страны",
+    "statUptime": "Время работы"
+  },
+  "customDomain": {
+    "heading": "Ваш бренд.",
+    "headingHighlight": "Ваши ссылки.",
+    "description": "Перестаньте отправлять людей на uurl.uz. Подключите свой домен, и каждая ссылка будет укреплять ваш бренд.",
+    "beforeLabel": "Было",
+    "afterLabel": "Стало",
+    "beforeExample": "uurl.uz/company-sale",
+    "afterExample": "go.company.com/sale",
+    "tag1": "Авто SSL",
+    "tag2": "Без настройки",
+    "tag3": "Мгновенная установка",
+    "tag4": "Несколько доменов"
+  },
+  "pricing": {
+    "heading": "Всё бесплатно.",
+    "headingHighlight": "Навсегда.",
+    "description": "Никакой кредитной карты. Никаких пробных периодов. Никаких ограничений. Никакого мелкого шрифта. Просто полный продукт, всегда бесплатно.",
+    "perkLinksLabel": "Безлимитные ссылки",
+    "perkLinksSub": "Создавайте сколько нужно",
+    "perkClicksLabel": "Безлимитные клики",
+    "perkClicksSub": "Никаких ограничений трафика",
+    "perkQrLabel": "Безлимитные QR-коды",
+    "perkQrSub": "Генерируйте без ограничений",
+    "perkAnalyticsLabel": "Безлимитная аналитика",
+    "perkAnalyticsSub": "Полные данные, никаких платных стен",
+    "perkTeamsLabel": "Безлимитные команды",
+    "perkTeamsSub": "Приглашайте всех, кого хотите",
+    "perkWorkspacesLabel": "Безлимитные пространства",
+    "perkWorkspacesSub": "Организуйте свободно",
+    "ctaButton": "Начать бесплатно — карта не нужна"
+  },
+  "cta": {
+    "heading": "Готовы сделать ваши ссылки",
+    "headingHighlight": "умнее",
+    "description": "Присоединяйтесь к 12 000+ команд. Бесплатно навсегда. Карта не нужна. Начните за секунды.",
+    "ctaPrimary": "Начать создавать ссылки",
+    "ctaSecondary": "Все возможности",
+    "trustItem1": "Навсегда бесплатно",
+    "trustItem2": "Без кредитной карты",
+    "trustItem3": "Без ограничений"
+  },
   "locale": {
     "en": "English",
     "uz": "O'zbek",
     "ru": "Русский",
     "language": "Язык"
+  },
+  "auth": {
+    "login": {
+      "title": "С возвращением",
+      "subtitle": "Войдите в свой аккаунт UURL.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ivan@example.com",
+      "passwordLabel": "Пароль",
+      "submitButton": "Войти",
+      "forgotPassword": "Забыли пароль?",
+      "registerLink": "Регистрация",
+      "continueWith": "Продолжить через"
+    },
+    "register": {
+      "title": "Создать аккаунт",
+      "subtitle": "Начните сокращать ссылки уже сегодня.",
+      "nameLabel": "Имя",
+      "namePlaceholder": "Иван Иванов",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ivan@example.com",
+      "passwordLabel": "Пароль",
+      "avatarLabel": "URL аватара",
+      "avatarPlaceholder": "https://example.com/avatar.png",
+      "submitButton": "Создать аккаунт",
+      "alreadyHaveAccount": "Уже есть аккаунт?",
+      "loginLink": "Войти",
+      "continueWith": "Продолжить через"
+    },
+    "forgotPassword": {
+      "title": "Забыли пароль?",
+      "subtitle": "Мы отправим OTP-код для сброса на ваш email.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ivan@example.com",
+      "submitButton": "Отправить OTP",
+      "backToLogin": "Назад ко входу"
+    },
+    "resetPassword": {
+      "title": "Сброс пароля",
+      "subtitle": "Введите OTP-код из вашего email.",
+      "otpLabel": "OTP-код",
+      "otpPlaceholder": "123456",
+      "newPasswordLabel": "Новый пароль",
+      "newPasswordPlaceholder": "Новый пароль",
+      "submitButton": "Сбросить пароль",
+      "backToLogin": "Назад ко входу"
+    },
+    "verifyAccount": {
+      "title": "Подтверждение аккаунта",
+      "subtitle": "Введите код подтверждения, отправленный на ваш email."
+    }
   }
 }

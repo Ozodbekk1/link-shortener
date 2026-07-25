@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { useLocale } from "@/hooks/use-locale"
+import { useTranslation } from "@/hooks/use-translation"
 import Link from "next/link"
 import {
   ArrowLeft,
@@ -15,26 +16,27 @@ import {
 const contactMethods = [
   {
     icon: <Mail className="h-5 w-5" />,
-    title: "Email Us",
-    content: "hello@uurl.uz",
-    description: "We typically respond within 24 hours",
+    titleKey: "contact.methodEmailTitle",
+    contentKey: "contact.methodEmailContent",
+    descKey: "contact.methodEmailDesc",
   },
   {
     icon: <MapPin className="h-5 w-5" />,
-    title: "Location",
-    content: "Tashkent, Uzbekistan",
-    description: "Remote-first team, global presence",
+    titleKey: "contact.methodLocationTitle",
+    contentKey: "contact.methodLocationContent",
+    descKey: "contact.methodLocationDesc",
   },
   {
     icon: <Clock className="h-5 w-5" />,
-    title: "Response Time",
-    content: "Mon–Fri, 9AM–6PM GMT+5",
-    description: "We aim to reply within 48 hours",
+    titleKey: "contact.methodResponseTitle",
+    contentKey: "contact.methodResponseContent",
+    descKey: "contact.methodResponseDesc",
   },
 ]
 
 export default function ContactPage() {
   const locale = useLocale()
+  const { t } = useTranslation()
   const [submitted, setSubmitted] = useState(false)
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,22 +53,21 @@ export default function ContactPage() {
           className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-[#6B7280] transition-colors hover:text-[#F45B69]"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Home
+          {t("contact.backToHome")}
         </Link>
       </div>
 
       <div className="mx-auto max-w-[1200px] px-[32px] pb-[80px]">
         <div className="mb-12">
           <div className="mb-4 inline-block rounded-full bg-[#F45B69]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#F45B69] uppercase">
-            Get in Touch
+            {t("contact.badge")}
           </div>
           <h1 className="mb-4 text-4xl font-black tracking-tight text-[#111827] sm:text-5xl">
-            We&rsquo;d love to hear{" "}
-            <span className="text-[#F45B69]">from you</span>
+            {t("contact.title")}{" "}
+            <span className="text-[#F45B69]">{t("contact.titleHighlight")}</span>
           </h1>
           <p className="max-w-[500px] text-lg leading-relaxed text-[#6B7280]">
-            Have a question, feedback, or just want to say hi? Drop us a message
-            and we&rsquo;ll get back to you as soon as possible.
+            {t("contact.description")}
           </p>
         </div>
 
@@ -78,17 +79,16 @@ export default function ContactPage() {
                   <CheckCircle2 className="h-8 w-8 text-[#F45B69]" />
                 </div>
                 <h3 className="mb-2 text-xl font-bold text-[#111827]">
-                  Message Sent!
+                  {t("contact.successTitle")}
                 </h3>
                 <p className="mb-6 max-w-[400px] text-[#6B7280]">
-                  Thank you for reaching out. We&rsquo;ll review your message
-                  and get back to you within 48 hours.
+                  {t("contact.successDesc")}
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
                   className="rounded-xl bg-[#F45B69] px-6 py-2.5 text-sm font-bold text-white transition-all hover:opacity-90"
                 >
-                  Send Another Message
+                  {t("contact.successButton")}
                 </button>
               </div>
             ) : (
@@ -99,13 +99,13 @@ export default function ContactPage() {
                       htmlFor="name"
                       className="mb-1.5 block text-sm font-semibold text-[#111827]"
                     >
-                      Full Name
+                      {t("contact.nameLabel")}
                     </label>
                     <input
                       type="text"
                       id="name"
                       required
-                      placeholder="John Doe"
+                      placeholder={t("contact.namePlaceholder")}
                       className="w-full rounded-xl border border-[#E5E7EB] px-4 py-3 text-sm text-[#111827] transition-colors placeholder:text-[#9CA3AF] focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
                     />
                   </div>
@@ -114,13 +114,13 @@ export default function ContactPage() {
                       htmlFor="email"
                       className="mb-1.5 block text-sm font-semibold text-[#111827]"
                     >
-                      Email Address
+                      {t("contact.emailLabel")}
                     </label>
                     <input
                       type="email"
                       id="email"
                       required
-                      placeholder="john@example.com"
+                      placeholder={t("contact.emailPlaceholder")}
                       className="w-full rounded-xl border border-[#E5E7EB] px-4 py-3 text-sm text-[#111827] transition-colors placeholder:text-[#9CA3AF] focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
                     />
                   </div>
@@ -131,13 +131,13 @@ export default function ContactPage() {
                     htmlFor="subject"
                     className="mb-1.5 block text-sm font-semibold text-[#111827]"
                   >
-                    Subject
+                    {t("contact.subjectLabel")}
                   </label>
                   <input
                     type="text"
                     id="subject"
                     required
-                    placeholder="How can we help?"
+                    placeholder={t("contact.subjectPlaceholder")}
                     className="w-full rounded-xl border border-[#E5E7EB] px-4 py-3 text-sm text-[#111827] transition-colors placeholder:text-[#9CA3AF] focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
                   />
                 </div>
@@ -147,13 +147,13 @@ export default function ContactPage() {
                     htmlFor="message"
                     className="mb-1.5 block text-sm font-semibold text-[#111827]"
                   >
-                    Message
+                    {t("contact.messageLabel")}
                   </label>
                   <textarea
                     id="message"
                     required
                     rows={6}
-                    placeholder="Tell us more about your inquiry..."
+                    placeholder={t("contact.messagePlaceholder")}
                     className="w-full resize-none rounded-xl border border-[#E5E7EB] px-4 py-3 text-sm text-[#111827] transition-colors placeholder:text-[#9CA3AF] focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
                   />
                 </div>
@@ -163,7 +163,7 @@ export default function ContactPage() {
                   className="inline-flex items-center gap-2 rounded-xl bg-[#F45B69] px-6 py-3 text-sm font-bold text-white shadow-lg shadow-[#F45B69]/30 transition-all hover:opacity-90 active:scale-[0.98]"
                 >
                   <Send className="h-4 w-4" />
-                  Send Message
+                  {t("contact.sendButton")}
                 </button>
               </form>
             )}
@@ -172,26 +172,26 @@ export default function ContactPage() {
           <div className="space-y-6">
             {contactMethods.map((method) => (
               <div
-                key={method.title}
+                key={method.titleKey}
                 className="group rounded-2xl border border-[#E5E7EB] bg-white p-6 transition-all duration-300 hover:border-[#F45B69]/30 hover:shadow-lg"
               >
                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-[#F45B69]/10 text-[#F45B69]">
                   {method.icon}
                 </div>
                 <h3 className="mb-1 text-base font-bold text-[#111827]">
-                  {method.title}
+                  {t(method.titleKey)}
                 </h3>
-                <p className="mb-1 text-sm text-[#111827]">{method.content}</p>
-                <p className="text-xs text-[#6B7280]">{method.description}</p>
+                <p className="mb-1 text-sm text-[#111827]">{t(method.contentKey)}</p>
+                <p className="text-xs text-[#6B7280]">{t(method.descKey)}</p>
               </div>
             ))}
 
             <div className="rounded-2xl border border-[#E5E7EB] bg-[#FFF8F8] p-6">
               <h3 className="mb-3 text-base font-bold text-[#111827]">
-                Follow Us
+                {t("contact.followTitle")}
               </h3>
               <p className="mb-4 text-sm text-[#6B7280]">
-                Stay up to date with the latest features and updates.
+                {t("contact.followDesc")}
               </p>
               <div className="flex gap-3">
                 <a
@@ -241,3 +241,4 @@ export default function ContactPage() {
     </div>
   )
 }
+

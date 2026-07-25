@@ -6,6 +6,7 @@ import shareLink from "../assets/share.png"
 import Image from "next/image"
 import { CoolMode } from "@/components/ui/cool-mode"
 import BlurText from "@/components/BlurText"
+import { useTranslation } from "@/hooks/use-translation"
 
 const coral = "#F45B69"
 const coralDark = "#E04856"
@@ -13,6 +14,7 @@ const pinkLight = "#FFF0F2"
 const pinkMedium = "#FFE4E8"
 
 export default function Demo() {
+  const { t } = useTranslation()
   const [url, setUrl] = useState("")
   const [result, setResult] = useState("")
   const [loading, setLoading] = useState(false)
@@ -101,15 +103,9 @@ export default function Demo() {
                 : "translate-y-7 opacity-0"
             }`}
           >
-            {/* <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-[#F45B69]/15 bg-[#FFF0F2] px-3.5 py-1">
-              <span className="text-xs font-semibold text-[#F45B69]">
-                ⚡ Instant magic
-              </span>
-            </div> */}
-
             <div className="mb-3 flex flex-wrap items-center justify-center gap-2 text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl">
               <BlurText
-                text="Shorten a link in "
+                text={t("demo.heading") + " "}
                 delay={200}
                 animateBy="words"
                 direction="top"
@@ -119,7 +115,7 @@ export default function Demo() {
                 className="mb-3 flex justify-center text-3xl leading-tight font-black tracking-tight text-gray-900 sm:text-4xl lg:text-5xl"
               />
               <BlurText
-                text="seconds"
+                text={t("demo.headingHighlight")}
                 delay={200}
                 animateBy="words"
                 direction="top"
@@ -131,15 +127,14 @@ export default function Demo() {
             </div>
 
             <p className="mx-auto max-w-md text-base leading-relaxed text-gray-500 sm:text-lg">
-              Paste your long URL and get a clean, trackable short link
-              instantly.
+              {t("demo.description")}
             </p>
           </div>
 
           <div className="mx-auto grid max-w-5xl grid-cols-1 items-center gap-6 lg:grid-cols-[1fr_auto_1fr] lg:gap-8">
             <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-xl shadow-black/5 sm:p-8">
               <div className="mb-2.5 text-[11.5px] font-bold tracking-wider text-gray-500 uppercase">
-                Your long URL
+                {t("demo.urlLabel")}
               </div>
 
               <div className="mb-3.5 flex flex-col gap-2.5 sm:flex-row">
@@ -151,7 +146,7 @@ export default function Demo() {
                     setResult("")
                   }}
                   onKeyDown={(e) => e.key === "Enter" && shorten()}
-                  placeholder="Paste your long URL here..."
+                  placeholder={t("demo.urlPlaceholder")}
                   className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 font-mono text-sm text-gray-900 transition-colors outline-none focus:border-[#F45B69]"
                 />
                 <CoolMode>
@@ -170,13 +165,15 @@ export default function Demo() {
                       width={20}
                       height={20}
                     />
-                    {loading ? "Cutting..." : "Shorten"}
+                    {loading
+                      ? t("demo.shortenLoading")
+                      : t("demo.shortenButton")}
                   </button>
                 </CoolMode>
               </div>
 
               <div className="text-xs text-gray-400">
-                Try: https://example.com/products/summer-sale-2024?ref=email
+                {t("demo.urlExample")}
               </div>
             </div>
 
@@ -202,7 +199,7 @@ export default function Demo() {
               {result ? (
                 <>
                   <div className="mb-2.5 text-[11.5px] font-bold tracking-wider text-[#F45B69] uppercase">
-                    Your short link
+                    {t("demo.resultLabel")}
                   </div>
 
                   <div className="mb-3.5 flex flex-col gap-2.5 sm:flex-row">
@@ -218,16 +215,16 @@ export default function Demo() {
                             : "bg-[#F45B69] hover:bg-[#E04856]"
                         }`}
                       >
-                        {copied ? "Copied" : "Copy"}
+                        {copied ? t("demo.copiedButton") : t("demo.copyButton")}
                       </button>
                     </CoolMode>
                   </div>
 
                   <div className="flex gap-2">
                     {[
-                      { v: "0", l: "Clicks" },
-                      { v: "0", l: "Countries" },
-                      { v: "100%", l: "Uptime" },
+                      { v: "0", l: t("demo.statClicks") },
+                      { v: "0", l: t("demo.statCountries") },
+                      { v: "100%", l: t("demo.statUptime") },
                     ].map(({ v, l }) => (
                       <div
                         key={l}
@@ -247,10 +244,10 @@ export default function Demo() {
                     <Image src={shareLink} alt="link" width={50} height={50} />
                   </div>
                   <div className="text-sm font-medium text-gray-600">
-                    Your short link will appear here
+                    {t("demo.resultPlaceholder")}
                   </div>
                   <div className="mt-1 text-xs text-gray-400">
-                    Paste a URL and click Shorten
+                    {t("demo.resultHint")}
                   </div>
                 </div>
               )}
