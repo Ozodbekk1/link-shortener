@@ -3,13 +3,13 @@ import { LineShadowText } from "@/components/ui/line-shadow-text"
 import { Highlighter } from "@/components/ui/highlighter"
 import Image from "next/image"
 import starImage from "../assets/gold-star.png"
+import { useTranslation } from "@/hooks/use-translation"
 
 const coral = "#F45B69"
-const pinkBg = "#FFF5F5"
-const pillBg = "rgba(244,91,105,0.08)"
-const darkText = "#111827"
 
 export default function Hero() {
+  const { t } = useTranslation()
+
   return (
     <>
       <style jsx global>{`
@@ -105,15 +105,15 @@ export default function Hero() {
           <div className="grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-2 lg:gap-8">
             <div className="animate-fade-in-up">
               <h1 className="mb-6 text-4xl leading-[1.05] font-black tracking-tight text-gray-900 sm:text-5xl lg:text-[68px]">
-                Create smarter{" "}
+                {t("hero.headline")}{" "}
                 <LineShadowText className="text-[#F45B69]">
-                  links
+                  {t("hero.headlineLinks")}
                 </LineShadowText>
                 .
                 <br />
-                Understand every{" "}
+                {t("hero.headlineUnderstand")}{" "}
                 <LineShadowText className="text-[#F45B69]">
-                  click
+                  {t("hero.headlineClick")}
                 </LineShadowText>
                 .
               </h1>
@@ -121,15 +121,15 @@ export default function Hero() {
               <p className="mb-9 max-w-md text-base leading-relaxed text-gray-500 sm:text-lg">
                 {" "}
                 <Highlighter action="underline" color="#FF9800">
-                  Free forever URL shortener
+                  {t("hero.subtitleFree")}
                 </Highlighter>{" "}
-                with advanced analytics,{" "}
+                {t("hero.subtitleAnalytics")}{" "}
                 <Highlighter action="underline" color="#87CEFA">
-                  custom sub domains
+                  {t("hero.subtitleDomains")}
                 </Highlighter>
-                , QR codes, and powerful redirect rules.{" "}
+                {t("hero.subtitleQR")}{" "}
                 <Highlighter action="underline" color="#F45B69">
-                  No limits. No subscriptions.
+                  {t("hero.subtitleNoLimits")}
                 </Highlighter>
               </p>
 
@@ -138,10 +138,10 @@ export default function Hero() {
                   className="cursor-pointer rounded-xl px-6 py-3.5 text-base font-bold text-white shadow-lg shadow-[#F45B69]/30 transition-all hover:opacity-95 active:scale-[0.98]"
                   style={{ backgroundColor: coral }}
                 >
-                  Create your first link →
+                  {t("hero.ctaPrimary")}
                 </button>
                 <button className="cursor-pointer rounded-xl border border-gray-200/80 bg-white/80 px-6 py-3.5 text-base font-bold text-gray-800 backdrop-blur-sm transition-all hover:bg-white active:scale-[0.98]">
-                  Explore features
+                  {t("hero.ctaSecondary")}
                 </button>
               </div>
 
@@ -165,9 +165,9 @@ export default function Hero() {
                 </div>
                 <div className="flex flex-col">
                   <div className="text-xs font-bold text-gray-900">
-                    12,000+ teams trust Uurl
+                    {t("hero.trustText")}
                   </div>
-                  <div>Loved by marketers and devs</div>
+                  <div>{t("hero.trustSubtext")}</div>
 
                   <div className="flex flex-row items-center text-xs text-gray-400">
                     <Image src={starImage} alt="star" width={35} height={35} />{" "}

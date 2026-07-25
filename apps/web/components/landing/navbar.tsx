@@ -1,22 +1,28 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { DivideCircle, Menu, X } from "lucide-react"
+import { Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { ComicText } from "@/components/ui/comic-text"
+import { useTranslation } from "@/hooks/use-translation"
+import { useLocale } from "@/hooks/use-locale"
+import LanguageSwitcher from "@/components/landing/language-switcher"
 
-const navItems = [
-  { label: "Features", href: "#features" },
-  { label: "Shortener", href: "#shortener" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "Domains", href: "#domains" },
-  // { label: "About", href: "#about" },
+type NavItemKey = "features" | "shortener" | "pricing" | "domains"
+
+const NAV_ITEMS: { key: NavItemKey; href: string }[] = [
+  { key: "features", href: "#features" },
+  { key: "shortener", href: "#shortener" },
+  { key: "pricing", href: "#pricing" },
+  { key: "domains", href: "#domains" },
 ]
 
 export default function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { t } = useTranslation()
+  const locale = useLocale()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -43,7 +49,7 @@ export default function LandingNavbar() {
       }`}
     >
       <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 lg:px-8">
-        <Link href="/" className="group shrink-0">
+        <Link href={`/${locale}`} className="group shrink-0">
           <Image
             src="/icons/logo.png"
             alt="Logo"
@@ -55,28 +61,30 @@ export default function LandingNavbar() {
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
-          {navItems.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <Link
-              key={item.label}
+              key={item.key}
               href={item.href}
               className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
-              <ComicText fontSize={1.2}>{item.label}</ComicText>
+              <ComicText fontSize={1.2}>{t(`nav.${item.key}`)}</ComicText>
             </Link>
           ))}
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
+          <LanguageSwitcher />
+
           <Link
-            href="/auth/login"
+            href={`/${locale}/auth/login`}
             className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
           >
-            Login
+            {t("nav.login")}
           </Link>
 
-          <Link href={"/auth/register"}>
+          <Link href={`/${locale}/auth/register`}>
             <div className="w-full rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500">
-              Get Started →
+              {t("nav.getStarted")}
             </div>
           </Link>
         </div>
@@ -84,7 +92,7 @@ export default function LandingNavbar() {
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="rounded-lg p-2 text-gray-800 transition hover:bg-gray-100 lg:hidden"
-          aria-label="Toggle menu"
+          aria-label={t("nav.toggleMenu")}
         >
           {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -98,28 +106,32 @@ export default function LandingNavbar() {
         }`}
       >
         <div className="space-y-1 px-5 py-5">
-          {navItems.map((item) => (
+          {NAV_ITEMS.map((item) => (
             <Link
-              key={item.label}
+              key={item.key}
               href={item.href}
               onClick={() => setMobileOpen(false)}
               className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
             >
-              <ComicText fontSize={1.2}>{item.label}</ComicText>
+              <ComicText fontSize={1.2}>{t(`nav.${item.key}`)}</ComicText>
             </Link>
           ))}
 
           <div className="mt-4 border-t pt-4">
+            <div className="mb-3 px-4">
+              <LanguageSwitcher />
+            </div>
+
             <Link
-              href="/auth/login"
+              href={`/${locale}/auth/login`}
               className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
             >
-              Login
+              {t("nav.login")}
             </Link>
 
-            <Link href={"/auth/register"}>
+            <Link href={`/${locale}/auth/register`}>
               <div className="w-full rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500">
-                Get Started →
+                {t("nav.getStarted")}
               </div>
             </Link>
           </div>

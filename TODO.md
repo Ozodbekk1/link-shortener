@@ -1,9 +1,8 @@
-# Sidebar Implementation Plan
+# Footer Pages Implementation
 
-## Steps
-
-- [x] Step 1: Read and analyze all relevant files
-- [x] Step 2: Create plan and get user approval
-- [x] Step 3: Update `apps/web/components/app-sidebar.tsx` - Complete sidebar with navigation
-- [x] Step 4: Update `apps/web/app/layout.tsx` - Use SidebarInset for proper layout
-- [x] Step 5: Verify build - TypeScript compiles cleanly
+- [x] Create TODO.md
+- [x] 1. Update `footer.tsx` - Fix company link hrefs to use locale-aware routes
+- [x] 2. Build About page (`about/page.tsx`) - Hero, mission, stats, values
+- [x] 3. Build Privacy Policy page (`privacy/page.tsx`) - Legal sections, TOC sidebar
+- [x] 4. Build Terms of Service page (`terms/page.tsx`) - Legal sections, TOC sidebar
+- [x] 5. Build Contact page (`contact/page.tsx`) - Form, contact info cards, socials

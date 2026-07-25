@@ -1,41 +1,43 @@
+"use client"
+
 import React from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useLocale } from "@/hooks/use-locale"
 
 const productLinks = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
-  { label: "Integrations", href: "#" },
-  { label: "API", href: "#" },
-  { label: "Changelog", href: "#" },
+  // { label: "Integrations", href: "#" },
+  // { label: "API", href: "#" },
+  // { label: "Changelog", href: "#" },
 ]
 
-const resourceLinks = [
-  { label: "Documentation", href: "#" },
-  { label: "Guides", href: "#" },
-  { label: "Blog", href: "#" },
-  { label: "Community", href: "#" },
-  { label: "Support", href: "#" },
-]
+// const resourceLinks = [
+//   { label: "Documentation", href: "#" },
+//   { label: "Guides", href: "#" },
+//   { label: "Blog", href: "#" },
+//   { label: "Community", href: "#" },
+//   { label: "Support", href: "#" },
+// ]
 
 const companyLinks = [
-  { label: "About", href: "#" },
-  { label: "Careers", href: "#" },
-  { label: "Privacy", href: "#" },
-  { label: "Terms", href: "#" },
-  { label: "Contact", href: "#" },
+  { label: "About", href: "about" },
+  { label: "Privacy", href: "privacy" },
+  { label: "Terms", href: "terms" },
+  { label: "Contact", href: "contact" },
 ]
 
 const socialLinks = [
-  {
-    label: "X (Twitter)",
-    href: "#",
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-      </svg>
-    ),
-  },
+  // {
+  //   label: "X (Twitter)",
+  //   href: "#",
+  //   icon: (
+  //     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+  //       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  //     </svg>
+  //   ),
+  // },
   {
     label: "GitHub",
     href: "#",
@@ -66,6 +68,8 @@ const socialLinks = [
 ]
 
 export default function Footer() {
+  const locale = useLocale()
+
   return (
     <footer id="about" className="relative bg-white">
       <div
@@ -127,11 +131,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="sm:col-span-1 lg:col-span-2">
+          {/* <div className="sm:col-span-1 lg:col-span-2">
             <h3 className="mb-[16px] text-[13px] font-extrabold tracking-wider text-[#151515] uppercase">
               Resources
             </h3>
-            <ul className="flex flex-col gap-[12px]">
+            {/* <ul className="flex flex-col gap-[12px]">
               {resourceLinks.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -142,8 +146,8 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
-            </ul>
-          </div>
+            </ul> */}
+          {/* </div> */}
 
           <div className="sm:col-span-1 lg:col-span-2">
             <h3 className="mb-[16px] text-[13px] font-extrabold tracking-wider text-[#151515] uppercase">
@@ -153,7 +157,7 @@ export default function Footer() {
               {companyLinks.map((link) => (
                 <li key={link.label}>
                   <Link
-                    href={link.href}
+                    href={`/${locale}/${link.href}`}
                     className="text-[14px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
                   >
                     {link.label}
@@ -177,22 +181,22 @@ export default function Footer() {
 
             <div className="flex items-center gap-[20px]">
               <Link
-                href="#"
+                href={`/${locale}/privacy`}
                 className="text-[13px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
               >
                 Privacy Policy
               </Link>
               <Link
-                href="#"
+                href={`/${locale}/terms`}
                 className="text-[13px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
               >
                 Terms of Service
               </Link>
               <Link
-                href="#"
+                href={`/${locale}/contact`}
                 className="text-[13px] text-[#6B7280] transition-colors duration-200 hover:text-[#F45B69]"
               >
-                Cookie Policy
+                Contact Us
               </Link>
             </div>
           </div>
