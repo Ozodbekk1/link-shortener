@@ -9,10 +9,15 @@ import { useLocale } from "@/hooks/use-locale"
 import { useTranslation } from "@/hooks/use-translation"
 import { AuthLayout } from "@/components/auth/auth-layout"
 import { Mail, Lock, ArrowRight } from "lucide-react"
+import { useLoginMutation } from "@/hooks/use-auth"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
+  const login = useLoginMutation()
   const locale = useLocale()
   const { t } = useTranslation()
+  const router = useRouter()
 
   const {
     register,
@@ -22,10 +27,20 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   })
 
-  function onSubmit(data: LoginForm) {
-    console.log(data)
-
-    // loginMutation.mutate(data)
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      const res = await login.mutateAsync(data)
+      if (res && (res as any).success === false) {
+        toast.error((res as any).message || "Invalid email or password")
+        return
+      }
+      toast.success("Welcome back!")
+      router.push(`/${locale}/dashboard`)
+    } catch (err: unknown) {
+      const msg =
+        (err as any)?.data?.message || (err as any)?.message || "Login failed"
+      toast.error(msg)
+    }
   }
 
   return (
@@ -35,7 +50,7 @@ export default function LoginPage() {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-700">
+          <label className="mb-1.5 block text-xs font-bold tracking-wider text-gray-700 uppercase">
             {t("auth.login.emailLabel")}
           </label>
           <div className="relative">
@@ -45,18 +60,20 @@ export default function LoginPage() {
             <input
               type="email"
               placeholder={t("auth.login.emailPlaceholder")}
-              className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-[#F45B69] focus:outline-none focus:ring-2 focus:ring-[#F45B69]/20"
+              className="w-full rounded-xl border border-gray-200 bg-white py-3 pr-4 pl-10 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
               {...register("email")}
             />
           </div>
           {errors.email && (
-            <p className="mt-1.5 text-xs text-rose-500 font-medium">{errors.email.message}</p>
+            <p className="mt-1.5 text-xs font-medium text-rose-500">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700">
+            <label className="block text-xs font-bold tracking-wider text-gray-700 uppercase">
               {t("auth.login.passwordLabel")}
             </label>
             <Link
@@ -73,12 +90,14 @@ export default function LoginPage() {
             <input
               type="password"
               placeholder="••••••••"
-              className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-[#F45B69] focus:outline-none focus:ring-2 focus:ring-[#F45B69]/20"
+              className="w-full rounded-xl border border-gray-200 bg-white py-3 pr-4 pl-10 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
               {...register("password")}
             />
           </div>
           {errors.password && (
-            <p className="mt-1.5 text-xs text-rose-500 font-medium">{errors.password.message}</p>
+            <p className="mt-1.5 text-xs font-medium text-rose-500">
+              {errors.password.message}
+            </p>
           )}
         </div>
 
@@ -105,7 +124,7 @@ export default function LoginPage() {
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200" />
           </div>
-          <div className="relative flex justify-center text-xs text-gray-500 uppercase tracking-wider">
+          <div className="relative flex justify-center text-xs tracking-wider text-gray-500 uppercase">
             <span className="bg-white px-3 font-semibold text-gray-400">
               {t("auth.login.continueWith")}
             </span>
@@ -131,5 +150,3 @@ export default function LoginPage() {
     </AuthLayout>
   )
 }
-
-
