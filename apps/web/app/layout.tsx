@@ -3,12 +3,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Metadata } from "next"
-// import {
-//   SidebarProvider,
-//   SidebarInset,
-//   SidebarTrigger,
-// } from "@/components/ui/sidebar"
-// import { AppSidebar } from "@/components/app-sidebar"
+import { QueryProvider } from "@/common/providers/query-provider"
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -21,6 +16,8 @@ export const metadata: Metadata = {
   title: "Home",
   description: "Welcome to Uurl.uz",
 }
+
+import { Toaster } from "sonner"
 
 export default function RootLayout({
   children,
@@ -39,16 +36,8 @@ export default function RootLayout({
       )}
     >
       <body>
-        {/* <ThemeProvider> */}
-        {/* <SidebarProvider>
-            <AppSidebar />
-            <SidebarInset>
-              <SidebarTrigger className="mt-1 ml-1" />
-              {children}
-            </SidebarInset>
-          </SidebarProvider> */}
-        {children}
-        {/* </ThemeProvider> */}
+        <QueryProvider>{children}</QueryProvider>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   )
