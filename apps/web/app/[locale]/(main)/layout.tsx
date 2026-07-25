@@ -1,5 +1,3 @@
-import "../../globals.css"
-import { cn } from "@/lib/utils"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -12,9 +10,5 @@ export default function MainLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return (
-    <html lang="en" suppressHydrationWarning className={cn()}>
-      <body>{children}</body>
-    </html>
-  )
+  return <>{children}</>
 }

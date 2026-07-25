@@ -1,7 +1,11 @@
-import React from "react"
+"use client"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
-const page = () => {
-  return <div>page tenats page</div>
+export default function ProfilePage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.replace("/dashboard")
+  }, [router])
 }
-
-export default page
