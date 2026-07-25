@@ -2,92 +2,83 @@
 
 import React from "react"
 import { useLocale } from "@/hooks/use-locale"
+import { useTranslation } from "@/hooks/use-translation"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 
-const sections = [
+const sectionKeys = [
   {
     id: "acceptance",
-    title: "1. Acceptance of Terms",
-    content:
-      "By accessing or using Uurl (&ldquo;the Service&rdquo;), you agree to be bound by these Terms of Service. If you do not agree, you may not use the Service. We reserve the right to update these terms at any time, and continued use constitutes acceptance of changes.",
+    titleKey: "terms.section1Title",
+    contentKey: "terms.section1Content",
   },
   {
     id: "description",
-    title: "2. Service Description",
-    content:
-      "Uurl provides a URL shortening and link management platform. This includes link creation, analytics, custom domains, QR code generation, and redirect management. All core features are available free of charge.",
+    titleKey: "terms.section2Title",
+    contentKey: "terms.section2Content",
   },
   {
     id: "accounts",
-    title: "3. User Accounts",
-    content:
-      "You are responsible for maintaining the confidentiality of your account credentials. You must provide accurate information and keep it updated. You are liable for all activities under your account. Notify us immediately of any unauthorized use.",
-    items: [
-      "You must be at least 13 years of age",
-      "One person may not maintain multiple accounts without permission",
-      "Accounts found to be in violation may be suspended or terminated",
+    titleKey: "terms.section3Title",
+    contentKey: "terms.section3Content",
+    itemKeys: [
+      "terms.section3Item1",
+      "terms.section3Item2",
+      "terms.section3Item3",
     ],
   },
   {
     id: "acceptable-use",
-    title: "4. Acceptable Use",
-    content:
-      "You agree not to use Uurl for any illegal, harmful, or abusive purposes. This includes, but is not limited to:",
-    items: [
-      "Spamming, phishing, or distributing malware",
-      "Hosting content that infringes intellectual property rights",
-      "Engaging in denial-of-service attacks or network abuse",
-      "Creating links that redirect to illegal or harmful content",
-      "Attempting to bypass our security measures",
+    titleKey: "terms.section4Title",
+    contentKey: "terms.section4Content",
+    itemKeys: [
+      "terms.section4Item1",
+      "terms.section4Item2",
+      "terms.section4Item3",
+      "terms.section4Item4",
+      "terms.section4Item5",
     ],
   },
   {
     id: "content",
-    title: "5. User Content & Links",
-    content:
-      "You retain all rights to the content you share through Uurl links. However, you grant us a license to process, store, and transmit this content as necessary to provide the Service. We reserve the right to remove any links or content that violate these terms.",
+    titleKey: "terms.section5Title",
+    contentKey: "terms.section5Content",
   },
   {
     id: "analytics",
-    title: "6. Analytics & Data",
-    content:
-      "Uurl collects basic analytics data (click counts, referrer data, geographic location, device type) to provide our Service. This data is anonymized and aggregated where possible. You can view detailed analytics for links you create through your dashboard.",
+    titleKey: "terms.section6Title",
+    contentKey: "terms.section6Content",
   },
   {
     id: "service-level",
-    title: "7. Service Level",
-    content:
-      "We strive for 99.9% uptime but do not guarantee uninterrupted service. The Service is provided &ldquo;as is&rdquo; without warranties of any kind, either express or implied. We are not liable for any damages arising from the use or inability to use the Service.",
+    titleKey: "terms.section7Title",
+    contentKey: "terms.section7Content",
   },
   {
     id: "limitation",
-    title: "8. Limitation of Liability",
-    content:
-      "To the maximum extent permitted by law, Uurl shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Service. Our total liability shall not exceed the amount you paid us (if any) in the past 12 months.",
+    titleKey: "terms.section8Title",
+    contentKey: "terms.section8Content",
   },
   {
     id: "termination",
-    title: "9. Termination",
-    content:
-      "We reserve the right to suspend or terminate your access to the Service at any time, without prior notice, for conduct that we believe violates these terms or is harmful to other users, us, or third parties. Upon termination, your right to use the Service immediately ceases.",
+    titleKey: "terms.section9Title",
+    contentKey: "terms.section9Content",
   },
   {
     id: "governing-law",
-    title: "10. Governing Law",
-    content:
-      "These terms shall be governed by and construed in accordance with the laws of Uzbekistan, without regard to its conflict of law provisions. Any disputes arising from these terms shall be resolved in the courts of Uzbekistan.",
+    titleKey: "terms.section10Title",
+    contentKey: "terms.section10Content",
   },
   {
     id: "contact",
-    title: "11. Contact Information",
-    content:
-      "For questions about these Terms of Service, please contact us. We aim to respond to all inquiries within 48 hours.",
+    titleKey: "terms.section11Title",
+    contentKey: "terms.section11Content",
   },
 ]
 
 export default function TermsPage() {
   const locale = useLocale()
+  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen bg-white">
@@ -97,7 +88,7 @@ export default function TermsPage() {
           className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-[#6B7280] transition-colors hover:text-[#F45B69]"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Home
+          {t("terms.backToHome")}
         </Link>
       </div>
 
@@ -106,16 +97,16 @@ export default function TermsPage() {
           <aside className="mb-10 lg:mb-0">
             <div className="lg:sticky lg:top-[120px]">
               <h2 className="mb-4 text-xs font-extrabold tracking-wider text-[#6B7280] uppercase">
-                On this page
+                {t("terms.onThisPage")}
               </h2>
               <nav className="space-y-1">
-                {sections.map((section) => (
+                {sectionKeys.map((section) => (
                   <a
                     key={section.id}
                     href={`#${section.id}`}
                     className="block rounded-lg px-3 py-2 text-sm text-[#6B7280] transition-colors hover:bg-[#FFF5F5] hover:text-[#F45B69]"
                   >
-                    {section.title}
+                    {t(section.titleKey)}
                   </a>
                 ))}
               </nav>
@@ -125,17 +116,17 @@ export default function TermsPage() {
           <article className="min-w-0">
             <div className="mb-10">
               <div className="mb-4 inline-block rounded-full bg-[#F45B69]/10 px-4 py-1.5 text-xs font-bold tracking-wider text-[#F45B69] uppercase">
-                Legal
+                {t("terms.badge")}
               </div>
               <h1 className="mb-4 text-4xl font-black tracking-tight text-[#111827] sm:text-5xl">
-                Terms of <span className="text-[#F45B69]">Service</span>
+                {t("terms.title")}{" "}
+                <span className="text-[#F45B69]">{t("terms.titleHighlight")}</span>
               </h1>
               <p className="text-sm text-[#6B7280]">
-                Last updated: July 15, 2025
+                {t("terms.lastUpdated")}
               </p>
               <p className="mt-2 max-w-[600px] leading-relaxed text-[#6B7280]">
-                Please read these terms carefully before using Uurl. By using
-                our service, you agree to be bound by these terms.
+                {t("terms.description")}
               </p>
             </div>
 
@@ -148,23 +139,23 @@ export default function TermsPage() {
             />
 
             <div className="space-y-10">
-              {sections.map((section) => (
+              {sectionKeys.map((section) => (
                 <section key={section.id} id={section.id}>
                   <h2 className="mb-4 text-xl font-bold text-[#111827]">
-                    {section.title}
+                    {t(section.titleKey)}
                   </h2>
                   <p className="leading-relaxed text-[#6B7280]">
-                    {section.content}
+                    {t(section.contentKey)}
                   </p>
-                  {section.items && (
+                  {section.itemKeys && (
                     <ul className="mt-3 space-y-2">
-                      {section.items.map((item, i) => (
+                      {section.itemKeys.map((itemKey, i) => (
                         <li
                           key={i}
                           className="flex items-start gap-2 text-sm text-[#6B7280]"
                         >
                           <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#F45B69]" />
-                          {item}
+                          {t(itemKey)}
                         </li>
                       ))}
                     </ul>
@@ -178,3 +169,4 @@ export default function TermsPage() {
     </div>
   )
 }
+

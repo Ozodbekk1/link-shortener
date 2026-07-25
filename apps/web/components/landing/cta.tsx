@@ -1,6 +1,11 @@
+"use client"
+
 import React from "react"
+import { useTranslation } from "@/hooks/use-translation"
 
 export default function FinalCTA() {
+  const { t } = useTranslation()
+
   return (
     <section className="relative overflow-hidden bg-white py-[96px]">
       <div className="pointer-events-none absolute top-1/2 left-1/2 h-[450px] w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse,_rgba(244,91,105,0.08)_0%,_transparent_70%)]" />
@@ -143,20 +148,20 @@ export default function FinalCTA() {
           </div>
 
           <h2 className="mb-[16px] text-[clamp(32px,5vw,62px)] leading-[1.06] font-black tracking-[-2px] text-[#151515]">
-            Ready to make your links{" "}
+            {t("cta.heading")}{" "}
             <span className="bg-gradient-to-r from-[#F45B69] to-[#FF8A94] bg-clip-text text-transparent">
-              smarter
+              {t("cta.headingHighlight")}
             </span>
             ?
           </h2>
 
           <p className="mb-[36px] text-[18px] leading-[1.6] text-[#6B7280]">
-            Join 12,000+ teams. Free forever. No card needed. Start in seconds.
+            {t("cta.description")}
           </p>
 
           <div className="mb-[20px] flex flex-wrap justify-center gap-[12px]">
             <button className="inline-flex items-center gap-2 rounded-[14px] bg-gradient-to-r from-[#F45B69] to-[#FF6B7A] px-[34px] py-[16px] text-[17px] font-extrabold tracking-[-0.3px] text-white shadow-[0_8px_32px_rgba(244,91,105,0.35)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_16px_44px_rgba(244,91,105,0.48)] active:translate-y-0">
-              Start creating links
+              {t("cta.ctaPrimary")}
               <svg
                 className="h-4 w-4"
                 fill="none"
@@ -173,16 +178,16 @@ export default function FinalCTA() {
             </button>
 
             <button className="rounded-[14px] border-[1.5px] border-[#E5E7EB] bg-transparent px-[28px] py-[16px] text-[16px] font-semibold text-[#151515] transition-all duration-200 hover:border-[#F45B69] hover:text-[#F45B69]">
-              See all features
+              {t("cta.ctaSecondary")}
             </button>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-2 text-[13px] text-[#6B7280]">
-            <span>✓ Free forever</span>
+            <span>✓ {t("cta.trustItem1")}</span>
             <span>·</span>
-            <span>✓ No credit card</span>
+            <span>✓ {t("cta.trustItem2")}</span>
             <span>·</span>
-            <span>✓ No limits</span>
+            <span>✓ {t("cta.trustItem3")}</span>
           </div>
         </div>
       </div>

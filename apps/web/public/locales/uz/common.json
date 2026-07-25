@@ -29,7 +29,13 @@
     "analytics": {
       "title": "Global Analitika",
       "description": "Har bir bosishni aniq kuzating. Davlatlar, shaharlar, qurilmalar, brauzerlar, OT — barchasi real vaqtda.",
-      "tags": ["Davlatlar", "Shaharlar", "Qurilmalar", "Brauzerlar", "Real vaqt"]
+      "tags": [
+        "Davlatlar",
+        "Shaharlar",
+        "Qurilmalar",
+        "Brauzerlar",
+        "Real vaqt"
+      ]
     },
     "redirects": {
       "title": "Aqlli Yo'naltirish Qoidalari",
@@ -68,7 +74,9 @@
     "copyright": "Barcha huquqlar himoyalangan.",
     "privacyPolicy": "Maxfiylik Siyosati",
     "termsOfService": "Xizmat Ko'rsatish Shartlari",
-    "contactUs": "Biz bilan bog'lanish"
+    "contactUs": "Biz bilan bog'lanish",
+    "features": "Imkoniyatlar",
+    "pricing": "Narxlar"
   },
   "about": {
     "backToHome": "Bosh sahifaga qaytish",
@@ -142,6 +150,7 @@
     "section6Item2": "Tuzatish: Hisob ma'lumotlaringizni istalgan vaqtda yangilashingiz mumkin.",
     "section6Item3": "O'chirish: Hisobingiz va barcha ma'lumotlarni istalgan vaqtda o'chirishingiz mumkin.",
     "section6Item4": "Ko'chirish: Ma'lumotlaringizni mashina o'qiydigan formatda so'rashingiz mumkin.",
+    "section6Item5": "Ushbu huquqlardan foydalanish uchun privacy@uurl.uz manzili orqali biz bilan bog'laning.",
     "ctaTitle": "Maxfiylik bo'yicha savollaringiz bormi?",
     "ctaDesc": "Ushbu siyosat yoki ma'lumotlarni qayta ishlash bo'yicha savollaringiz bo'lsa, biz bilan bog'laning.",
     "ctaButton": "Biz bilan bog'lanish"
@@ -215,10 +224,119 @@
     "followTitle": "Bizni kuzating",
     "followDesc": "So'nggi yangiliklar va yangi funksiyalardan xabardor bo'ling."
   },
+  "demo": {
+    "heading": "Havolani qisqartirish",
+    "headingHighlight": "soniyalar",
+    "description": "Uzun URL'ingizni joylang va toza, kuzatiladigan qisqa havolani oling.",
+    "urlLabel": "Sizning uzun URL'ingiz",
+    "urlPlaceholder": "Uzun URL'ingizni bu yerga joylang...",
+    "shortenButton": "Qisqartirish",
+    "shortenLoading": "Kesilmoqda...",
+    "urlExample": "Sinab ko'ring: https://example.com/products/summer-sale-2024?ref=email",
+    "resultLabel": "Sizning qisqa havolangiz",
+    "copyButton": "Nusxalash",
+    "copiedButton": "Nusxalandi",
+    "resultPlaceholder": "Qisqa havolangiz bu yerda ko'rinadi",
+    "resultHint": "URL joylang va Qisqartirish tugmasini bosing",
+    "statClicks": "Bosishlar",
+    "statCountries": "Davlatlar",
+    "statUptime": "Ishlash vaqti"
+  },
+  "customDomain": {
+    "heading": "Sizning brendingiz.",
+    "headingHighlight": "Sizning havolalaringiz.",
+    "description": "Odamlarni uurl.uz'ga yuborishni to'xtating. O'z domeningizni ulang va har bir havola brendingizni mustahkamlaydi.",
+    "beforeLabel": "Oldin",
+    "afterLabel": "Keyin",
+    "beforeExample": "uurl.uz/company-sale",
+    "afterExample": "go.company.com/sale",
+    "tag1": "Avto SSL",
+    "tag2": "Sozlash shart emas",
+    "tag3": "Tez o'rnatish",
+    "tag4": "Bir nechta domenlar"
+  },
+  "pricing": {
+    "heading": "Hammasi bepul.",
+    "headingHighlight": "Abadiy.",
+    "description": "Kredit karta yo'q. Sinov muddati yo'q. Cheklovlar yo'q. Hech qanday yashirin shartlar. Faqat to'liq mahsulot, doimiy bepul.",
+    "perkLinksLabel": "Cheksiz havolalar",
+    "perkLinksSub": "Kerakli miqdorda yarating",
+    "perkClicksLabel": "Cheksiz bosishlar",
+    "perkClicksSub": "Hech qachon trafik cheklovi yo'q",
+    "perkQrLabel": "Cheksiz QR kodlar",
+    "perkQrSub": "Cheklovsiz yarating",
+    "perkAnalyticsLabel": "Cheksiz analitika",
+    "perkAnalyticsSub": "To'liq ma'lumotlar, to'lov devorlari yo'q",
+    "perkTeamsLabel": "Cheksiz jamoalar",
+    "perkTeamsSub": "Istaganingizni taklif qiling",
+    "perkWorkspacesLabel": "Cheksiz ish joylari",
+    "perkWorkspacesSub": "Erkin tartibga soling",
+    "ctaButton": "Bepul boshlang — karta kerak emas"
+  },
+  "cta": {
+    "heading": "Havolalaringizni yanada",
+    "headingHighlight": "aqlliroq",
+    "description": "12,000+ jamoaga qo'shiling. Abadiy bepul. Karta kerak emas. Soniyalarda boshlang.",
+    "ctaPrimary": "Havola yaratishni boshlang",
+    "ctaSecondary": "Barcha imkoniyatlar",
+    "trustItem1": "Abadiy bepul",
+    "trustItem2": "Kredit karta yo'q",
+    "trustItem3": "Cheklovlar yo'q"
+  },
   "locale": {
     "en": "English",
     "uz": "O'zbek",
     "ru": "Русский",
     "language": "Til"
+  },
+  "auth": {
+    "login": {
+      "title": "Xush kelibsiz",
+      "subtitle": "UURL hisobingizga kiring.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ozodbek@example.com",
+      "passwordLabel": "Parol",
+      "submitButton": "Kirish",
+      "forgotPassword": "Parolni unutdingizmi?",
+      "registerLink": "Ro'yxatdan o'tish",
+      "continueWith": "Yoki davom eting"
+    },
+    "register": {
+      "title": "Hisob yaratish",
+      "subtitle": "Bugun havolalaringizni qisqartirishni boshlang.",
+      "nameLabel": "Ism",
+      "namePlaceholder": "Ozodbek Karimov",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ozodbek@example.com",
+      "passwordLabel": "Parol",
+      "avatarLabel": "Avatar URL",
+      "avatarPlaceholder": "https://example.com/avatar.png",
+      "submitButton": "Hisob yaratish",
+      "alreadyHaveAccount": "Hisobingiz bormi?",
+      "loginLink": "Kirish",
+      "continueWith": "Yoki davom eting"
+    },
+    "forgotPassword": {
+      "title": "Parolni unutdingizmi?",
+      "subtitle": "Emailingizga parolni tiklash OTP kodini yuboramiz.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "ozodbek@example.com",
+      "submitButton": "OTP yuborish",
+      "backToLogin": "Kirishga qaytish"
+    },
+    "resetPassword": {
+      "title": "Parolni tiklash",
+      "subtitle": "Emailingizga kelgan OTP kodini kiriting.",
+      "otpLabel": "OTP kod",
+      "otpPlaceholder": "123456",
+      "newPasswordLabel": "Yangi parol",
+      "newPasswordPlaceholder": "Yangi parol",
+      "submitButton": "Parolni tiklash",
+      "backToLogin": "Kirishga qaytish"
+    },
+    "verifyAccount": {
+      "title": "Hisobni tasdiqlash",
+      "subtitle": "Emailingizga yuborilgan tasdiqlash kodini kiriting."
+    }
   }
 }

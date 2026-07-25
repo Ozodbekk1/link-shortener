@@ -68,7 +68,9 @@
     "copyright": "All rights reserved.",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
-    "contactUs": "Contact Us"
+    "contactUs": "Contact Us",
+    "features": "Features",
+    "pricing": "Pricing"
   },
   "about": {
     "backToHome": "Back to Home",
@@ -142,6 +144,7 @@
     "section6Item2": "Correction: You can update your account information at any time through your settings.",
     "section6Item3": "Deletion: You can delete your account and all associated data at any time.",
     "section6Item4": "Portability: You can request your data in a machine-readable format.",
+    "section6Item5": "To exercise any of these rights, contact us at privacy@uurl.uz.",
     "ctaTitle": "Have questions about privacy?",
     "ctaDesc": "If you have any questions or concerns about this privacy policy or how we handle your data, don't hesitate to reach out.",
     "ctaButton": "Contact Us"
@@ -215,10 +218,119 @@
     "followTitle": "Follow Us",
     "followDesc": "Stay up to date with the latest features and updates."
   },
+  "demo": {
+    "heading": "Shorten a link in",
+    "headingHighlight": "seconds",
+    "description": "Paste your long URL and get a clean, trackable short link instantly.",
+    "urlLabel": "Your long URL",
+    "urlPlaceholder": "Paste your long URL here...",
+    "shortenButton": "Shorten",
+    "shortenLoading": "Cutting...",
+    "urlExample": "Try: https://example.com/products/summer-sale-2024?ref=email",
+    "resultLabel": "Your short link",
+    "copyButton": "Copy",
+    "copiedButton": "Copied",
+    "resultPlaceholder": "Your short link will appear here",
+    "resultHint": "Paste a URL and click Shorten",
+    "statClicks": "Clicks",
+    "statCountries": "Countries",
+    "statUptime": "Uptime"
+  },
+  "customDomain": {
+    "heading": "Your brand.",
+    "headingHighlight": "Your links.",
+    "description": "Stop sending people to uurl.uz. Connect your own domain and every link reinforces your brand identity.",
+    "beforeLabel": "Before",
+    "afterLabel": "After",
+    "beforeExample": "uurl.uz/company-sale",
+    "afterExample": "go.company.com/sale",
+    "tag1": "Auto SSL",
+    "tag2": "Zero config",
+    "tag3": "Instant setup",
+    "tag4": "Multiple domains"
+  },
+  "pricing": {
+    "heading": "Everything is free.",
+    "headingHighlight": "Forever.",
+    "description": "No credit card. No trial. No limits. No \"unlimited*\" fine print. Just the full product, always free.",
+    "perkLinksLabel": "Unlimited links",
+    "perkLinksSub": "Create as many as you need",
+    "perkClicksLabel": "Unlimited clicks",
+    "perkClicksSub": "No traffic caps, ever",
+    "perkQrLabel": "Unlimited QR codes",
+    "perkQrSub": "Generate without restriction",
+    "perkAnalyticsLabel": "Unlimited analytics",
+    "perkAnalyticsSub": "Full data, no paywalls",
+    "perkTeamsLabel": "Unlimited teams",
+    "perkTeamsSub": "Invite everyone you want",
+    "perkWorkspacesLabel": "Unlimited workspaces",
+    "perkWorkspacesSub": "Organize freely",
+    "ctaButton": "Get started free — no card needed"
+  },
+  "cta": {
+    "heading": "Ready to make your links",
+    "headingHighlight": "smarter",
+    "description": "Join 12,000+ teams. Free forever. No card needed. Start in seconds.",
+    "ctaPrimary": "Start creating links",
+    "ctaSecondary": "See all features",
+    "trustItem1": "Free forever",
+    "trustItem2": "No credit card",
+    "trustItem3": "No limits"
+  },
   "locale": {
     "en": "English",
     "uz": "O'zbek",
     "ru": "Русский",
     "language": "Language"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Login to your UURL account.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "john@example.com",
+      "passwordLabel": "Password",
+      "submitButton": "Login",
+      "forgotPassword": "Forgot password ?",
+      "registerLink": "Register",
+      "continueWith": "Continue With"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Start shortening your links today.",
+      "nameLabel": "Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Email",
+      "emailPlaceholder": "john@example.com",
+      "passwordLabel": "Password",
+      "avatarLabel": "Avatar URL",
+      "avatarPlaceholder": "https://example.com/avatar.png",
+      "submitButton": "Create account",
+      "alreadyHaveAccount": "Already have an account ?",
+      "loginLink": "Login",
+      "continueWith": "Continue With"
+    },
+    "forgotPassword": {
+      "title": "Forgot password?",
+      "subtitle": "We will send a reset OTP to your email.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "john@example.com",
+      "submitButton": "Send OTP",
+      "backToLogin": "Back to login"
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "subtitle": "Enter the OTP from your email.",
+      "otpLabel": "OTP",
+      "otpPlaceholder": "123456",
+      "newPasswordLabel": "New password",
+      "newPasswordPlaceholder": "New password",
+      "submitButton": "Reset password",
+      "backToLogin": "Back to login"
+    },
+    "verifyAccount": {
+      "title": "Verify Account",
+      "subtitle": "Enter the verification code sent to your email."
+    }
   }
 }
