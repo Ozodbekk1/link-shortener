@@ -43,7 +43,7 @@ import {
 
 const navigation = {
   main: [
-    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+    { title: "Dashboard", url: `/en/dashboard`, icon: LayoutDashboard },
     { title: "Links", url: "/links", icon: Link },
     { title: "Analytics", url: "/analytics", icon: BarChart3 },
     { title: "QR Codes", url: "/qr", icon: QrCode },
