@@ -1,0 +1,9 @@
+tunnel: e539c764-729a-4712-89c6-8c33b68c97fa
+credentials-file: /etc/cloudflared/e539c764-729a-4712-89c6-8c33b68c97fa.json
+
+ingress:
+  - hostname: uurl.uz
+    service: http://frontend:3000
+  - hostname: api.uurl.uz
+    service: http://backend:8080
+  - service: http_status:404

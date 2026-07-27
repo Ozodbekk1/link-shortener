@@ -283,6 +283,30 @@
     "ru": "Русский",
     "language": "Language"
   },
+  "onboarding": {
+    "organization": {
+      "title": "Create your organization",
+      "subtitle": "Centralize your team, projects, and assets in one secure workspace. Join 100+ companies growing with Uurl.",
+      "stepCreate": "Create",
+      "stepSetup": "Setup",
+      "stepDone": "Done",
+      "nameLabel": "Organization name",
+      "namePlaceholder": "Enter organization name",
+      "slugLabel": "Organization Subdomain",
+      "slugEditHint": "( Edit as you want )",
+      "slugPlaceholder": "your-slug",
+      "slugSuffix": ".uurl.uz",
+      "availableAt": "Your organization will be available at:",
+      "submitButton": "Create Organization",
+      "submittingButton": "Creating...",
+      "errors": {
+        "nameMin": "Organization name must be at least 2 characters",
+        "slugMin": "Slug must be at least 3 characters",
+        "slugRegex": "Slug can only contain lowercase letters, numbers, and hyphens",
+        "slugReserved": "This slug is reserved or already taken. Please choose another."
+      }
+    }
+  },
   "auth": {
     "login": {
       "title": "Welcome back",
@@ -330,7 +354,17 @@
     },
     "verifyAccount": {
       "title": "Verify Account",
-      "subtitle": "Enter the verification code sent to your email."
+      "subtitle": "Enter the verification code sent to your email.",
+      "checkEmail": "Check your email",
+      "otpSent": "We've sent a 6-digit code to",
+      "enterCode": "Enter verification code",
+      "submitButton": "Verify Email",
+      "verifying": "Verifying...",
+      "successMessage": "Email verified successfully!",
+      "errorMessage": "Verification failed. Please try again.",
+      "didntReceive": "Didn't receive the code?",
+      "resend": "Resend",
+      "resendInfo": "If you don't see the email, check your spam folder."
     }
   }
 }

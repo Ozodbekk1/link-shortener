@@ -8159,6 +8159,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gsap@npm:^3.13.0":
+  version: 3.15.0
+  resolution: "gsap@npm:3.15.0"
+  checksum: 10c0/5d86de72cb0bd6b20502c34c329a83a7d679979731bb465164407b7a5225aa61d612beee740eea36258622897c116cd2ca35320d530b7cf68bad62522361fcf7
+  languageName: node
+  linkType: hard
+
 "handlebars@npm:^4.7.9":
   version: 4.7.9
   resolution: "handlebars@npm:4.7.9"
@@ -14096,6 +14103,7 @@ __metadata:
     eslint: "npm:^9"
     eslint-config-next: "npm:16.2.6"
     form: "npm:^0.2.5"
+    gsap: "npm:^3.13.0"
     lucide-react: "npm:^1.26.0"
     motion: "npm:^12.23.12"
     next: "npm:16.2.6"
