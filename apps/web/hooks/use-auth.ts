@@ -4,12 +4,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { queryKeys } from "@/api/query-keys"
 import {
   authService,
-  type DeleteMePayload,
+  // type DeleteMePayload,
   type ForgotPasswordPayload,
   type LoginPayload,
   type RegisterPayload,
   type ResetPasswordPayload,
-  type UpdateMePayload,
+  // type UpdateMePayload,
   type VerifyOtpPayload,
 } from "@/services/auth.service"
 
@@ -63,24 +63,24 @@ export const useResetPasswordMutation = () =>
       authService.resetPassword(payload),
   })
 
-export const useUpdateMeMutation = () => {
-  const queryClient = useQueryClient()
+// export const useUpdateMeMutation = () => {
+//   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (payload: UpdateMePayload) => authService.updateMe(payload),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me })
-    },
-  })
-}
+//   return useMutation({
+//     mutationFn: (payload: UpdateMePayload) => authService.updateMe(payload),
+//     onSuccess: async () => {
+//       await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me })
+//     },
+//   })
+// }
 
-export const useDeleteMeMutation = () => {
-  const queryClient = useQueryClient()
+// export const useDeleteMeMutation = () => {
+//   const queryClient = useQueryClient()
 
-  return useMutation({
-    mutationFn: (payload: DeleteMePayload) => authService.deleteMe(payload),
-    onSuccess: async () => {
-      await queryClient.removeQueries({ queryKey: queryKeys.auth.me })
-    },
-  })
-}
+//   return useMutation({
+//     mutationFn: (payload: DeleteMePayload) => authService.deleteMe(payload),
+//     onSuccess: async () => {
+//       await queryClient.removeQueries({ queryKey: queryKeys.auth.me })
+//     },
+//   })
+// }

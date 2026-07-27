@@ -5,6 +5,9 @@ import { env } from './config/env.config';
 import cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import dns from 'node:dns';
+
+dns.setDefaultResultOrder('ipv4first');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

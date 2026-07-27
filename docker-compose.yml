@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: https://api.uurl.uz
+    restart: always
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+      - apps/web/.env
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+      - apps/api/.env
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+    networks:
+      - app-network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: always
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - /home/jasurbek/.cloudflared/e539c764-729a-4712-89c6-8c33b68c97fa.json:/etc/cloudflared/e539c764-729a-4712-89c6-8c33b68c97fa.json:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
