@@ -2,14 +2,18 @@ import { apiClient } from "@/api/clients"
 import type { AppUser } from "@/api/types"
 
 export interface RegisterPayload {
-  fullName: string
   email: string
+
   password: string
+
+  name: string
+
+  avatar?: string
 }
 
 export interface VerifyOtpPayload {
   email: string
-  otp: string
+  otpCode: string
 }
 
 export interface LoginPayload {
@@ -27,19 +31,19 @@ export interface ResetPasswordPayload {
   newPassword: string
 }
 
-export interface UpdateMePayload {
-  fullName?: string
-  username?: string
-  photoUrl?: string
-  bio?: string
-  avatar?: string
-  profileBg?: string
-}
+// export interface UpdateMePayload {
+//   fullName?: string
+//   username?: string
+//   photoUrl?: string
+//   bio?: string
+//   avatar?: string
+//   profileBg?: string
+// }
 
-export interface DeleteMePayload {
-  password: string
-  reason?: string
-}
+// export interface DeleteMePayload {
+//   password: string
+//   reason?: string
+// }
 
 export interface TelegramLoginPayload {
   [key: string]: unknown
@@ -56,8 +60,7 @@ export const authService = {
     }),
   login: (payload: LoginPayload) =>
     apiClient.post<{ message: string }>("/jwt/auth/login", { body: payload }),
-  refreshToken: () =>
-    apiClient.post<{ message: string }>("/jwt/auth/refresh"),
+  refreshToken: () => apiClient.post<{ message: string }>("/jwt/auth/refresh"),
   logout: () => apiClient.post<{ message: string }>("/jwt/auth/logout"),
   forgotPassword: (payload: ForgotPasswordPayload) =>
     apiClient.post<{ message: string }>("/jwt/auth/forgot-password", {
@@ -79,8 +82,8 @@ export const authService = {
     apiClient.post<{ message: string }>("/telegram/auth/login", {
       body: payload,
     }),
-  updateMe: (payload: UpdateMePayload) =>
-    apiClient.patch<AppUser>("/jwt/auth/me", { body: payload }),
-  deleteMe: (payload: DeleteMePayload) =>
-    apiClient.delete<AppUser>("/jwt/auth/me", { body: payload }),
+  // updateMe: (payload: UpdateMePayload) =>
+  //   apiClient.patch<AppUser>("/jwt/auth/me", { body: payload }),
+  // deleteMe: (payload: DeleteMePayload) =>
+  //   apiClient.delete<AppUser>("/jwt/auth/me", { body: payload }),
 }

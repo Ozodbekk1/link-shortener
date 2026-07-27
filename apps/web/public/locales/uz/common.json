@@ -289,6 +289,30 @@
     "ru": "Русский",
     "language": "Til"
   },
+  "onboarding": {
+    "organization": {
+      "title": "Tashkilotingizni yarating",
+      "subtitle": "Jamoangiz, loyihalaringiz va aktivlaringizni bitta xavfsiz ish joyida jamlang. Uurl bilan o'sayotgan 100+ kompaniyaga qo'shiling.",
+      "stepCreate": "Yaratish",
+      "stepSetup": "Sozlash",
+      "stepDone": "Tayyor",
+      "nameLabel": "Tashkilot nomi",
+      "namePlaceholder": "Tashkilot nomini kiriting",
+      "slugLabel": "Tashkilot subdomeni",
+      "slugEditHint": "( Istalgancha tahrirlang )",
+      "slugPlaceholder": "sizning-slug",
+      "slugSuffix": ".uurl.uz",
+      "availableAt": "Tashkilotingiz quyidagi manzilda mavjud bo'ladi:",
+      "submitButton": "Tashkilot yaratish",
+      "submittingButton": "Yaratilmoqda...",
+      "errors": {
+        "nameMin": "Tashkilot nomi kamida 2 ta belgidan iborat bo'lishi kerak",
+        "slugMin": "Slug kamida 3 ta belgidan iborat bo'lishi kerak",
+        "slugRegex": "Slug faqat kichik lotin harflari, raqamlar va tire belgisidan iborat bo'lishi mumkin",
+        "slugReserved": "Bu slug band qilingan yoki allaqachon olingan. Iltimos, boshqasini tanlang."
+      }
+    }
+  },
   "auth": {
     "login": {
       "title": "Xush kelibsiz",
@@ -336,7 +360,17 @@
     },
     "verifyAccount": {
       "title": "Hisobni tasdiqlash",
-      "subtitle": "Emailingizga yuborilgan tasdiqlash kodini kiriting."
+      "subtitle": "Emailingizga yuborilgan tasdiqlash kodini kiriting.",
+      "checkEmail": "Emailingizni tekshiring",
+      "otpSent": "6 xonali kod yuborildi",
+      "enterCode": "Tasdiqlash kodini kiriting",
+      "submitButton": "Tasdiqlash",
+      "verifying": "Tekshirilmoqda...",
+      "successMessage": "Email muvaffaqiyatli tasdiqlandi!",
+      "errorMessage": "Tasdiqlash amalga oshmadi. Qayta urinib ko'ring.",
+      "didntReceive": "Kod kelmadimi?",
+      "resend": "Qayta yuborish",
+      "resendInfo": "Agar emailni ko'rmasangiz, spam papkasini tekshiring."
     }
   }
 }

@@ -39,6 +39,7 @@ export class EmailService {
 
       this.logger.log(`Email "${subject}" sent successfully to ${to}`);
     } catch (error) {
+      console.log(error);
       this.logger.error(`Failed to send email to ${to}`, error);
       throw new Error('Email delivery failed');
     }
