@@ -40,10 +40,10 @@ export class CookieService {
     const isProduction = env.NODE_ENV === 'production';
 
     return {
-      ...(isProduction && { domain: '.uurl.uz' }),
+      domain: isProduction ? '.uurl.uz' : undefined, // Note the leading dot!
       httpOnly: true,
-      secure: isProduction, // false on localhost (HTTP), true in production (HTTPS)
-      sameSite: isProduction ? ('lax' as const) : ('lax' as const),
+      secure: isProduction, // HTTPS is strictly required
+      sameSite: isProduction ? ('none' as const) : ('lax' as const),
       path: '/',
       maxAge: this.parseDurationToMs(expiry),
     };
