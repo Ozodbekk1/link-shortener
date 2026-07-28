@@ -37,10 +37,13 @@ export class CookieService {
   }
 
   private buildCookieOptions(expiry: string) {
+    const isProduction = env.NODE_ENV === 'production';
+
     return {
+      ...(isProduction && { domain: '.uurl.uz' }),
       httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'lax' as const,
+      secure: isProduction, // false on localhost (HTTP), true in production (HTTPS)
+      sameSite: isProduction ? ('lax' as const) : ('lax' as const),
       path: '/',
       maxAge: this.parseDurationToMs(expiry),
     };

@@ -15,17 +15,36 @@ async function bootstrap() {
   });
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
 
-  const allowedOrigins = env.WEB_ORIGIN?.split(',') || [];
+  const allowedOrigins = env.WEB_ORIGIN?.split(',').map((o) => o.trim()) || [];
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // Check against WEB_ORIGIN list
+      const isExplicitlyAllowed = allowedOrigins.includes(origin);
+
+      // Check if origin matches .uurl.uz or .uurl.uz subdomains
+      const isUurlSubdomain = /^https:\/\/(.*\.)?uurl\.uz$/.test(origin);
+
+      if (isExplicitlyAllowed || isUurlSubdomain) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        callback(null, true);
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        callback(new Error(`CORS blocked for origin: ${origin}`));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  app.getHttpAdapter().getInstance().set('trust proxy', 1);
   app.enableCors({
     origin: env.WEB_ORIGIN
       ? env.WEB_ORIGIN.split(',').map((origin) => origin.trim())
