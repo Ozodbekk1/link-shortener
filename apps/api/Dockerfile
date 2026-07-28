@@ -1,37 +1,53 @@
 FROM node:20-alpine AS base
+RUN apk add --no-cache libc6-compat curl
+WORKDIR /app
+
 
 FROM base AS builder
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
 RUN npm install -g turbo
 COPY . .
-RUN turbo prune --scope=api --docker
+RUN turbo prune api --docker
+
 
 FROM base AS installer
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
+
+RUN corepack enable 
 
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/package-lock.json ./package-lock.json
-RUN npm ci
+COPY --from=builder /app/out/yarn.lock ./yarn.lock
+COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
+
+RUN yarn install --immutable
+
+COPY --from=builder /app/out/full/apps/api/prisma ./apps/api/prisma
+COPY --from=builder /app/out/full/apps/api/prisma.config.ts ./apps/api/prisma.config.ts
+RUN yarn dlx prisma generate --schema=apps/api/prisma/schema.prisma
 
 COPY --from=builder /app/out/full/ .
 COPY turbo.json turbo.json
 
-RUN npm run build --filter=api...
+RUN yarn build --filter=api...
+
 
 FROM base AS runner
-WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nestjs
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nestjs
+
 USER nestjs
 
-COPY --from=installer --chown=nestjs:nodejs /app ./
+COPY --from=installer --chown=nestjs:nodejs /app/apps/api/dist ./apps/api/dist
+COPY --from=installer --chown=nestjs:nodejs /app/apps/api/prisma ./apps/api/prisma
+COPY --from=installer --chown=nestjs:nodejs /app/apps/api/package.json ./apps/api/package.json
+COPY --from=installer --chown=nestjs:nodejs /app/package.json ./package.json
+COPY --from=installer --chown=nestjs:nodejs /app/node_modules ./node_modules
 
-ENV PORT=8080
 ENV NODE_ENV=production
+ENV PORT=8080
 EXPOSE 8080
 
-# Adjust dist path if your NestJS output is dist/src/main.js
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl --fail http://localhost:${PORT}/docs || exit 1
+
 CMD ["node", "apps/api/dist/src/main.js"]
+

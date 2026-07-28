@@ -1,19 +1,28 @@
-# i18n Translation Task - Main Page
+# Dockerization Customization Plan
 
-## Steps
+## Done
 
-- [x] Analyze codebase and understand i18n setup
-- [x] Get user approval for plan
-- [x] **Step 1**: Add missing translation keys to `en/common.json`
-- [x] **Step 2**: Add missing translation keys to `uz/common.json`
-- [x] **Step 3**: Add missing translation keys to `ru/common.json`
-- [x] **Step 4**: Update `features.tsx` - use `t()` for all text
-- [x] **Step 5**: Update `demo.tsx` - use `t()` for UI text
-- [x] **Step 6**: Update `custom-domain.tsx` - use `t()` for all text
-- [x] **Step 7**: Update `pricing.tsx` - use `t()` for all text
-- [x] **Step 8**: Update `cta.tsx` - use `t()` for all text
-- [x] **Step 9**: Update `footer.tsx` - use `t()` for all text
+- [x] Analyze existing Dockerfiles and docker-compose.yml
+- [x] Review project structure, dependencies, and configs
+- [x] **Step 1**: Create `.env.example` with all required variables
+- [x] **Step 2**: Create `.dockerignore` for build optimization
+- [x] **Step 3**: Rewrite `docker-compose.yml`
+  - Add PostgreSQL service (persistent volume, healthcheck)
+  - Add Redis service (persistent volume, healthcheck)
+  - Update backend: depends_on conditions, healthcheck, proper env
+  - Update frontend: healthcheck
+  - Fix cloudflared: hardcoded path → relative credentials.json
+- [x] **Step 4**: Fix `apps/api/Dockerfile`
+  - Switch from npm to yarn (corepack with yarn 4.9.2)
+  - Add prisma generate in build stage
+  - Add healthcheck in runner
+- [x] **Step 5**: Fix `apps/web/next.config.ts`
+  - Add `output: 'standalone'` (required for Docker)
+- [x] **Step 6**: Fix `apps/web/Dockerfile`
+  - Switch from npm ci to yarn install --immutable
+  - Add healthcheck in runner
+  - Clean copy of standalone output
 
-## ✅ Complete
+## Done
 
-All main page components now use the i18n translation system:
+- [x] **Step 7**: Final review and verification — all files consistent and ready
