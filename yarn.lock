@@ -4950,6 +4950,7 @@ __metadata:
     globals: "npm:^17.0.0"
     jest: "npm:^30.0.0"
     jsonwebtoken: "npm:^9.0.3"
+    nanoid: "npm:^6.0.0"
     nestjs-pino: "npm:^4.6.1"
     nodemailer: "npm:^9.0.3"
     passport: "npm:^0.7.0"
@@ -10411,6 +10412,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 10c0/e0b12e3a1d361f74150fa4b25631d0ae29f7162dab01a12f0f1be1f53b7a2a219f9b729504e474d4821207d0fe349bd3c97569ab5cf7ec2fff6aa94711956c93
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "nanoid@npm:6.0.0"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10c0/45bc79b7fc3f8f7110986fee7ac8acc2dc673b4c9ebe0c28a05fd0b2c2bb7a0b9942e43a558e39ea3c41a7fb74c7de1a0f8b73263b025f82e87cdb4a769188c3
   languageName: node
   linkType: hard
 
