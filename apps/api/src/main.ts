@@ -45,12 +45,12 @@ async function bootstrap() {
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
-  app.enableCors({
-    origin: env.WEB_ORIGIN
-      ? env.WEB_ORIGIN.split(',').map((origin) => origin.trim())
-      : true,
-    credentials: true,
-  });
+  // app.enableCors({
+  //   origin: env.WEB_ORIGIN
+  //     ? env.WEB_ORIGIN.split(',').map((origin) => origin.trim())
+  //     : true,
+  //   credentials: true,
+  // });
   app.setGlobalPrefix('api/v1', {
     exclude: [
       // Redirect routes must be at root level for clean short URLs
