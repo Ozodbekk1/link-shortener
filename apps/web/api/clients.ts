@@ -126,11 +126,9 @@ apiInstance.interceptors.response.use(
 
     try {
       if (!refreshPromise) {
-        refreshPromise = apiInstance
-          .post("/jwt/auth/refresh")
-          .then(() => {
-            return
-          })
+        refreshPromise = apiInstance.post("/jwt/auth/refresh").then(() => {
+          return
+        })
       }
 
       await refreshPromise
