@@ -68,7 +68,7 @@ export default function CreateOrganization() {
       document.cookie = "hasOrganization=true; path=/"
 
       toast.success("Organization created!")
-      window.location.replace(`http://${data.slug}.localhost:3000`)
+      window.location.replace(`https://${data.slug}.uurl.uz`)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong")
     }
