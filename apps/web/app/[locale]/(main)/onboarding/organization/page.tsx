@@ -66,7 +66,7 @@ export default function CreateOrganization() {
 
       // Determine parent domain dynamically for dev vs prod
       const rootDomain =
-        process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
+        process.env.NEXT_PUBLIC_ROOT_DOMAIN_REDIRECT || "uurl.uz"
       const isProduction = rootDomain.includes("uurl.uz")
       const domainAttribute = isProduction
         ? `; domain=.${rootDomain.split(":")[0]}`
