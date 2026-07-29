@@ -1,11 +1,27 @@
 import { NextResponse, type NextRequest } from "next/server"
+import { edgeLogger } from "@/lib/edge-logger"
 
 const PUBLIC_FILE = /\.(.*)$/
 const LOCALES = ["en", "uz", "ru"]
 const DEFAULT_LOCALE = "en"
 
 export function middleware(req: NextRequest) {
+  const start = Date.now()
+
   const url = req.nextUrl
+
+  const log = (response: NextResponse) => {
+    edgeLogger("info", "Incoming request", {
+      method: req.method,
+      path: url.pathname,
+      status: response.status,
+      duration: `${Date.now() - start}ms`,
+      host: req.headers.get("host"),
+      userAgent: req.headers.get("user-agent"),
+    })
+
+    return response
+  }
 
   if (
     PUBLIC_FILE.test(url.pathname) ||
@@ -14,7 +30,7 @@ export function middleware(req: NextRequest) {
     url.pathname.startsWith("/r/") ||
     url.pathname === "/r"
   ) {
-    return NextResponse.next()
+    return log(NextResponse.next())
   }
 
   const hostname =
@@ -39,8 +55,10 @@ export function middleware(req: NextRequest) {
   const activeLocale = pathnameLocale || DEFAULT_LOCALE
 
   if (!pathnameLocale) {
-    return NextResponse.redirect(
-      new URL(`/${DEFAULT_LOCALE}${url.pathname}${url.search}`, req.url)
+    return log(
+      NextResponse.redirect(
+        new URL(`/${DEFAULT_LOCALE}${url.pathname}${url.search}`, req.url)
+      )
     )
   }
 
@@ -51,33 +69,41 @@ export function middleware(req: NextRequest) {
     if (pathnameWithoutLocale.startsWith("/tenant-app/")) {
       const cleanPath =
         pathnameWithoutLocale.replace(/^\/tenant-app\/[^/]*/, "") || "/"
-      return NextResponse.redirect(
-        new URL(`/${activeLocale}${cleanPath}${url.search}`, req.url)
+
+      return log(
+        NextResponse.redirect(
+          new URL(`/${activeLocale}${cleanPath}${url.search}`, req.url)
+        )
       )
     }
 
     const cleanPath = pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale
 
-    return NextResponse.rewrite(
-      new URL(
-        `/${activeLocale}/tenant-app/${subdomain}${cleanPath}${url.search}`,
-        req.url
+    return log(
+      NextResponse.rewrite(
+        new URL(
+          `/${activeLocale}/tenant-app/${subdomain}${cleanPath}${url.search}`,
+          req.url
+        )
       )
     )
   }
 
   const hasOrganization = req.cookies.get("hasOrganization")?.value
+
   if (
     !subdomain &&
     hasOrganization === "false" &&
     !url.pathname.includes("/onboarding/organization")
   ) {
-    return NextResponse.redirect(
-      new URL(`/${activeLocale}/onboarding/organization`, req.url)
+    return log(
+      NextResponse.redirect(
+        new URL(`/${activeLocale}/onboarding/organization`, req.url)
+      )
     )
   }
 
-  return NextResponse.next()
+  return log(NextResponse.next())
 }
 
 export const config = {
