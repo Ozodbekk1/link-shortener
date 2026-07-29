@@ -65,8 +65,12 @@ export default function CreateOrganization() {
       await mutateAsync(data)
 
       // Determine parent domain dynamically for dev vs prod
-      const isProduction = window.location.hostname.includes("uurl.uz")
-      const domainAttribute = isProduction ? "; domain=.uurl.uz" : ""
+      const rootDomain =
+        process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
+      const isProduction = rootDomain.includes("uurl.uz")
+      const domainAttribute = isProduction
+        ? `; domain=.${rootDomain.split(":")[0]}`
+        : ""
 
       // Set cookies accessible to ALL subdomains
       document.cookie = `organization_slug=${data.slug}; path=/${domainAttribute}`
@@ -74,9 +78,9 @@ export default function CreateOrganization() {
 
       toast.success("Organization created!")
 
-      // Redirect to subdomain
+      // Redirect to the correct subdomain using env-based root domain
       const protocol = window.location.protocol
-      window.location.replace(`${protocol}//${data.slug}.uurl.uz/en`)
+      window.location.replace(`${protocol}//${data.slug}.${rootDomain}/en`)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong")
     }
