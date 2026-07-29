@@ -102,7 +102,9 @@ export default function VerifyAccountPage() {
               t("auth.verifyAccount.successMessage") ||
                 "Email verified successfully!"
             )
-            document.cookie = "hasOrganization=false; path=/"
+            const isProduction = window.location.hostname.includes("uurl.uz")
+            const domainAttribute = isProduction ? "; domain=.uurl.uz" : ""
+            document.cookie = `hasOrganization=false; path=/${domainAttribute}`
             router.push(`/${locale}/onboarding/organization`)
           },
           onError: (error: unknown) => {
