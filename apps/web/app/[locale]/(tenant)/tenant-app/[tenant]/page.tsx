@@ -1,15 +1,18 @@
 "use client"
 import { useEffect } from "react"
-import { useRouter, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
 
 export default function ProfilePage() {
-  const router = useRouter()
   const params = useParams()
-  const locale = params?.locale || "en"
+  const locale = (params?.locale as string) || "en"
 
   useEffect(() => {
-    // Redirect to /{locale}/dashboard — the middleware rewrites subdomain
-    // requests internally, so the browser URL stays clean (no /tenant-app/slug)
-    router.replace(`/${locale}/dashboard`)
-  }, [router, locale])
+    // Use a hard navigation (not client-side router) so the browser makes a
+    // real HTTP request. This ensures the middleware runs, detects the
+    // subdomain from the Host header, and rewrites to the correct tenant
+    // dashboard route internally. router.replace() is a client-side nav that
+    // can bypass the middleware rewrite and land on the wrong page.
+    window.location.replace(`/${locale}/dashboard`)
+  }, [locale])
 }
+
