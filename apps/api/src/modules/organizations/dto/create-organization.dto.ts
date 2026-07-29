@@ -12,5 +12,5 @@ export class CreateOrganizationDto {
     message:
       'The slug must be a single word containing only lowercase letters and numbers (no spaces, dashes, or symbols).',
   })
-  slug!: string; // The tenant subdomain
+  slug!: string;
 }

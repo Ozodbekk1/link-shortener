@@ -1,5 +1,4 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-// import { ConfigService } from '@nestjs/config';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/database/prisma.service';
@@ -21,7 +20,6 @@ export interface TelegramAuthPayload {
 export class TelegramService {
   constructor(
     private prisma: PrismaService,
-    // private configService: ConfigService,
     private jwtService: JwtService,
   ) {}
 
@@ -61,7 +59,6 @@ export class TelegramService {
   }
 
   async loginWithTelegram(telegramPayload: TelegramAuthPayload) {
-    // Validate that the request actually came from Telegram
     const isValid = this.verifyTelegramHash(telegramPayload);
     if (!isValid) {
       throw new UnauthorizedException(
@@ -72,20 +69,14 @@ export class TelegramService {
     const telegramId = String(telegramPayload.id);
     const syntheticEmail = `tg-${telegramId}@uurl.tg.auth`;
 
-    // Try finding the user by their unique placeholder email
     let user = await this.prisma.user.findUnique({
       where: { email: syntheticEmail },
     });
 
-    // If they don't exist in our PostgreSQL instance, bootstrap a user profile safely
     if (!user) {
-      // Create a complex password string that satisfies your Prisma NOT NULL validation
-      // const jwtSecret = env.JWT_SECRET;
-      // this.configService.get<string>('JWT_SECRET') || 'FALLBACK_SECRET';
       const dummyPassword = `TG_AUTH_BYPASS_${telegramId}_${env.TG_AUTH_BYPASS_SECRET}`;
       const passwordHash = await bcrypt.hash(dummyPassword, 10);
 
-      // Build the display name string cleanly
       const fullName =
         `${telegramPayload.first_name || ''} ${telegramPayload.last_name || ''}`.trim();
 
@@ -96,8 +87,8 @@ export class TelegramService {
           passwordHash: passwordHash,
           name: fullName || `Telegram User ${telegramId}`,
           avatar: telegramPayload.photo_url || null,
-          status: 'ACTIVE', // Pre-verified profile state
-          emailVerified: true, // Bypasses email validation screens since TG identity is proven
+          status: 'ACTIVE',
+          emailVerified: true,
         },
       });
     }

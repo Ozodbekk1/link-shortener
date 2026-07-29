@@ -3,7 +3,6 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service';
 import { CreatePermissionDto, UpdatePermissionDto } from './dto/permission.dto';
 import { PrismaService } from 'src/database/prisma.service';
 

@@ -1,5 +1,3 @@
-// src/auth/guards/permissions.guard.ts
-
 import {
   Injectable,
   CanActivate,
@@ -8,7 +6,6 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-// import { PrismaService } from '../../prisma/prisma.service';
 import {
   PERMISSIONS_KEY,
   RequiredPermission,
@@ -23,20 +20,18 @@ export class PermissionsGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // 1. Get required permission from route decorator
     const requiredPermission =
       this.reflector.getAllAndOverride<RequiredPermission>(PERMISSIONS_KEY, [
         context.getHandler(),
         context.getClass(),
       ]);
 
-    // If no @RequirePermission decorator is present, allow access
     if (!requiredPermission) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
-    const user = request.user; // Set by your JWT Auth Guard
+    const user = request.user;
 
     if (!user) {
       throw new ForbiddenException('User authentication required');
@@ -48,7 +43,6 @@ export class PermissionsGuard implements CanActivate {
       throw new ForbiddenException('User ID not found in request context');
     }
 
-    // 2. Get Organization ID (check headers or params)
     const organizationId =
       request.headers['x-organization-id'] ||
       request.params.organizationId ||
@@ -58,7 +52,6 @@ export class PermissionsGuard implements CanActivate {
       throw new BadRequestException('Header "x-organization-id" is missing');
     }
 
-    // 3. Find roles associated with the user inside this organization
     const roles = await this.prisma.role.findMany({
       where: {
         organizationId,
@@ -72,14 +65,12 @@ export class PermissionsGuard implements CanActivate {
       },
     });
 
-    // Extract all permissions assigned to the fetched roles
     const userPermissions = roles.flatMap((role) =>
       role.permissions.map(
         (rp) => `${rp.permission.action}:${rp.permission.resource}`,
       ),
     );
 
-    // Check for "manage" wildcard (gives full access to resource)
     const requiredKey = `${requiredPermission.action}:${requiredPermission.resource}`;
     const wildcardKey = `manage:${requiredPermission.resource}`;
 

@@ -37,9 +37,6 @@ export class CookieService {
   }
 
   private buildCookieOptions(expiry: string) {
-    // const isProduction = env.NODE_ENV === 'production';
-
-    // Helper to check if request is coming from your domain structure
     const isUurlDomain = process.env.NODE_ENV === 'production';
 
     return {

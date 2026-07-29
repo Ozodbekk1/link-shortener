@@ -54,8 +54,6 @@ export class OrganizationsService {
         },
       });
 
-      // Auto-create default workspace for newly created organization
-      // Requirement: workspace name must be "personal"
       await tx.workspace.create({
         data: {
           name: 'personal',
@@ -192,7 +190,6 @@ export class OrganizationsService {
     page = 1,
     limit = 20,
   ) {
-    // Verify user belongs to the organization
     const membership = await this.prisma.organizationMember.findFirst({
       where: {
         organizationId,

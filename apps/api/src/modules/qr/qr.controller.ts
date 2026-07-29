@@ -27,7 +27,6 @@ export class QrController {
     @Param('workspaceId') workspaceId: string,
     @Body() dto: GenerateQrDto,
   ) {
-    // Map DTO to QrStyle interface
     const style = {
       ...(dto.foregroundColor && { foregroundColor: dto.foregroundColor }),
       ...(dto.backgroundColor && { backgroundColor: dto.backgroundColor }),
@@ -82,7 +81,6 @@ export class QrController {
 
   @Get(':id/download')
   async download(@Param('id') id: string, @Res() res: Response) {
-    // Get QR code for filename
     const qrCode = await this.qrService.findOne(id);
     const buffer = await this.qrService.getQrImageBuffer(id);
 

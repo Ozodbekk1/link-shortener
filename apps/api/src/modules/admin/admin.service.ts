@@ -36,7 +36,6 @@ export class AdminService {
       activeUsers,
       suspendedUsers,
     ] = await Promise.all([
-      // Users
       this.prisma.user.count(),
       this.prisma.user.count({
         where: { createdAt: { gte: startOfToday } },
@@ -44,7 +43,6 @@ export class AdminService {
       this.prisma.user.count({
         where: { createdAt: { gte: startOfMonth } },
       }),
-      // Links
       this.prisma.link.count(),
       this.prisma.link.count({
         where: { createdAt: { gte: startOfToday } },
@@ -52,7 +50,6 @@ export class AdminService {
       this.prisma.link.count({
         where: { createdAt: { gte: startOfMonth } },
       }),
-      // Clicks
       this.prisma.click.count(),
       this.prisma.click.count({
         where: { clickedAt: { gte: startOfToday } },
@@ -60,15 +57,11 @@ export class AdminService {
       this.prisma.click.count({
         where: { clickedAt: { gte: startOfMonth } },
       }),
-      // Organizations & Workspaces
       this.prisma.organization.count(),
       this.prisma.workspace.count(),
-      // QR Codes
       this.prisma.qRCode.count(),
-      // Link statuses
       this.prisma.link.count({ where: { status: LinkStatus.ACTIVE } }),
       this.prisma.link.count({ where: { status: LinkStatus.DISABLED } }),
-      // User statuses
       this.prisma.user.count({ where: { status: UserStatus.PENDING } }),
       this.prisma.user.count({ where: { status: UserStatus.ACTIVE } }),
       this.prisma.user.count({ where: { status: UserStatus.SUSPENDED } }),
@@ -115,35 +108,30 @@ export class AdminService {
     const now = new Date();
     const startDate = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
 
-    // Generate array of dates
     const dates: string[] = [];
     for (let i = days - 1; i >= 0; i--) {
       const d = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
       dates.push(d.toISOString().split('T')[0]);
     }
 
-    // Get users per day
     const usersPerDay = await this.prisma.user.findMany({
       where: { createdAt: { gte: startDate } },
       select: { createdAt: true },
       orderBy: { createdAt: 'asc' },
     });
 
-    // Get links per day
     const linksPerDay = await this.prisma.link.findMany({
       where: { createdAt: { gte: startDate } },
       select: { createdAt: true },
       orderBy: { createdAt: 'asc' },
     });
 
-    // Get clicks per day
     const clicksPerDay = await this.prisma.click.findMany({
       where: { clickedAt: { gte: startDate } },
       select: { clickedAt: true },
       orderBy: { clickedAt: 'asc' },
     });
 
-    // Group by date
     const userCounts: Record<string, number> = {};
     const linkCounts: Record<string, number> = {};
     const clickCounts: Record<string, number> = {};

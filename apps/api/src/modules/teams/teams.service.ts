@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service';
 import { TeamRole } from '@prisma/client';
 import { CreateTeamDto, GetTeamsDto } from './dto/teams.dto';
 import { PrismaService } from 'src/database/prisma.service';

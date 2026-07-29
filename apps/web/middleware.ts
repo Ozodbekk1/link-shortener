@@ -1,4 +1,3 @@
-import { NextApiResponse } from "next"
 import { NextResponse, type NextRequest } from "next/server"
 
 const PUBLIC_FILE = /\.(.*)$/
@@ -8,7 +7,6 @@ const DEFAULT_LOCALE = "en"
 export function middleware(req: NextRequest) {
   const url = req.nextUrl
 
-  // 1. Skip static assets, Next.js internals, images, and API routes
   if (
     PUBLIC_FILE.test(url.pathname) ||
     url.pathname.startsWith("/api") ||
@@ -19,15 +17,13 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // 2. Extract TRUE host passed by Cloudflare Tunnel
   const hostname =
     req.headers.get("x-forwarded-host") || req.headers.get("host") || ""
 
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
-  const currentHost = hostname.replace(/:\d+$/, "") // strip port
+  const currentHost = hostname.replace(/:\d+$/, "")
   const rootHost = rootDomain.replace(/:\d+$/, "")
 
-  // 3. Detect if host is a subdomain (e.g. "any-org.uurl.uz")
   const isSubdomain =
     currentHost !== rootHost &&
     currentHost !== `www.${rootHost}` &&
@@ -35,7 +31,6 @@ export function middleware(req: NextRequest) {
 
   const subdomain = isSubdomain ? currentHost.replace(`.${rootHost}`, "") : null
 
-  // 4. Detect Locale in path
   const pathnameLocale = LOCALES.find(
     (locale) =>
       url.pathname.startsWith(`/${locale}/`) || url.pathname === `/${locale}`
@@ -43,7 +38,6 @@ export function middleware(req: NextRequest) {
 
   const activeLocale = pathnameLocale || DEFAULT_LOCALE
 
-  // Force locale prefix if missing
   if (!pathnameLocale) {
     return NextResponse.redirect(
       new URL(`/${DEFAULT_LOCALE}${url.pathname}${url.search}`, req.url)
@@ -53,11 +47,7 @@ export function middleware(req: NextRequest) {
   const pathnameWithoutLocale =
     url.pathname.replace(new RegExp(`^/${activeLocale}`), "") || "/"
 
-  // 5. DYNAMIC SUBDOMAIN REWRITE -> Route to app/[locale]/(tenant)/tenant-app/[tenant]
   if (subdomain && subdomain !== "api" && subdomain !== "www") {
-    // If the URL still contains /tenant-app/[slug], strip it and redirect to
-    // the clean URL. The rewrite below will handle it on the next request.
-    // e.g. nevv.uurl.uz/en/tenant-app/nevv/dashboard → nevv.uurl.uz/en/dashboard
     if (pathnameWithoutLocale.startsWith("/tenant-app/")) {
       const cleanPath =
         pathnameWithoutLocale.replace(/^\/tenant-app\/[^/]*/, "") || "/"
@@ -66,10 +56,7 @@ export function middleware(req: NextRequest) {
       )
     }
 
-    // Rewrite clean subdomain path → internal tenant route (URL bar stays clean)
-    // e.g. nevv.uurl.uz/en/dashboard → serves /en/tenant-app/nevv/dashboard
-    const cleanPath =
-      pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale
+    const cleanPath = pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale
 
     return NextResponse.rewrite(
       new URL(
@@ -79,7 +66,6 @@ export function middleware(req: NextRequest) {
     )
   }
 
-  // 6. Handle users without organization on root domain
   const hasOrganization = req.cookies.get("hasOrganization")?.value
   if (
     !subdomain &&

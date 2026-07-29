@@ -100,7 +100,6 @@ export class UsersService {
         userRole: true,
         createdAt: true,
         updatedAt: true,
-        // Organizations the user owns
         ownedOrganizations: {
           include: {
             workspaces: {
@@ -129,7 +128,6 @@ export class UsersService {
             },
           },
         },
-        // Organizations the user is a member of
         memberships: {
           include: {
             organization: {
@@ -142,7 +140,6 @@ export class UsersService {
             },
           },
         },
-        // Team memberships
         teamMemberships: {
           include: {
             team: {
@@ -159,7 +156,6 @@ export class UsersService {
             },
           },
         },
-        // All links with full details
         links: {
           include: {
             tags: true,
@@ -178,7 +174,6 @@ export class UsersService {
           },
           orderBy: { createdAt: 'desc' },
         },
-        // Notifications
         notifications: {
           orderBy: { createdAt: 'desc' },
           take: 50,
