@@ -55,17 +55,28 @@ export function middleware(req: NextRequest) {
 
   // 5. DYNAMIC SUBDOMAIN REWRITE -> Route to app/[locale]/(tenant)/tenant-app/[tenant]
   if (subdomain && subdomain !== "api" && subdomain !== "www") {
-    if (!pathnameWithoutLocale.startsWith("/tenant-app")) {
+    // If the URL still contains /tenant-app/[slug], strip it and redirect to
+    // the clean URL. The rewrite below will handle it on the next request.
+    // e.g. nevv.uurl.uz/en/tenant-app/nevv/dashboard → nevv.uurl.uz/en/dashboard
+    if (pathnameWithoutLocale.startsWith("/tenant-app/")) {
       const cleanPath =
-        pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale
-
-      return NextResponse.rewrite(
-        new URL(
-          `/${activeLocale}/tenant-app/${subdomain}${cleanPath}${url.search}`,
-          req.url
-        )
+        pathnameWithoutLocale.replace(/^\/tenant-app\/[^/]*/, "") || "/"
+      return NextResponse.redirect(
+        new URL(`/${activeLocale}${cleanPath}${url.search}`, req.url)
       )
     }
+
+    // Rewrite clean subdomain path → internal tenant route (URL bar stays clean)
+    // e.g. nevv.uurl.uz/en/dashboard → serves /en/tenant-app/nevv/dashboard
+    const cleanPath =
+      pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale
+
+    return NextResponse.rewrite(
+      new URL(
+        `/${activeLocale}/tenant-app/${subdomain}${cleanPath}${url.search}`,
+        req.url
+      )
+    )
   }
 
   // 6. Handle users without organization on root domain
