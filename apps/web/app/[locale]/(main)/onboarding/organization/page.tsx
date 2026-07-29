@@ -66,7 +66,7 @@ export default function CreateOrganization() {
 
       // Determine parent domain dynamically for dev vs prod
       const rootDomain =
-        process.env.NEXT_PUBLIC_ROOT_DOMAIN_REDIRECT || "uurl.uz"
+        process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
       const isProduction = rootDomain.includes("uurl.uz")
       const domainAttribute = isProduction
         ? `; domain=.${rootDomain.split(":")[0]}`
@@ -78,13 +78,18 @@ export default function CreateOrganization() {
 
       toast.success("Organization created!")
 
-      // Redirect to the correct subdomain using env-based root domain
+      // Redirect DIRECTLY to /en/dashboard on the subdomain.
+      // Going to /en first would require a client-side router.replace() in the
+      // tenant index page, which can bypass middleware and land on the wrong route.
+      // Going straight to /en/dashboard means the middleware handles it on the
+      // very first request: detects subdomain, rewrites internally → clean URL.
       const protocol = window.location.protocol
-      window.location.replace(`${protocol}//${data.slug}.${rootDomain}/en`)
+      window.location.replace(`${protocol}//${data.slug}.${rootDomain}/en/dashboard`)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong")
     }
   }
+
 
   return (
     <div className="flex min-h-screen w-full flex-col justify-between bg-linear-to-br from-pink-50 via-purple-50/30 to-indigo-50/40 p-4 font-sans text-slate-800 md:p-8">
