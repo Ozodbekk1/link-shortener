@@ -25,7 +25,7 @@ export function middleware(req: NextRequest) {
   const hasOrganization = req.cookies.get("hasOrganization")?.value
   const organizationSlug = req.cookies.get("organization_slug")?.value
 
-  // 3. Extract Root Domain vs Subdomain
+  // 3. Domain Parsing
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
   const currentHost = hostname.replace(/:\d+$/, "") // Strip port (e.g. :3000)
   const rootHost = rootDomain.replace(/:\d+$/, "")
@@ -43,7 +43,7 @@ export function middleware(req: NextRequest) {
     req.headers.get("x-forwarded-proto") ||
     (process.env.NODE_ENV === "production" ? "https" : "http")
 
-  // 5. Ensure URL has a valid locale prefix (Must run first!)
+  // 5. Ensure URL has a valid locale prefix
   const pathnameLocale = LOCALES.find(
     (locale) =>
       url.pathname.startsWith(`/${locale}/`) || url.pathname === `/${locale}`
@@ -59,7 +59,7 @@ export function middleware(req: NextRequest) {
   const pathnameWithoutLocale =
     url.pathname.replace(new RegExp(`^/${activeLocale}`), "") || "/"
 
-  // 6. Redirect authenticated user from root domain to their organization subdomain
+  // 6. Root Domain: Redirect logged-in user with org to their subdomain
   if (
     token &&
     isRootDomain &&
@@ -72,19 +72,23 @@ export function middleware(req: NextRequest) {
     )
   }
 
-  // 7. Tenant Subdomain Rewrite (e.g. real.uurl.uz -> /en/tenant-app/real/...)
+  // 7. SUBDOMAIN REWRITE: Route subdomain.uurl.uz/en -> [locale]/(tenant)/tenant-app/[tenant]
   if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    return NextResponse.rewrite(
-      new URL(
-        `/${activeLocale}/tenant-app/${subdomain}${pathnameWithoutLocale}${url.search}`,
-        req.url
+    // If user requests subdomain directly without /tenant-app in path, rewrite internally
+    if (!pathnameWithoutLocale.startsWith("/tenant-app")) {
+      return NextResponse.rewrite(
+        new URL(
+          `/${activeLocale}/tenant-app/${subdomain}${pathnameWithoutLocale}${url.search}`,
+          req.url
+        )
       )
-    )
+    }
   }
 
-  // 8. Redirect authenticated user without organization to onboarding
+  // 8. Root Domain: Redirect logged-in user without org to onboarding page
   if (
     token &&
+    isRootDomain &&
     hasOrganization === "false" &&
     !url.pathname.includes("/onboarding/organization")
   ) {
