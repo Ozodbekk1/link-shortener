@@ -63,12 +63,20 @@ export default function CreateOrganization() {
   const onSubmit = async (data: CreateOrgFormValues) => {
     try {
       await mutateAsync(data)
-      document.cookie = `organization_slug=${data.slug}; path=/`
 
-      document.cookie = "hasOrganization=true; path=/"
+      // Determine parent domain dynamically for dev vs prod
+      const isProduction = window.location.hostname.includes("uurl.uz")
+      const domainAttribute = isProduction ? "; domain=.uurl.uz" : ""
+
+      // Set cookies accessible to ALL subdomains
+      document.cookie = `organization_slug=${data.slug}; path=/${domainAttribute}`
+      document.cookie = `hasOrganization=true; path=/${domainAttribute}`
 
       toast.success("Organization created!")
-      window.location.replace(`https://${data.slug}.uurl.uz`)
+
+      // Redirect to subdomain
+      const protocol = window.location.protocol
+      window.location.replace(`${protocol}//${data.slug}.uurl.uz/en`)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Something went wrong")
     }
