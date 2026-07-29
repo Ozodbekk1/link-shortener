@@ -12,6 +12,7 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl
   const hostname = req.headers.get("host") || ""
 
+  // Ignore static files, API routes, and internal Next.js requests
   if (
     PUBLIC_FILE.test(url.pathname) ||
     url.pathname.startsWith("/api") ||
@@ -22,27 +23,36 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
+  // Detect locale in URL path
   const pathnameLocale = LOCALES.find(
     (locale) =>
       url.pathname.startsWith(`/${locale}/`) || url.pathname === `/${locale}`
   )
 
-  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost:3000"
+  const activeLocale = pathnameLocale || DEFAULT_LOCALE
+
+  // Determine root domain (Fallback to uurl.uz if env variable is missing)
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
 
   const currentHost = hostname.replace(/:\d+$/, "")
   const rootHost = rootDomain.replace(/:\d+$/, "")
 
+  // Check if current request is on a subdomain (e.g., real.uurl.uz)
   const isSubdomain =
     currentHost !== rootHost && currentHost.endsWith(`.${rootHost}`)
 
   const subdomain = isSubdomain ? currentHost.replace(`.${rootHost}`, "") : null
+  const isRootDomain =
+    currentHost === rootHost || currentHost === `www.${rootHost}`
+
+  // Detect protocol (HTTPS in production)
+  const protocol =
+    req.headers.get("x-forwarded-proto") ||
+    (process.env.NODE_ENV === "production" ? "https" : "http")
 
   /**
-   * Redirect authenticated users from root domain
-   * to their organization subdomain
+   * 1. Redirect authenticated users from root domain to their organization subdomain
    */
-  const isRootDomain = currentHost === rootHost
-
   if (
     token &&
     isRootDomain &&
@@ -54,13 +64,15 @@ export function middleware(req: NextRequest) {
     if (organizationSlug) {
       return NextResponse.redirect(
         new URL(
-          `http://${organizationSlug}.${rootDomain}${url.pathname}${url.search}`,
-          req.url
+          `${protocol}://${organizationSlug}.${rootHost}${url.pathname}${url.search}`
         )
       )
     }
   }
 
+  /**
+   * 2. Ensure URL has a valid locale prefix
+   */
   if (!pathnameLocale) {
     return NextResponse.redirect(
       new URL(`/${DEFAULT_LOCALE}${url.pathname}${url.search}`, req.url)
@@ -71,26 +83,27 @@ export function middleware(req: NextRequest) {
     url.pathname.replace(new RegExp(`^/${pathnameLocale}`), "") || "/"
 
   /**
-   * Tenant subdomain routing
+   * 3. Tenant subdomain rewrite -> Send real.uurl.uz to /en/tenant-app/real/...
    */
-  if (subdomain && subdomain !== "www") {
+  if (subdomain && subdomain !== "www" && subdomain !== "api") {
     return NextResponse.rewrite(
       new URL(
-        `/${pathnameLocale}/tenant-app/${subdomain}${pathnameWithoutLocale}${url.search}`,
+        `/${activeLocale}/tenant-app/${subdomain}${pathnameWithoutLocale}${url.search}`,
         req.url
       )
     )
   }
 
   /**
-   * User without organization
-   * goes to organization creation
+   * 4. Users without organization redirect to onboarding
    */
   if (
     hasOrganization === "false" &&
     !req.nextUrl.pathname.includes("/onboarding/organization")
   ) {
-    return NextResponse.redirect(new URL(`/onboarding/organization`, req.url))
+    return NextResponse.redirect(
+      new URL(`/${activeLocale}/onboarding/organization`, req.url)
+    )
   }
 
   return NextResponse.next()
