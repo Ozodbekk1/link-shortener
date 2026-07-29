@@ -1,4 +1,3 @@
-// src/links/links.controller.ts
 import {
   Controller,
   Get,
@@ -19,7 +18,6 @@ import { UpdateLinkDto } from './dto/update-link.dto';
 import { QueryLinkDto } from './dto/query-link.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
 
-// ---- Workspace-scoped links CRUD (authenticated) ----
 @Controller(':workspaceId/links')
 export class WorkspaceLinksController {
   constructor(private readonly linksService: LinksService) {}
@@ -44,8 +42,6 @@ export class WorkspaceLinksController {
   ) {
     return this.linksService.findAll(workspaceId, query);
   }
-
-  // ─── Analytics Routes (must precede :id to avoid conflicts) ──
 
   @Get('analytics/overview')
   @UseGuards(JwtAuthGuard)
@@ -126,7 +122,6 @@ export class WorkspaceLinksController {
   }
 }
 
-// ---- Public slug resolution (no auth) ----
 @Controller('links')
 export class PublicLinksController {
   constructor(private readonly linksService: LinksService) {}

@@ -19,7 +19,6 @@ function randomSlug() {
   let result = '';
 
   const length = Math.floor(Math.random() * 5) + 6;
-  // 6-10 chars
 
   for (let i = 0; i < length; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));

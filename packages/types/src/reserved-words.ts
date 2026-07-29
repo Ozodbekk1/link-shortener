@@ -1,5 +1,4 @@
 export const BLOCKED_DOMAINS = [
-  // Core App & System
   "www",
   "app",
   "api",
@@ -22,8 +21,8 @@ export const BLOCKED_DOMAINS = [
   "images",
   "img",
   "files",
+  "chat",
 
-  // Business, Legal & Marketing
   "admin",
   "administrator",
   "billing",
@@ -53,7 +52,6 @@ export const BLOCKED_DOMAINS = [
   "docs",
   "api-docs",
 
-  // Identity, Auth & Support
   "login",
   "signin",
   "logout",
@@ -73,9 +71,7 @@ export const BLOCKED_DOMAINS = [
   "forum",
   "community",
   "feedback",
-  "chat",
 
-  // Protocol, Infrastructure & Mail
   "mail",
   "email",
   "smtp",
@@ -104,7 +100,6 @@ export const BLOCKED_DOMAINS = [
   "autodiscover",
   "autoconfig",
 
-  // Common Malicious / Phishing Targets
   "secure",
   "ssl",
   "vpn",
@@ -125,7 +120,6 @@ export const BLOCKED_DOMAINS = [
   "root",
   "search",
 
-  // Wildcards, Multi-tenant place holders, & SEO
   "all",
   "any",
   "main",
@@ -138,22 +132,3 @@ export const BLOCKED_DOMAINS = [
   "site",
   "web",
 ];
-
-// /**
-//  * Validates whether a requested subdomain is safe, correctly formatted, and not blocked.
-//  *
-//  * @param slug The requested tenant subdomain (e.g. "my-company")
-//  * @returns boolean True if the subdomain is allowed, false if invalid or blocked.
-//  */
-// export function isValidSubdomain(slug: string): boolean {
-//   // 1. Must be lowercase alphanumeric characters or hyphens only
-//   const isFormatValid = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/.test(slug);
-
-//   if (!isFormatValid) {
-//     return false;
-//   }
-
-//   const isNotBlocked = !BLOCKED_DOMAINS.includes(slug.toLowerCase());
-
-//   return isNotBlocked;
-// }

@@ -35,7 +35,7 @@ export class QrService {
         dark: foregroundColor,
         light: backgroundColor,
       },
-      errorCorrectionLevel: 'H', // High error correction for logo overlay
+      errorCorrectionLevel: 'H',
     });
 
     const base64Data = qrDataUrl.replace(/^data:image\/png;base64,/, '');
@@ -207,7 +207,6 @@ export class QrService {
     const base64Image = imageBuffer.toString('base64');
     const dataUrl = `data:image/png;base64,${base64Image}`;
 
-    // Update in DB
     const updated = await this.prisma.qRCode.update({
       where: { id },
       data: {

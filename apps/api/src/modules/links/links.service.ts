@@ -1,11 +1,10 @@
-// src/links/links.service.ts
 import {
   Injectable,
   NotFoundException,
   ConflictException,
   BadRequestException,
 } from '@nestjs/common';
-// import { PrismaService } from '../prisma/prisma.service'; // Adjust path to your PrismaService
+
 import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
 import { QueryLinkDto } from './dto/query-link.dto';
@@ -21,7 +20,6 @@ export class LinksService {
   async create(userId: string, workspaceId: string, dto: CreateLinkDto) {
     const slug = dto.shortSlug || nanoid(7);
 
-    // Check slug uniqueness
     const existing = await this.prisma.link.findUnique({
       where: { shortSlug: slug },
     });
@@ -141,7 +139,6 @@ export class LinksService {
       throw new NotFoundException('Short link not found');
     }
 
-    // Status / Expiry Checks
     if (link.status !== LinkStatus.ACTIVE) {
       throw new BadRequestException('Link is no longer active');
     }
@@ -163,7 +160,6 @@ export class LinksService {
     const { tags, redirectRules, password, ...rest } = dto;
 
     return this.prisma.$transaction(async (tx) => {
-      // Handle tag updates if provided
       if (tags) {
         await tx.linkTag.deleteMany({ where: { linkId: id } });
         await tx.linkTag.createMany({
@@ -171,7 +167,6 @@ export class LinksService {
         });
       }
 
-      // Handle redirect rule updates if provided
       if (redirectRules) {
         await tx.redirectRule.deleteMany({ where: { linkId: id } });
         await tx.redirectRule.createMany({
@@ -200,9 +195,6 @@ export class LinksService {
     });
   }
 
-  // ─── Analytics ───────────────────────────────────────────────
-
-  /** Overview stats for the workspace */
   async getAnalyticsOverview(workspaceId: string) {
     const now = new Date();
     const startOfToday = new Date(
@@ -222,7 +214,6 @@ export class LinksService {
     ).length;
     const totalClicks = links.reduce((sum, l) => sum + l._count.clicks, 0);
 
-    // Clicks today across all links in workspace
     const clicksToday = await this.prisma.click.count({
       where: {
         link: { workspaceId },
@@ -230,7 +221,6 @@ export class LinksService {
       },
     });
 
-    // Unique clicks (by IP) for last 30 days
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const uniqueClicks = await this.prisma.click.groupBy({
       by: ['ip'],
@@ -250,7 +240,6 @@ export class LinksService {
     };
   }
 
-  /** Realtime active visitors per link in workspace */
   async getRealtimeAnalytics(workspaceId: string) {
     const data = await this.prisma.realtimeAnalytics.findMany({
       where: { link: { workspaceId } },
@@ -271,7 +260,6 @@ export class LinksService {
     }));
   }
 
-  /** Clicks grouped by country */
   async getCountriesAnalytics(workspaceId: string) {
     const result = await this.prisma.click.groupBy({
       by: ['country'],
@@ -289,7 +277,6 @@ export class LinksService {
     }));
   }
 
-  /** Clicks grouped by device, OS, and browser */
   async getDevicesAnalytics(workspaceId: string) {
     const [byDevice, byOs, byBrowser] = await Promise.all([
       this.prisma.click.groupBy({
@@ -322,9 +309,7 @@ export class LinksService {
     };
   }
 
-  /** Single link analytics */
   async getLinkAnalytics(linkId: string, workspaceId: string) {
-    // Ensure the link exists and belongs to this workspace
     const link = await this.prisma.link.findFirst({
       where: { id: linkId, workspaceId },
       select: { id: true, shortSlug: true, title: true, originalUrl: true },

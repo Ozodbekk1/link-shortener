@@ -26,7 +26,6 @@ export class TelegramController {
     @Body() telegramPayload: TelegramAuthPayload,
     @Res({ passthrough: true }) res: Response,
   ) {
-    // Receives raw web widget or Mini App payload containing data fields + hash parameter
     const { user, accessToken, refreshToken } =
       await this.authService.loginWithTelegram(telegramPayload);
 

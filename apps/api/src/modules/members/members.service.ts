@@ -29,9 +29,7 @@ export class TeamMembersService {
 
     const organizationId = team.workspace.organizationId;
 
-    // 2. Perform atomic auto-provisioning and team creation
     return this.prisma.$transaction(async (tx) => {
-      // Step A: Ensure user is added to Organization Member table
       await tx.organizationMember.upsert({
         where: {
           organizationId_userId: {
@@ -42,12 +40,11 @@ export class TeamMembersService {
         create: {
           organizationId,
           userId: dto.userId,
-          role: 'MEMBER', // Default Org role
+          role: 'MEMBER',
         },
-        update: {}, // No action if user is already an Org member
+        update: {},
       });
 
-      // Step B: Check for existing team membership
       const existingTeamMember = await tx.teamMember.findUnique({
         where: {
           teamId_userId: {
@@ -61,7 +58,6 @@ export class TeamMembersService {
         throw new ConflictException('User is already a member of this team');
       }
 
-      // Step C: Create team membership
       return tx.teamMember.create({
         data: {
           teamId,
@@ -77,7 +73,6 @@ export class TeamMembersService {
     });
   }
 
-  // List all members of a team
   async getTeamMembers(teamId: string) {
     return this.prisma.teamMember.findMany({
       where: { teamId },
@@ -90,7 +85,6 @@ export class TeamMembersService {
     });
   }
 
-  // Update member role (OWNER, ADMIN, MEMBER, VIEWER)
   async updateMemberRole(
     teamId: string,
     memberId: string,
@@ -104,7 +98,6 @@ export class TeamMembersService {
       throw new NotFoundException('Team member not found');
     }
 
-    // Safety guard: If demoting an OWNER, ensure at least one OWNER remains
     if (member.role === TeamRole.OWNER && dto.role !== TeamRole.OWNER) {
       const ownerCount = await this.prisma.teamMember.count({
         where: { teamId, role: TeamRole.OWNER },
@@ -125,7 +118,6 @@ export class TeamMembersService {
     });
   }
 
-  // Remove member from team
   async removeMember(teamId: string, memberId: string) {
     const member = await this.prisma.teamMember.findUnique({
       where: { id: memberId },
@@ -135,7 +127,6 @@ export class TeamMembersService {
       throw new NotFoundException('Team member not found');
     }
 
-    // Prevent deleting sole owner
     if (member.role === TeamRole.OWNER) {
       const ownerCount = await this.prisma.teamMember.count({
         where: { teamId, role: TeamRole.OWNER },

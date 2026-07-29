@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 }
 
 import { Toaster } from "sonner"
+import { TranslationProvider } from "@/common/providers/translation-provider"
 
 export default function RootLayout({
   children,
@@ -36,7 +37,9 @@ export default function RootLayout({
       )}
     >
       <body>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          <TranslationProvider>{children}</TranslationProvider>
+        </QueryProvider>
         <Toaster position="top-right" richColors />
       </body>
     </html>

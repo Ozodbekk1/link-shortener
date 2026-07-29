@@ -3,11 +3,11 @@ import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class CreatePermissionDto {
   @IsString()
   @IsNotEmpty()
-  action!: string; // e.g., 'create', 'read', 'update', 'delete'
+  action!: string;
 
   @IsString()
   @IsNotEmpty()
-  resource!: string; // e.g., 'links', 'campaigns', 'workspaces'
+  resource!: string;
 }
 
 export class UpdatePermissionDto {

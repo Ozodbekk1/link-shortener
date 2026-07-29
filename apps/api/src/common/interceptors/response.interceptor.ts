@@ -19,7 +19,6 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
         ) {
           return {
             success: true,
-            // status: response.status,
             message: response.message,
             data: response.data,
           };
@@ -27,7 +26,6 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, any> {
 
         return {
           success: true,
-          // status: response.status,
           message: 'Success',
           data,
         };
