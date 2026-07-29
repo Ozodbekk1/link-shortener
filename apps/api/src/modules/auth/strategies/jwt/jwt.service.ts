@@ -44,7 +44,7 @@ export class JwtService {
     if (existingUser) {
       throw new ConflictException('Email is already registered');
     }
-    await this.emailService.sendOtpEmail(normalizedEmail, otp);
+    // await this.emailService.sendOtpEmail(normalizedEmail, otp);
     const passwordHash = await this.tokenService.hashData(dto.password);
     const user = await this.prisma.user.create({
       data: {
