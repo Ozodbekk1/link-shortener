@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+import { NextApiResponse } from "next"
+import { NextResponse, type NextRequest } from "next/server"
 
 const PUBLIC_FILE = /\.(.*)$/
 const LOCALES = ["en", "uz", "ru"]
@@ -7,9 +7,8 @@ const DEFAULT_LOCALE = "en"
 
 export function middleware(req: NextRequest) {
   const url = req.nextUrl
-  const hostname = req.headers.get("host") || ""
 
-  // 1. Skip static assets, internal Next.js routes, and API calls
+  // 1. Skip static assets, Next.js internals, images, and API routes
   if (
     PUBLIC_FILE.test(url.pathname) ||
     url.pathname.startsWith("/api") ||
@@ -20,75 +19,59 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // 2. Read Auth & Tenant Cookies
-  const token = req.cookies.get("access_token")?.value
-  const hasOrganization = req.cookies.get("hasOrganization")?.value
-  const organizationSlug = req.cookies.get("organization_slug")?.value
+  // 2. Extract TRUE host passed by Cloudflare Tunnel
+  const hostname =
+    req.headers.get("x-forwarded-host") || req.headers.get("host") || ""
 
-  // 3. Domain Parsing
   const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
-  const currentHost = hostname.replace(/:\d+$/, "") // Strip port (e.g. :3000)
+  const currentHost = hostname.replace(/:\d+$/, "") // strip port
   const rootHost = rootDomain.replace(/:\d+$/, "")
 
+  // 3. Detect if host is a subdomain (e.g. "any-org.uurl.uz")
   const isSubdomain =
-    currentHost !== rootHost && currentHost.endsWith(`.${rootHost}`)
+    currentHost !== rootHost &&
+    currentHost !== `www.${rootHost}` &&
+    currentHost.endsWith(`.${rootHost}`)
 
   const subdomain = isSubdomain ? currentHost.replace(`.${rootHost}`, "") : null
 
-  const isRootDomain =
-    currentHost === rootHost || currentHost === `www.${rootHost}`
-
-  // 4. Extract Protocol
-  const protocol =
-    req.headers.get("x-forwarded-proto") ||
-    (process.env.NODE_ENV === "production" ? "https" : "http")
-
-  // 5. Ensure URL has a valid locale prefix
+  // 4. Detect Locale in path
   const pathnameLocale = LOCALES.find(
     (locale) =>
       url.pathname.startsWith(`/${locale}/`) || url.pathname === `/${locale}`
   )
 
+  const activeLocale = pathnameLocale || DEFAULT_LOCALE
+
+  // Force locale prefix if missing
   if (!pathnameLocale) {
     return NextResponse.redirect(
       new URL(`/${DEFAULT_LOCALE}${url.pathname}${url.search}`, req.url)
     )
   }
 
-  const activeLocale = pathnameLocale
   const pathnameWithoutLocale =
     url.pathname.replace(new RegExp(`^/${activeLocale}`), "") || "/"
 
-  // 6. Root Domain: Redirect logged-in user with org to their subdomain
-  if (
-    token &&
-    isRootDomain &&
-    hasOrganization === "true" &&
-    organizationSlug &&
-    !url.pathname.includes("/tenant-app")
-  ) {
-    return NextResponse.redirect(
-      `${protocol}://${organizationSlug}.${rootHost}/${activeLocale}${pathnameWithoutLocale}${url.search}`
-    )
-  }
-
-  // 7. SUBDOMAIN REWRITE: Route subdomain.uurl.uz/en -> [locale]/(tenant)/tenant-app/[tenant]
-  if (subdomain && subdomain !== "www" && subdomain !== "api") {
-    // If user requests subdomain directly without /tenant-app in path, rewrite internally
+  // 5. DYNAMIC SUBDOMAIN REWRITE -> Route to app/[locale]/(tenant)/tenant-app/[tenant]
+  if (subdomain && subdomain !== "api" && subdomain !== "www") {
     if (!pathnameWithoutLocale.startsWith("/tenant-app")) {
+      const cleanPath =
+        pathnameWithoutLocale === "/" ? "" : pathnameWithoutLocale
+
       return NextResponse.rewrite(
         new URL(
-          `/${activeLocale}/tenant-app/${subdomain}${pathnameWithoutLocale}${url.search}`,
+          `/${activeLocale}/tenant-app/${subdomain}${cleanPath}${url.search}`,
           req.url
         )
       )
     }
   }
 
-  // 8. Root Domain: Redirect logged-in user without org to onboarding page
+  // 6. Handle users without organization on root domain
+  const hasOrganization = req.cookies.get("hasOrganization")?.value
   if (
-    token &&
-    isRootDomain &&
+    !subdomain &&
     hasOrganization === "false" &&
     !url.pathname.includes("/onboarding/organization")
   ) {
