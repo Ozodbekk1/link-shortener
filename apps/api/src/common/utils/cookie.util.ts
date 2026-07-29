@@ -39,11 +39,14 @@ export class CookieService {
   private buildCookieOptions(expiry: string) {
     // const isProduction = env.NODE_ENV === 'production';
 
+    // Helper to check if request is coming from your domain structure
+    const isUurlDomain = process.env.NODE_ENV === 'production';
+
     return {
-      domain: '.uurl.uz', // Explicit leading dot
+      domain: isUurlDomain ? '.uurl.uz' : undefined,
       httpOnly: true,
-      secure: true,
-      sameSite: 'none' as const, // Force lowercase string 'none'
+      secure: isUurlDomain,
+      sameSite: isUurlDomain ? ('none' as const) : ('lax' as const),
       path: '/',
       maxAge: this.parseDurationToMs(expiry),
     };
