@@ -7,97 +7,159 @@ interface FullscreenLoaderProps {
 }
 
 /**
- * Premium fullscreen loading screen shown while authentication state
- * is being resolved (fetching /users/me). Prevents any page content
- * from rendering until auth is determined.
+ * Modern Animated Fullscreen Loader for uurl.uz
+ * Features custom SVG link-shortening animation with branded accent glow.
  */
 export function FullscreenLoader({
   message = "Loading your workspace...",
 }: FullscreenLoaderProps) {
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-white via-[#FFF8F8] to-[#FFF0F2]">
-      {/* Ambient glow */}
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-white via-[#FFF8F8] to-[#FFF0F2]">
+      {/* Ambient Glows */}
       <div
-        className="pointer-events-none absolute -top-[20%] -left-[10%] h-[500px] w-[500px] rounded-full opacity-40 blur-3xl"
+        className="pointer-events-none absolute -top-[20%] -left-[10%] h-[500px] w-[500px] animate-pulse rounded-full opacity-40 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, rgba(244,91,105,0.18) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(244,91,105,0.2) 0%, transparent 70%)",
         }}
       />
       <div
-        className="pointer-events-none absolute -right-[10%] -bottom-[20%] h-[500px] w-[500px] rounded-full opacity-30 blur-3xl"
+        className="pointer-events-none absolute -right-[10%] -bottom-[20%] h-[500px] w-[500px] animate-pulse rounded-full opacity-30 blur-3xl"
         style={{
           background:
-            "radial-gradient(circle, rgba(244,91,105,0.14) 0%, transparent 70%)",
+            "radial-gradient(circle, rgba(244,91,105,0.16) 0%, transparent 70%)",
+          animationDelay: "1s",
         }}
       />
 
-      {/* Logo + Spinner */}
-      <div className="relative flex flex-col items-center gap-8">
-        {/* Pulsing ring */}
-        <div className="relative">
-          <div className="absolute inset-0 animate-ping rounded-2xl bg-[#F45B69]/20" />
-          <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#F45B69] to-[#e04b59] shadow-lg shadow-[#F45B69]/30">
-            <svg
-              viewBox="0 0 24 24"
-              className="h-8 w-8 text-white"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-            </svg>
-          </div>
-        </div>
-
-        {/* Brand name */}
-        <div className="text-2xl font-black tracking-tight text-gray-900">
-          UURL
-        </div>
-
-        {/* Animated dots loader */}
-        <div className="flex items-center gap-1.5">
+      {/* Main Container */}
+      <div className="relative z-10 flex flex-col items-center gap-6">
+        {/* Custom Animated Link Shortener Icon */}
+        <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-white/80 p-4 shadow-xl ring-1 shadow-[#F45B69]/10 ring-[#F45B69]/15 backdrop-blur-md">
+          {/* Subtle Outer Ping Ring */}
           <div
-            className="h-2 w-2 rounded-full bg-[#F45B69] opacity-80"
+            className="absolute inset-0 animate-ping rounded-3xl bg-[#F45B69]/10"
+            style={{ animationDuration: "2.5s" }}
+          />
+
+          <svg
+            className="h-12 w-12 text-[#F45B69]"
+            viewBox="0 0 48 48"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            {/* Left Link Chain Arc */}
+            <path
+              d="M19 14H15A9 9 0 0 0 15 32H19"
+              className="origin-center"
+              style={{
+                animation: "link-pull-left 2s ease-in-out infinite",
+              }}
+            />
+            {/* Right Link Chain Arc */}
+            <path
+              d="M29 14H33A9 9 0 0 1 33 32H29"
+              className="origin-center"
+              style={{
+                animation: "link-pull-right 2s ease-in-out infinite",
+              }}
+            />
+            {/* Center Connection (Shortening effect) */}
+            <line
+              x1="18"
+              y1="23"
+              x2="30"
+              y2="23"
+              style={{
+                animation: "link-[#F45B69]-connect 2s ease-in-out infinite",
+              }}
+            />
+          </svg>
+        </div>
+
+        {/* Brand Title */}
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-2xl font-black tracking-tight text-gray-900">
+            uurl<span className="text-[#F45B69]">.uz</span>
+          </span>
+          <p className="text-xs font-semibold tracking-wider text-[#F45B69]/80 uppercase">
+            Link Shortener
+          </p>
+        </div>
+
+        {/* Dynamic Wave Dots */}
+        <div className="flex items-center gap-2 pt-1">
+          <div
+            className="h-2 w-2 rounded-full bg-[#F45B69]"
             style={{
-              animation: "pulse-dot 1.4s ease-in-out infinite",
+              animation: "wave-dot 1.2s ease-in-out infinite",
               animationDelay: "0s",
             }}
           />
           <div
-            className="h-2 w-2 rounded-full bg-[#F45B69] opacity-80"
+            className="h-2 w-2 rounded-full bg-[#F45B69]"
             style={{
-              animation: "pulse-dot 1.4s ease-in-out infinite",
+              animation: "wave-dot 1.2s ease-in-out infinite",
               animationDelay: "0.2s",
             }}
           />
           <div
-            className="h-2 w-2 rounded-full bg-[#F45B69] opacity-80"
+            className="h-2 w-2 rounded-full bg-[#F45B69]"
             style={{
-              animation: "pulse-dot 1.4s ease-in-out infinite",
+              animation: "wave-dot 1.2s ease-in-out infinite",
               animationDelay: "0.4s",
             }}
           />
         </div>
 
-        {/* Message */}
-        <p className="text-sm font-medium text-gray-400">{message}</p>
+        {/* Loader Message */}
+        <p className="text-sm font-medium text-gray-500">{message}</p>
       </div>
 
-      {/* Keyframe animation */}
+      {/* Embedded Animations */}
       <style jsx>{`
-        @keyframes pulse-dot {
+        @keyframes link-pull-left {
           0%,
-          80%,
           100% {
-            transform: scale(0.6);
+            transform: translateX(0px);
+          }
+          50% {
+            transform: translateX(3px);
+          }
+        }
+        @keyframes link-pull-right {
+          0%,
+          100% {
+            transform: translateX(0px);
+          }
+          50% {
+            transform: translateX(-3px);
+          }
+        }
+        @keyframes link-connect {
+          0%,
+          100% {
+            stroke-dasharray: 12;
+            stroke-dashoffset: 0;
+            opacity: 1;
+          }
+          50% {
+            stroke-dasharray: 12;
+            stroke-dashoffset: 6;
             opacity: 0.4;
           }
-          40% {
-            transform: scale(1);
+        }
+        @keyframes wave-dot {
+          0%,
+          100% {
+            transform: translateY(0);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateY(-5px);
             opacity: 1;
           }
         }
