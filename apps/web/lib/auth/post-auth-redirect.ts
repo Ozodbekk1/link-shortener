@@ -117,4 +117,29 @@ export function executeRedirect(result: PostAuthRedirectResult): void {
   }
 }
 
+/**
+ * Safely redirects unauthenticated users or logout actions back to the login page.
+ * If currently on a tenant subdomain, redirects back to the root domain login page
+ * (e.g. https://uurl.uz/en/auth/login) to prevent 404 Not Found on tenant subdomains.
+ */
+export function redirectToLogin(locale: string = "en"): void {
+  if (typeof window === "undefined") return
+
+  const rootDomain = getRootDomain()
+  const protocol = getProtocol()
+  const currentHost = window.location.host.replace(/:\d+$/, "")
+  const rootHost = rootDomain.replace(/:\d+$/, "")
+
+  const isSubdomain =
+    currentHost !== rootHost &&
+    currentHost !== `www.${rootHost}` &&
+    currentHost.endsWith(`.${rootHost}`)
+
+  if (isSubdomain) {
+    window.location.replace(`${protocol}//${rootDomain}/${locale}/auth/login`)
+  } else {
+    window.location.replace(`/${locale}/auth/login`)
+  }
+}
+
 export { getUserOrganizations }
