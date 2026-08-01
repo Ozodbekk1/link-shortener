@@ -73,16 +73,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } catch {
       // Ignore logout API errors, clean up locally regardless
     } finally {
-      queryClient.removeQueries({ queryKey: queryKeys.users.me })
-      router.push(`/${locale}/auth/login`)
+      queryClient.setQueryData(queryKeys.users.me, null)
+      if (
+        typeof window !== "undefined" &&
+        !window.location.pathname.includes("/auth/")
+      ) {
+        router.push(`/${locale}/auth/login`)
+      }
     }
   }, [queryClient, router, locale])
 
   // Setup refresh failure interceptor hook
   useEffect(() => {
     setOnRefreshFailure(() => {
-      queryClient.removeQueries({ queryKey: queryKeys.users.me })
-      router.push(`/${locale}/auth/login`)
+      queryClient.setQueryData(queryKeys.users.me, null)
+
+      if (
+        typeof window !== "undefined" &&
+        !window.location.pathname.includes("/auth/")
+      ) {
+        router.push(`/${locale}/auth/login`)
+      }
     })
 
     return () => {
