@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/common/providers/auth-provider"
 import { useLocale } from "@/hooks/use-locale"
 import { FullscreenLoader } from "@/components/auth/fullscreen-loader"
@@ -9,6 +8,7 @@ import {
   getUserOrganizations,
   resolvePostAuthRedirect,
   executeRedirect,
+  redirectToLogin,
 } from "@/lib/auth/post-auth-redirect"
 
 interface OrgGuardProps {
@@ -26,13 +26,12 @@ interface OrgGuardProps {
  * 3. User is accessing the correct tenant subdomain.
  *
  * Redirects:
- * - Unauthenticated → /auth/login
- * - No organization → /onboarding/organization
+ * - Unauthenticated → https://uurl.uz/{locale}/auth/login
+ * - No organization → https://uurl.uz/{locale}/onboarding/organization
  * - Wrong subdomain → https://{correctSlug}.uurl.uz/{locale}/dashboard
  */
 export function OrgGuard({ children, expectedTenant }: OrgGuardProps) {
   const { user, isAuthenticated, isLoading } = useAuth()
-  const router = useRouter()
   const locale = useLocale()
   const [isResolving, setIsResolving] = useState(true)
 
@@ -40,15 +39,17 @@ export function OrgGuard({ children, expectedTenant }: OrgGuardProps) {
     if (isLoading) return
 
     if (!isAuthenticated || !user) {
-      router.replace(`/${locale}/auth/login`)
+      redirectToLogin(locale)
       return
     }
 
     const orgs = getUserOrganizations(user)
 
-    // Case 1: User has no organization → redirect to onboarding
+    // Case 1: User has no organization → redirect to onboarding on root domain
     if (orgs.length === 0) {
-      router.replace(`/${locale}/onboarding/organization`)
+      const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
+      const protocol = window.location.protocol
+      window.location.replace(`${protocol}//${rootDomain}/${locale}/onboarding/organization`)
       return
     }
 
@@ -67,7 +68,7 @@ export function OrgGuard({ children, expectedTenant }: OrgGuardProps) {
     }
 
     setIsResolving(false)
-  }, [isLoading, isAuthenticated, user, expectedTenant, router, locale])
+  }, [isLoading, isAuthenticated, user, expectedTenant, locale])
 
   if (isLoading || isResolving) {
     return <FullscreenLoader message="Validating organization access..." />

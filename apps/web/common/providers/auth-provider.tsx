@@ -14,6 +14,7 @@ import { usersService } from "@/services/users.service"
 import { authService } from "@/services/auth.service"
 import { setOnRefreshFailure, clearOnRefreshFailure } from "@/api/clients"
 import { useLocale } from "@/hooks/use-locale"
+import { redirectToLogin } from "@/lib/auth/post-auth-redirect"
 import type { UserProfileResponse } from "@/api/types"
 
 interface AuthContextType {
@@ -78,10 +79,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         typeof window !== "undefined" &&
         !window.location.pathname.includes("/auth/")
       ) {
-        router.push(`/${locale}/auth/login`)
+        redirectToLogin(locale)
       }
     }
-  }, [queryClient, router, locale])
+  }, [queryClient, locale])
 
   // Setup refresh failure interceptor hook
   useEffect(() => {
@@ -92,14 +93,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         typeof window !== "undefined" &&
         !window.location.pathname.includes("/auth/")
       ) {
-        router.push(`/${locale}/auth/login`)
+        redirectToLogin(locale)
       }
     })
 
     return () => {
       clearOnRefreshFailure()
     }
-  }, [queryClient, router, locale])
+  }, [queryClient, locale])
 
   const refetchUser = useCallback(async () => {
     const result = await refetch()
