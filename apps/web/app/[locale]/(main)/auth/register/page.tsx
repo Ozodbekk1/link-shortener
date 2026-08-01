@@ -44,7 +44,9 @@ export default function RegisterPage() {
     try {
       await registerAuth.mutateAsync(data)
       toast.success("Account created! Please verify your email.")
-      router.push(`/${locale}/auth/verify-account?email=${encodeURIComponent(data.email)}`)
+      router.push(
+        `/${locale}/auth/verify-account?email=${encodeURIComponent(data.email)}`
+      )
     } catch (err: unknown) {
       const msg =
         (err as { data?: { message?: string }; message?: string })?.data
@@ -56,7 +58,7 @@ export default function RegisterPage() {
   }
 
   const handleGoogleAuth = () => {
-    window.location.href = authService.googleAuthUrl()
+    window.location.href = authService.googleAuthUrl(locale)
   }
 
   const handleTelegramAuth = async (user: Record<string, unknown>) => {

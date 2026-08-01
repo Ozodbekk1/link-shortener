@@ -14,7 +14,11 @@ import { usersService } from "@/services/users.service"
 import { authService } from "@/services/auth.service"
 import { setOnRefreshFailure, clearOnRefreshFailure } from "@/api/clients"
 import { useLocale } from "@/hooks/use-locale"
-import { redirectToLogin } from "@/lib/auth/post-auth-redirect"
+import {
+  isPublicMarketingPage,
+  isPublicRedirectPath,
+  redirectToLogin,
+} from "@/lib/auth/post-auth-redirect"
 import type { UserProfileResponse } from "@/api/types"
 
 interface AuthContextType {
@@ -75,9 +79,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       // Ignore logout API errors, clean up locally regardless
     } finally {
       queryClient.setQueryData(queryKeys.users.me, null)
+      // Skip redirect if we're on a public marketing page, short-link
+      // redirect path, or already on /auth/*
       if (
         typeof window !== "undefined" &&
-        !window.location.pathname.includes("/auth/")
+        !window.location.pathname.includes("/auth/") &&
+        !isPublicMarketingPage(window.location.pathname) &&
+        !isPublicRedirectPath(window.location.pathname)
       ) {
         redirectToLogin(locale)
       }
@@ -89,9 +97,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setOnRefreshFailure(() => {
       queryClient.setQueryData(queryKeys.users.me, null)
 
+      // Only redirect to login on protected pages. Public marketing pages
+      // (home, about, contact, privacy, terms) and short-link redirect
+      // paths (/r/slug) must stay public even when the user has no auth
+      // tokens in cookies.
       if (
         typeof window !== "undefined" &&
-        !window.location.pathname.includes("/auth/")
+        !window.location.pathname.includes("/auth/") &&
+        !isPublicMarketingPage(window.location.pathname) &&
+        !isPublicRedirectPath(window.location.pathname)
       ) {
         redirectToLogin(locale)
       }

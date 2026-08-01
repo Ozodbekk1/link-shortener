@@ -6,7 +6,8 @@
     "domains": "Domains",
     "login": "Login",
     "getStarted": "Get Started →",
-    "toggleMenu": "Toggle menu"
+    "toggleMenu": "Toggle menu",
+    "goToDashboard": "Go to"
   },
   "hero": {
     "headline": "Create smarter",
@@ -29,32 +30,61 @@
     "analytics": {
       "title": "Global Analytics",
       "description": "Track every click with pinpoint detail. Countries, cities, devices, browsers, OS — all in real-time.",
-      "tags": ["Countries", "Cities", "Devices", "Browsers", "Real-time"]
+      "tags": [
+        "Countries",
+        "Cities",
+        "Devices",
+        "Browsers",
+        "Real-time"
+      ]
     },
     "redirects": {
       "title": "Smart Redirect Rules",
       "description": "Route visitors based on country, device, browser, language, or time. Personalize every click.",
-      "tags": ["Country", "Device", "Browser", "Language", "Time-based"]
+      "tags": [
+        "Country",
+        "Device",
+        "Browser",
+        "Language",
+        "Time-based"
+      ]
     },
     "qr": {
       "title": "Beautiful QR Codes",
       "description": "Branded QR codes with custom colors and your logo inside. Download as PNG or SVG.",
-      "tags": ["Custom colors", "Logo inside", "PNG / SVG"]
+      "tags": [
+        "Custom colors",
+        "Logo inside",
+        "PNG / SVG"
+      ]
     },
     "domains": {
       "title": "Custom Domains",
       "description": "Use your own brand domain. go.yourcompany.com instead of uurl.uz — for every link.",
-      "tags": ["Brand domain", "Auto SSL", "Zero config"]
+      "tags": [
+        "Brand domain",
+        "Auto SSL",
+        "Zero config"
+      ]
     },
     "organizations": {
       "title": "Organizations",
       "description": "Create company workspaces, invite teammates, and manage permissions across every department.",
-      "tags": ["Workspace", "Members", "Roles"]
+      "tags": [
+        "Workspace",
+        "Members",
+        "Roles"
+      ]
     },
     "workspaces": {
       "title": "Workspaces & Teams",
       "description": "Organize links into projects. Assign roles, collaborate in real-time, and keep everyone aligned.",
-      "tags": ["Projects", "Permissions", "Collaboration", "Sharing"]
+      "tags": [
+        "Projects",
+        "Permissions",
+        "Collaboration",
+        "Sharing"
+      ]
     }
   },
   "footer": {
