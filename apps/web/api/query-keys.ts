@@ -1,7 +1,4 @@
 export const queryKeys = {
-  auth: {
-    me: ["auth", "me"] as const,
-  },
   users: {
     all: (params?: Record<string, unknown>) =>
       ["users", "all", params].filter(

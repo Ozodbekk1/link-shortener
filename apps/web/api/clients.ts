@@ -93,6 +93,20 @@ const apiInstance = axios.create({
 
 let refreshPromise: Promise<void> | null = null
 
+/**
+ * Callback invoked when token refresh fails (expired/invalid refresh token).
+ * Set by AuthProvider to trigger logout + redirect without circular imports.
+ */
+let onRefreshFailure: (() => void) | null = null
+
+export function setOnRefreshFailure(callback: () => void) {
+  onRefreshFailure = callback
+}
+
+export function clearOnRefreshFailure() {
+  onRefreshFailure = null
+}
+
 const shouldSkipRefresh = (url?: string) => {
   if (!url) {
     return true
@@ -134,6 +148,10 @@ apiInstance.interceptors.response.use(
       await refreshPromise
       return apiInstance.request(originalConfig)
     } catch (refreshError) {
+      // Refresh token is expired/invalid — trigger logout
+      if (onRefreshFailure) {
+        onRefreshFailure()
+      }
       throw toApiError(refreshError)
     } finally {
       refreshPromise = null

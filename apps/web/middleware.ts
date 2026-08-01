@@ -89,20 +89,6 @@ export function middleware(req: NextRequest) {
     )
   }
 
-  const hasOrganization = req.cookies.get("hasOrganization")?.value
-
-  if (
-    !subdomain &&
-    hasOrganization === "false" &&
-    !url.pathname.includes("/onboarding/organization")
-  ) {
-    return log(
-      NextResponse.redirect(
-        new URL(`/${activeLocale}/onboarding/organization`, req.url)
-      )
-    )
-  }
-
   return log(NextResponse.next())
 }
 

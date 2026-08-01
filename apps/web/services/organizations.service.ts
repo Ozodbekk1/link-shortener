@@ -8,32 +8,36 @@ import type {
 } from "@/api/types"
 
 export const organizationsService = {
-  createOrganization: (payload: CreateOrganizationPayload) =>
-    apiClient.post<{
-      id: string
-      name: string
-      slug: string
-      ownerId: string
-      createdAt: string
-    }>("/organizations", { body: payload }),
+  createOrganization: async (payload: CreateOrganizationPayload) => {
+    const res = await apiClient.post<any>("/organizations", { body: payload })
+    return res?.data ?? res
+  },
 
-  getAllOrganizations: () =>
-    apiClient.get<OrganizationsListResponse>("/organizations"),
+  getAllOrganizations: async (): Promise<OrganizationsListResponse> => {
+    const res = await apiClient.get<any>("/organizations")
+    return res?.data ?? res
+  },
 
-  getOrganizationById: (organizationId: string) =>
-    apiClient.get<OrganizationDetailResponse>(
-      `/organizations/${organizationId}`
-    ),
+  getOrganizationById: async (
+    organizationId: string
+  ): Promise<OrganizationDetailResponse> => {
+    const res = await apiClient.get<any>(`/organizations/${organizationId}`)
+    return res?.data ?? res
+  },
 
-  getOrganizationMembers: (
+  getOrganizationMembers: async (
     organizationId: string,
     params?: OrganizationMembersQueryParams
-  ) =>
-    apiClient.get<OrganizationMembersResponse>(
+  ): Promise<OrganizationMembersResponse> => {
+    const res = await apiClient.get<any>(
       `/organizations/${organizationId}/members`,
       { query: params }
-    ),
+    )
+    return res?.data ?? res
+  },
 
-  deleteOrganization: (organizationId: string) =>
-    apiClient.delete<{ message: string }>(`/organizations/${organizationId}`),
+  deleteOrganization: async (organizationId: string) => {
+    const res = await apiClient.delete<any>(`/organizations/${organizationId}`)
+    return res?.data ?? res
+  },
 }

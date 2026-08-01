@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useLocale } from "@/hooks/use-locale"
 import { useTranslation } from "@/hooks/use-translation"
 import { useVerifyOtpMutation } from "@/hooks/use-auth"
+import { usePostAuthRedirect } from "@/hooks/use-post-auth-redirect"
 import { AuthLayout } from "@/components/auth/auth-layout"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -88,6 +89,8 @@ export default function VerifyAccountPage() {
   const otpCode = otp.join("")
   const isOtpComplete = otpCode.length === OTP_LENGTH
 
+  const { handleRedirect } = usePostAuthRedirect()
+
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault()
@@ -97,15 +100,12 @@ export default function VerifyAccountPage() {
       verifyOtp(
         { email, otpCode },
         {
-          onSuccess: () => {
+          onSuccess: async () => {
             toast.success(
               t("auth.verifyAccount.successMessage") ||
                 "Email verified successfully!"
             )
-            const isProduction = window.location.hostname.includes("uurl.uz")
-            const domainAttribute = isProduction ? "; domain=.uurl.uz" : ""
-            document.cookie = `hasOrganization=false; path=/${domainAttribute}`
-            router.push(`/${locale}/onboarding/organization`)
+            await handleRedirect()
           },
           onError: (error: unknown) => {
             const message =
@@ -119,7 +119,7 @@ export default function VerifyAccountPage() {
         }
       )
     },
-    [email, otpCode, isOtpComplete, verifyOtp, router, locale, t]
+    [email, otpCode, isOtpComplete, verifyOtp, handleRedirect, t]
   )
 
   return (
