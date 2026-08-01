@@ -1,33 +1,41 @@
+import React from "react"
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { cn } from "@/lib/utils"
+import { OrgGuard } from "@/components/auth/org-guard"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "tenants",
-  description: "welcome tenants page ",
+  title: "Dashboard — UURL",
+  description: "Manage your links and workspaces.",
 }
 
-export default function TenantLayout({
-  children,
-}: Readonly<{
+interface TenantLayoutProps {
   children: React.ReactNode
-}>) {
+  params: Promise<{
+    tenant: string
+    locale: string
+  }>
+}
+
+export default async function TenantLayout({
+  children,
+  params,
+}: TenantLayoutProps) {
+  const { tenant } = await params
+
   return (
-    <html lang="en" suppressHydrationWarning className={cn()}>
-      <body>
-        <SidebarProvider>
-          <AppSidebar />
-          <SidebarInset>
-            <SidebarTrigger className="mt-1 ml-1" />
-            {children}
-          </SidebarInset>
-        </SidebarProvider>
-      </body>
-    </html>
+    <OrgGuard expectedTenant={tenant}>
+      <SidebarProvider>
+        <AppSidebar currentSubdomain={tenant} />
+        <SidebarInset>
+          <SidebarTrigger className="mt-1 ml-1" />
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </OrgGuard>
   )
 }
