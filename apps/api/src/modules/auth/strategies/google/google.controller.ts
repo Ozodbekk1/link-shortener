@@ -41,12 +41,19 @@ export class GoogleAuthController {
     // usePostAuthRedirect(): fetches GET /users/me and routes to
     // onboarding (no org) or {slug}.uurl.uz/dashboard (has org).
     //
-    // Production safety: if WEB_ORIGIN is missing, NEVER fall back to localhost.
-    const webOrigin = env.WEB_ORIGIN
+    // CRITICAL: the origin MUST be an absolute URL (include http/https).
+    // res.redirect() treats scheme-less strings as *relative* URLs and
+    // resolves them against the current request path — producing broken
+    // URLs like /api/v1/google/auth/uurl.uz/en/auth/google/callback.
+    const rawOrigin = env.WEB_ORIGIN
       ? env.WEB_ORIGIN.split(',')[0].trim()
       : process.env.NODE_ENV === 'production'
-        ? `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'uurl.uz'}`
-        : 'http://localhost:3000';
+        ? 'uurl.uz'
+        : 'localhost:3000';
+
+    const webOrigin = /^https?:\/\//i.test(rawOrigin)
+      ? rawOrigin
+      : `${process.env.NODE_ENV === 'production' ? 'https' : 'http'}://${rawOrigin}`;
 
     const locale = (req.query?.state as string) || 'en';
 
