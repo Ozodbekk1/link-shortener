@@ -70,8 +70,11 @@ export const authService = {
     apiClient.post<{ message: string }>("/jwt/auth/reset-password", {
       body: payload,
     }),
-  googleAuthUrl: () =>
-    `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/google/auth`,
+  googleAuthUrl: (locale?: string) => {
+    const base = `${process.env.NEXT_PUBLIC_API_BASE_URL || ""}/google/auth`
+    const state = locale ? `?state=${encodeURIComponent(locale)}` : ""
+    return `${base}${state}`
+  },
   telegramLogin: (payload: TelegramLoginPayload) =>
     apiClient.post<{ message: string }>("/telegram/auth/login", {
       body: payload,

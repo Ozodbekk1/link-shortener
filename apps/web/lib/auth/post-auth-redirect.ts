@@ -142,4 +142,46 @@ export function redirectToLogin(locale: string = "en"): void {
   }
 }
 
+/**
+ * Public marketing/footer paths that must NEVER redirect to login,
+ * even when the user has no auth tokens in cookies.
+ */
+const PUBLIC_MARKETING_PATHS = [
+  "", // /{locale} → marketing home
+  "/about",
+  "/contact",
+  "/privacy",
+  "/terms",
+]
+
+/**
+ * Returns true if the given pathname is a public marketing page.
+ *
+ * Used to prevent redirecting public visitors to the login page when they
+ * don't have auth tokens in cookies (e.g. GET /users/me returns 401 and
+ * the refresh attempt also fails).
+ */
+export function isPublicMarketingPage(pathname: string): boolean {
+  // Strip the locale prefix (/en, /uz, /ru)
+  const withoutLocale = pathname.replace(/^\/(en|uz|ru)(?=\/|$)/, "")
+  // Normalize trailing slash
+  const normalized = withoutLocale.replace(/\/+$/, "") || ""
+  return PUBLIC_MARKETING_PATHS.includes(normalized)
+}
+
+/**
+ * Returns true if the given pathname is a public short-link redirect path
+ * (e.g. /r/slug).
+ *
+ * Short links must be resolvable WITHOUT authentication — anyone who clicks
+ * a shared link must be redirected to the original URL even if they have no
+ * tokens in cookies. When GET /users/me returns 401 and the refresh attempt
+ * fails on such a path, we must NOT bounce the visitor to the login page.
+ */
+export function isPublicRedirectPath(pathname: string): boolean {
+  // Strip the locale prefix (/en, /uz, /ru) just in case
+  const withoutLocale = pathname.replace(/^\/(en|uz|ru)(?=\/|$)/, "")
+  return withoutLocale === "/r" || withoutLocale.startsWith("/r/")
+}
+
 export { getUserOrganizations }

@@ -15,6 +15,7 @@ node_modules
 # cloudflare
 cloudflared/credentials.json
 cloudflared/*.json
+cloudflared
 
 # Testing
 coverage

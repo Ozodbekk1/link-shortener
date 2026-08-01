@@ -48,7 +48,7 @@ export default function LoginPage() {
   }
 
   const handleGoogleLogin = () => {
-    window.location.href = authService.googleAuthUrl()
+    window.location.href = authService.googleAuthUrl(locale)
   }
 
   const handleTelegramAuth = async (user: Record<string, unknown>) => {
