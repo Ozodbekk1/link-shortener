@@ -6,16 +6,11 @@ interface FullscreenLoaderProps {
   message?: string
 }
 
-/**
- * Modern Animated Fullscreen Loader for uurl.uz
- * Features custom SVG link-shortening animation with branded accent glow.
- */
 export function FullscreenLoader({
   message = "Loading your workspace...",
 }: FullscreenLoaderProps) {
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-white via-[#FFF8F8] to-[#FFF0F2]">
-      {/* Ambient Glows */}
       <div
         className="pointer-events-none absolute -top-[20%] -left-[10%] h-[500px] w-[500px] animate-pulse rounded-full opacity-40 blur-3xl"
         style={{
@@ -32,11 +27,8 @@ export function FullscreenLoader({
         }}
       />
 
-      {/* Main Container */}
       <div className="relative z-10 flex flex-col items-center gap-6">
-        {/* Custom Animated Link Shortener Icon */}
         <div className="relative flex h-24 w-24 items-center justify-center rounded-3xl bg-white/80 p-4 shadow-xl ring-1 shadow-[#F45B69]/10 ring-[#F45B69]/15 backdrop-blur-md">
-          {/* Subtle Outer Ping Ring */}
           <div
             className="absolute inset-0 animate-ping rounded-3xl bg-[#F45B69]/10"
             style={{ animationDuration: "2.5s" }}
@@ -51,7 +43,6 @@ export function FullscreenLoader({
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            {/* Left Link Chain Arc */}
             <path
               d="M19 14H15A9 9 0 0 0 15 32H19"
               className="origin-center"
@@ -59,7 +50,6 @@ export function FullscreenLoader({
                 animation: "link-pull-left 2s ease-in-out infinite",
               }}
             />
-            {/* Right Link Chain Arc */}
             <path
               d="M29 14H33A9 9 0 0 1 33 32H29"
               className="origin-center"
@@ -67,7 +57,6 @@ export function FullscreenLoader({
                 animation: "link-pull-right 2s ease-in-out infinite",
               }}
             />
-            {/* Center Connection (Shortening effect) */}
             <line
               x1="18"
               y1="23"
@@ -80,7 +69,6 @@ export function FullscreenLoader({
           </svg>
         </div>
 
-        {/* Brand Title */}
         <div className="flex flex-col items-center gap-1">
           <span className="text-2xl font-black tracking-tight text-gray-900">
             uurl<span className="text-[#F45B69]">.uz</span>
@@ -90,7 +78,6 @@ export function FullscreenLoader({
           </p>
         </div>
 
-        {/* Dynamic Wave Dots */}
         <div className="flex items-center gap-2 pt-1">
           <div
             className="h-2 w-2 rounded-full bg-[#F45B69]"
@@ -115,11 +102,9 @@ export function FullscreenLoader({
           />
         </div>
 
-        {/* Loader Message */}
         <p className="text-sm font-medium text-gray-500">{message}</p>
       </div>
 
-      {/* Embedded Animations */}
       <style jsx>{`
         @keyframes link-pull-left {
           0%,

@@ -91,11 +91,9 @@ export function TranslationProvider({
     [translations]
   )
 
-  // Block rendering children (or show your layout spinner) until translations load
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        {/* Your custom full-screen loader here */}
         <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-gray-900" />
       </div>
     )

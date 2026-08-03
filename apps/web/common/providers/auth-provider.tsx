@@ -55,13 +55,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       try {
         return await usersService.getMyProfile()
       } catch (err) {
-        // If 401 or network failure, return null profile
         return null
       }
     },
-    staleTime: 60_000, // Consider fresh for 1 min
+    staleTime: 60_000,
     gcTime: 5 * 60_000,
-    retry: false, // Don't spam retries on auth check
+    retry: false,
     refetchOnWindowFocus: false,
   })
 
@@ -76,11 +75,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       await authService.logout()
     } catch {
-      // Ignore logout API errors, clean up locally regardless
     } finally {
       queryClient.setQueryData(queryKeys.users.me, null)
-      // Skip redirect if we're on a public marketing page, short-link
-      // redirect path, or already on /auth/*
+
       if (
         typeof window !== "undefined" &&
         !window.location.pathname.includes("/auth/") &&
@@ -92,15 +89,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [queryClient, locale])
 
-  // Setup refresh failure interceptor hook
   useEffect(() => {
     setOnRefreshFailure(() => {
       queryClient.setQueryData(queryKeys.users.me, null)
 
-      // Only redirect to login on protected pages. Public marketing pages
-      // (home, about, contact, privacy, terms) and short-link redirect
-      // paths (/r/slug) must stay public even when the user has no auth
-      // tokens in cookies.
       if (
         typeof window !== "undefined" &&
         !window.location.pathname.includes("/auth/") &&

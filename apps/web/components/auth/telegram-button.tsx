@@ -42,7 +42,7 @@ export function TelegramWidget({ onAuth }: TelegramWidgetProps) {
 
     script.setAttribute("data-size", "large")
 
-    script.setAttribute("data-request-access", "write")
+    script.setAttribute("data-request-access", "write phone")
 
     script.setAttribute("data-onauth", "onTelegramAuth(user)")
 

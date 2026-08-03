@@ -10,13 +10,6 @@ interface AuthGuardProps {
   children: React.ReactNode
 }
 
-/**
- * Route protection wrapper requiring authentication.
- *
- * Ensures GET /api/v1/users/me has completed before rendering children.
- * Displays a fullscreen loading screen until auth state is resolved.
- * Redirects unauthenticated users to root domain login page.
- */
 export function AuthGuard({ children }: AuthGuardProps) {
   const { isAuthenticated, isLoading } = useAuth()
   const locale = useLocale()
