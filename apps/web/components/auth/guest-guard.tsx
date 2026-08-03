@@ -13,15 +13,6 @@ interface GuestGuardProps {
   children: React.ReactNode
 }
 
-/**
- * Guest-only route wrapper (Login, Register, etc.).
- *
- * Ensures GET /api/v1/users/me finishes BEFORE showing the page.
- * If user is ALREADY authenticated, automatically redirects them using
- * the centralized post-auth redirect logic (Dashboard or Onboarding).
- *
- * Prevents logged-in users from viewing auth forms.
- */
 export function GuestGuard({ children }: GuestGuardProps) {
   const { user, isAuthenticated, isLoading } = useAuth()
   const locale = useLocale()

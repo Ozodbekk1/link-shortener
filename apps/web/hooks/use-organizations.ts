@@ -8,11 +8,6 @@ import type {
 } from "@/api/types"
 import { organizationsService } from "@/services/organizations.service"
 
-/**
- * POST /api/v1/organizations
- * Create a new organization.
- * Usage: const { mutate, isPending } = useCreateOrganizationMutation()
- */
 export const useCreateOrganizationMutation = () => {
   const queryClient = useQueryClient()
 
@@ -27,22 +22,12 @@ export const useCreateOrganizationMutation = () => {
   })
 }
 
-/**
- * GET /api/v1/organizations
- * List all organizations for the authenticated user.
- * Usage: const { data, isLoading } = useOrganizationsQuery()
- */
 export const useOrganizationsQuery = () =>
   useQuery({
     queryKey: queryKeys.organizations.all,
     queryFn: () => organizationsService.getAllOrganizations(),
   })
 
-/**
- * GET /api/v1/organizations/:organizationId
- * Get organization details by ID.
- * Usage: const { data, isLoading } = useOrganizationByIdQuery("org-uuid")
- */
 export const useOrganizationByIdQuery = (organizationId: string) =>
   useQuery({
     queryKey: queryKeys.organizations.byId(organizationId),
@@ -50,11 +35,6 @@ export const useOrganizationByIdQuery = (organizationId: string) =>
     enabled: !!organizationId,
   })
 
-/**
- * GET /api/v1/organizations/:organizationId/members
- * Get members of an organization.
- * Usage: const { data, isLoading } = useOrganizationMembersQuery("org-uuid", { page: 1, limit: 20 })
- */
 export const useOrganizationMembersQuery = (
   organizationId: string,
   params?: OrganizationMembersQueryParams
@@ -69,11 +49,6 @@ export const useOrganizationMembersQuery = (
     enabled: !!organizationId,
   })
 
-/**
- * DELETE /api/v1/organizations/:organizationId
- * Delete an organization (OWNER only).
- * Usage: const { mutate, isPending } = useDeleteOrganizationMutation()
- */
 export const useDeleteOrganizationMutation = () => {
   const queryClient = useQueryClient()
 

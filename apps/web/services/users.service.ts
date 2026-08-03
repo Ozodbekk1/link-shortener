@@ -7,7 +7,9 @@ import type {
 } from "@/api/types"
 
 export const usersService = {
-  getAllUsers: async (params?: UsersQueryParams): Promise<UsersListResponse> => {
+  getAllUsers: async (
+    params?: UsersQueryParams
+  ): Promise<UsersListResponse> => {
     const res = await apiClient.get<any>("/users", { query: params })
     return (res?.data ?? res) as UsersListResponse
   },
@@ -19,7 +21,7 @@ export const usersService = {
 
   getMyProfile: async (): Promise<UserProfileResponse> => {
     const res = await apiClient.get<any>("/users/me")
-    // NestJS ResponseInterceptor wraps responses in { success: true, message: '...', data: { user: ... } }
+
     const unwrappedData = res?.data ?? res
     const user = unwrappedData?.user ?? unwrappedData
 

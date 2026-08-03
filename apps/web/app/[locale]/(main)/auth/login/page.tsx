@@ -35,7 +35,6 @@ export default function LoginPage() {
     try {
       await login.mutateAsync(data)
       toast.success("Welcome back!")
-      // Immediately fetch /users/me and redirect accordingly
       await handleRedirect()
     } catch (err: unknown) {
       const msg =

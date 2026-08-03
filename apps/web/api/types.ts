@@ -143,8 +143,6 @@ export interface UserProfileResponse {
   user: User
 }
 
-// ── Organizations API types ──────────────────────────────────────────────────
-
 export interface CreateOrganizationPayload {
   name: string
   slug: string

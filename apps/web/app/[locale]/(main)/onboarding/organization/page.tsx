@@ -68,20 +68,19 @@ export default function CreateOrganization() {
 
   const onSubmit = async (data: CreateOrgFormValues) => {
     try {
-      // 1. Call organization create API and wait for success
       await mutateAsync(data)
 
       toast.success("Organization created successfully!")
 
-      // 2. Refresh user profile (GET /api/v1/users/me) and wait for response
       const updatedProfile = await refetchUser()
 
       if (updatedProfile?.user) {
-        // 3. Resolve and execute redirect to https://{subdomain}.uurl.uz/dashboard
-        const redirectTarget = resolvePostAuthRedirect(updatedProfile.user, locale)
+        const redirectTarget = resolvePostAuthRedirect(
+          updatedProfile.user,
+          locale
+        )
         executeRedirect(redirectTarget)
       } else {
-        // Fallback cross-origin navigation using created slug
         const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
         const protocol = window.location.protocol
         window.location.replace(
@@ -203,7 +202,9 @@ export default function CreateOrganization() {
                   {isPending ? (
                     <>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>{t("onboarding.organization.submittingButton")}</span>
+                      <span>
+                        {t("onboarding.organization.submittingButton")}
+                      </span>
                     </>
                   ) : (
                     <span>{t("onboarding.organization.submitButton")}</span>
