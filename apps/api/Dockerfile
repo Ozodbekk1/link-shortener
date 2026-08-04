@@ -17,6 +17,17 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
 COPY --from=builder /app/.yarnrc.yml ./.yarnrc.yml
 
+RUN apk add --no-cache \
+    build-base \
+    g++ \
+    cairo-dev \
+    pango-dev \
+    jpeg-dev \
+    giflib-dev \
+    librsvg-dev \
+    python3 \
+    pkgconfig
+
 RUN yarn install --immutable
 
 COPY --from=builder /app/out/full/apps/api/prisma ./apps/api/prisma
