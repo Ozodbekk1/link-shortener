@@ -28,6 +28,7 @@ RUN apk add --no-cache \
     pixman-dev \
     freetype-dev \
     fontconfig-dev \
+    glib-dev \
     python3 \
     pkgconfig
 
@@ -53,7 +54,8 @@ RUN apk add --no-cache \
     librsvg \
     pixman \
     freetype \
-    fontconfig
+    fontconfig \
+    glib
 
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
