@@ -15,23 +15,47 @@ async function bootstrap() {
   });
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
-
-  const allowedOrigins = env.WEB_ORIGIN?.split(',') || [];
-
-  app.enableCors({
-    origin: allowedOrigins,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
-
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
+  const allowedOrigins = env.WEB_ORIGIN
+    ? env.WEB_ORIGIN.split(',').map((o) => o.trim())
+    : ['http://localhost:3000', 'https://uurl.uz'];
+
   app.enableCors({
-    origin: env.WEB_ORIGIN
-      ? env.WEB_ORIGIN.split(',').map((origin) => origin.trim())
-      : true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. server-to-server, curl, mobile apps)
+      if (!origin) return callback(null, true);
+
+      const isAllowed = allowedOrigins.some((allowedOrigin) => {
+        try {
+          const originHost = new URL(origin).hostname;
+          const allowedHost = new URL(
+            allowedOrigin.startsWith('http')
+              ? allowedOrigin
+              : `https://${allowedOrigin}`,
+          ).hostname;
+
+          // Exact host match (e.g. uurl.uz === uurl.uz or localhost === localhost)
+          if (originHost === allowedHost) return true;
+
+          // Subdomain host match (e.g. donknow.uurl.uz ends with .uurl.uz)
+          if (originHost.endsWith(`.${allowedHost}`)) return true;
+
+          return false;
+        } catch {
+          return false;
+        }
+      });
+
+      if (isAllowed) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
+    },
     credentials: true,
   });
+
   app.setGlobalPrefix('api/v1', {
     exclude: [
       // Redirect routes must be at root level for clean short URLs

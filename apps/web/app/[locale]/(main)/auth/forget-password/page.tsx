@@ -27,7 +27,6 @@ export default function ForgotPasswordPage() {
   async function onSubmit(data: ForgotPasswordForm) {
     console.log(data)
 
-    // later:
     // await forgotPassword({ email: data.email })
     // router.push(`/${locale}/auth/reset-password?email=${data.email}`)
   }
@@ -39,7 +38,7 @@ export default function ForgotPasswordPage() {
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div>
-          <label className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-700">
+          <label className="mb-1.5 block text-xs font-bold tracking-wider text-gray-700 uppercase">
             {t("auth.forgotPassword.emailLabel")}
           </label>
           <div className="relative">
@@ -49,12 +48,14 @@ export default function ForgotPasswordPage() {
             <input
               type="email"
               placeholder={t("auth.forgotPassword.emailPlaceholder")}
-              className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-[#F45B69] focus:outline-none focus:ring-2 focus:ring-[#F45B69]/20"
+              className="w-full rounded-xl border border-gray-200 bg-white py-3 pr-4 pl-10 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-[#F45B69] focus:ring-2 focus:ring-[#F45B69]/20 focus:outline-none"
               {...register("email")}
             />
           </div>
           {errors.email && (
-            <p className="mt-1.5 text-xs text-rose-500 font-medium">{errors.email.message}</p>
+            <p className="mt-1.5 text-xs font-medium text-rose-500">
+              {errors.email.message}
+            </p>
           )}
         </div>
 
@@ -80,5 +81,3 @@ export default function ForgotPasswordPage() {
     </AuthLayout>
   )
 }
-
-

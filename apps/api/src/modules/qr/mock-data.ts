@@ -1,18 +1,3 @@
-/**
- * QR Code Mock Data & API Test Examples
- *
- * This file provides mock data payloads for testing QR code generation
- * with various styling options. Use these with curl or Postman.
- *
- * Prerequisites:
- * 1. Have a valid JWT access token (from login/register)
- * 2. Have an existing link in a workspace (or the mock creates one)
- * 3. API running at http://localhost:3000
- */
-
-// ─── Mock QR Generation Payloads ─────────────────────────────────
-
-/** Basic QR — square modules, default colors */
 export const basicQr = {
   linkId: 'REPLACE_WITH_LINK_ID', // Get from GET /:workspaceId/links
   // No style fields = default black on white square QR

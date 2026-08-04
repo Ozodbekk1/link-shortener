@@ -335,7 +335,7 @@ export class RedirectService {
       language:
         req.headers['accept-language']?.split(',')[0]?.trim() || undefined,
       ip: req.ip || req.socket.remoteAddress || undefined,
-      country: undefined, // Geo-IP lookup can be added later (e.g. geoip-lite, maxmind)
+      country: undefined,
       referrer:
         req.headers['referer'] ||
         (req.headers['referrer'] as string) ||

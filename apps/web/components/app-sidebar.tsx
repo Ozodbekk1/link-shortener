@@ -1,13 +1,13 @@
 "use client"
 
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
   BadgeCheck,
   Bell,
   ChevronDown,
   CreditCard,
   LayoutDashboard,
-  Link,
+  Link as LinkIcon,
   BarChart3,
   LogOut,
   QrCode,
@@ -15,6 +15,8 @@ import {
   Sparkles,
   Users,
   UserPlus,
+  Building2,
+  Plus,
 } from "lucide-react"
 
 import {
@@ -40,31 +42,55 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useAuth } from "@/common/providers/auth-provider"
+import { useLocale } from "@/hooks/use-locale"
+import { getUserOrganizations } from "@/lib/auth/post-auth-redirect"
 
-const navigation = {
-  main: [
-    { title: "Dashboard", url: `/en/dashboard`, icon: LayoutDashboard },
-    { title: "Links", url: "/links", icon: Link },
-    { title: "Analytics", url: "/analytics", icon: BarChart3 },
-    { title: "QR Codes", url: "/qr", icon: QrCode },
-  ],
-  management: [
-    { title: "Teams", url: "/teams", icon: Users },
-    { title: "Members", url: "/members", icon: UserPlus },
-  ],
-  workspace: [
-    { title: "Settings", url: "/settings", icon: Settings },
-    { title: "Billing", url: "/billing", icon: CreditCard },
-  ],
+interface AppSidebarProps {
+  currentSubdomain?: string
 }
 
-const workspaces = [
-  { name: "Acme Inc", logo: Sparkles, plan: "Enterprise" },
-  { name: "Acme Corp", logo: Sparkles, plan: "Startup" },
-]
-
-export function AppSidebar() {
+export function AppSidebar({ currentSubdomain }: AppSidebarProps) {
   const pathname = usePathname()
+  const router = useRouter()
+  const locale = useLocale()
+  const { user, logout } = useAuth()
+
+  const userOrgs = user ? getUserOrganizations(user) : []
+  const activeOrg =
+    userOrgs.find(
+      (o) => o.slug.toLowerCase() === (currentSubdomain ?? "").toLowerCase()
+    ) ?? userOrgs[0]
+
+  const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN || "uurl.uz"
+  const protocol =
+    typeof window !== "undefined" ? window.location.protocol : "https:"
+
+  const handleSwitchOrg = (slug: string) => {
+    if (slug.toLowerCase() === (currentSubdomain ?? "").toLowerCase()) return
+    window.location.replace(`${protocol}//${slug}.${rootDomain}/${locale}/dashboard`)
+  }
+
+  const handleCreateOrg = () => {
+    window.location.replace(`${protocol}//${rootDomain}/${locale}/onboarding/organization`)
+  }
+
+  const navigation = {
+    main: [
+      { title: "Dashboard", url: `/${locale}/dashboard`, icon: LayoutDashboard },
+      { title: "Links", url: `/${locale}/links`, icon: LinkIcon },
+      { title: "Analytics", url: `/${locale}/analytics`, icon: BarChart3 },
+      { title: "QR Codes", url: `/${locale}/qr`, icon: QrCode },
+    ],
+    management: [
+      { title: "Teams", url: `/${locale}/teams`, icon: Users },
+      { title: "Members", url: `/${locale}/members`, icon: UserPlus },
+    ],
+    workspace: [
+      { title: "Settings", url: `/${locale}/settings`, icon: Settings },
+      { title: "Billing", url: `/${locale}/billing`, icon: CreditCard },
+    ],
+  }
 
   return (
     <Sidebar>
@@ -78,15 +104,19 @@ export function AppSidebar() {
                     size="lg"
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                      <Sparkles className="size-4" />
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground font-bold">
+                      {activeOrg ? (
+                        activeOrg.name.charAt(0).toUpperCase()
+                      ) : (
+                        <Sparkles className="size-4" />
+                      )}
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {workspaces[0].name}
+                        {activeOrg?.name ?? "My Organization"}
                       </span>
-                      <span className="truncate text-xs">
-                        {workspaces[0].plan}
+                      <span className="truncate text-xs text-muted-foreground">
+                        {activeOrg ? `${activeOrg.slug}.${rootDomain}` : "No org"}
                       </span>
                     </div>
                     <ChevronDown className="ml-auto size-4" />
@@ -98,16 +128,22 @@ export function AppSidebar() {
                 align="start"
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
-                  {workspaces.map((workspace) => (
-                    <DropdownMenuItem key={workspace.name}>
-                      <workspace.logo className="size-4" />
+                  <DropdownMenuLabel>Organizations</DropdownMenuLabel>
+                  {userOrgs.map((org) => (
+                    <DropdownMenuItem
+                      key={org.id}
+                      onClick={() => handleSwitchOrg(org.slug)}
+                      className={
+                        org.slug.toLowerCase() === (currentSubdomain ?? "").toLowerCase()
+                          ? "bg-muted font-semibold"
+                          : ""
+                      }
+                    >
+                      <Building2 className="size-4" />
                       <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-medium">
-                          {workspace.name}
-                        </span>
+                        <span className="truncate font-medium">{org.name}</span>
                         <span className="truncate text-xs text-muted-foreground">
-                          {workspace.plan}
+                          {org.slug}.{rootDomain}
                         </span>
                       </div>
                     </DropdownMenuItem>
@@ -115,9 +151,9 @@ export function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <UserPlus className="size-4" />
-                    Create workspace
+                  <DropdownMenuItem onClick={handleCreateOrg}>
+                    <Plus className="size-4" />
+                    Create organization
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -210,13 +246,25 @@ export function AppSidebar() {
                     size="lg"
                     className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
-                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                      <span className="text-xs font-medium">U</span>
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-muted text-muted-foreground overflow-hidden font-bold">
+                      {user?.avatar ? (
+                        <img
+                          src={user.avatar}
+                          alt={user.name}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-xs font-medium">
+                          {user?.name?.charAt(0).toUpperCase() ?? "U"}
+                        </span>
+                      )}
                     </div>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">User</span>
+                      <span className="truncate font-semibold">
+                        {user?.name ?? "User"}
+                      </span>
                       <span className="truncate text-xs text-muted-foreground">
-                        user@example.com
+                        {user?.email ?? ""}
                       </span>
                     </div>
                     <ChevronDown className="ml-auto size-4" />
@@ -242,7 +290,7 @@ export function AppSidebar() {
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout}>
                     <LogOut className="size-4" />
                     Sign out
                   </DropdownMenuItem>

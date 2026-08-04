@@ -1,5 +1,4 @@
 export const BLOCKED_DOMAINS = [
-  // Core App & System
   'www',
   'app',
   'api',
@@ -22,8 +21,8 @@ export const BLOCKED_DOMAINS = [
   'images',
   'img',
   'files',
-
-  // Business, Legal & Marketing
+  'chat',
+  'ai',
   'admin',
   'administrator',
   'billing',
@@ -53,7 +52,6 @@ export const BLOCKED_DOMAINS = [
   'docs',
   'api-docs',
 
-  // Identity, Auth & Support
   'login',
   'signin',
   'logout',
@@ -75,7 +73,6 @@ export const BLOCKED_DOMAINS = [
   'feedback',
   'chat',
 
-  // Protocol, Infrastructure & Mail
   'mail',
   'email',
   'smtp',
@@ -104,7 +101,6 @@ export const BLOCKED_DOMAINS = [
   'autodiscover',
   'autoconfig',
 
-  // Common Malicious / Phishing Targets
   'secure',
   'ssl',
   'vpn',
@@ -125,7 +121,6 @@ export const BLOCKED_DOMAINS = [
   'root',
   'search',
 
-  // Wildcards, Multi-tenant place holders, & SEO
   'all',
   'any',
   'main',

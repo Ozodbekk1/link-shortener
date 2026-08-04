@@ -3,7 +3,7 @@ export const PermissionAction = {
   READ: 'read',
   UPDATE: 'update',
   DELETE: 'delete',
-  MANAGE: 'manage', // All actions
+  MANAGE: 'manage',
 } as const;
 
 export type PermissionActionType =

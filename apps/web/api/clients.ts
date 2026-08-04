@@ -93,6 +93,16 @@ const apiInstance = axios.create({
 
 let refreshPromise: Promise<void> | null = null
 
+let onRefreshFailure: (() => void) | null = null
+
+export function setOnRefreshFailure(callback: () => void) {
+  onRefreshFailure = callback
+}
+
+export function clearOnRefreshFailure() {
+  onRefreshFailure = null
+}
+
 const shouldSkipRefresh = (url?: string) => {
   if (!url) {
     return true
@@ -126,16 +136,17 @@ apiInstance.interceptors.response.use(
 
     try {
       if (!refreshPromise) {
-        refreshPromise = apiInstance
-          .post("/jwt/auth/refresh")
-          .then(() => {
-            return
-          })
+        refreshPromise = apiInstance.post("/jwt/auth/refresh").then(() => {
+          return
+        })
       }
 
       await refreshPromise
       return apiInstance.request(originalConfig)
     } catch (refreshError) {
+      if (onRefreshFailure) {
+        onRefreshFailure()
+      }
       throw toApiError(refreshError)
     } finally {
       refreshPromise = null

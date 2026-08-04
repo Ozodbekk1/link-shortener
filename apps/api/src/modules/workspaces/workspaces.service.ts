@@ -16,7 +16,6 @@ export class WorkspacesService {
     organizationId: string,
     dto: CreateWorkspaceDto,
   ) {
-    // Check user access
     const membership = await this.prisma.organizationMember.findFirst({
       where: {
         organizationId,
@@ -31,7 +30,6 @@ export class WorkspacesService {
       throw new ForbiddenException('You do not belong to this organization');
     }
 
-    // Only OWNER and ADMIN can create workspace
     if (
       membership.role !== OrganizationRole.OWNER &&
       membership.role !== OrganizationRole.ADMIN
@@ -39,14 +37,10 @@ export class WorkspacesService {
       throw new ForbiddenException('You cannot create workspace');
     }
 
-    // Generate slug
-
     const slug = dto.name
       .toLowerCase()
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '');
-
-    // Create workspace
 
     const workspace = await this.prisma.workspace.create({
       data: {
@@ -77,7 +71,6 @@ export class WorkspacesService {
     page = 1,
     limit = 20,
   ) {
-    // Check user membership
     const membership = await this.prisma.organizationMember.findFirst({
       where: {
         organizationId,
@@ -172,8 +165,6 @@ export class WorkspacesService {
     organizationId: string,
     workspaceId: string,
   ) {
-    // 1. Check user membership in organization
-
     const membership = await this.prisma.organizationMember.findFirst({
       where: {
         organizationId,
@@ -190,8 +181,6 @@ export class WorkspacesService {
         'You do not have access to this organization',
       );
     }
-
-    // 2. Get workspace
 
     const workspace = await this.prisma.workspace.findFirst({
       where: {
@@ -264,7 +253,6 @@ export class WorkspacesService {
     organizationId: string,
     workspaceId: string,
   ) {
-    // 1. Check organization membership
     const membership = await this.prisma.organizationMember.findFirst({
       where: {
         organizationId,
@@ -281,8 +269,6 @@ export class WorkspacesService {
       );
     }
 
-    // 2. Only OWNER and ADMIN can delete workspace
-
     if (
       membership.role !== OrganizationRole.OWNER &&
       membership.role !== OrganizationRole.ADMIN
@@ -291,8 +277,6 @@ export class WorkspacesService {
         'You do not have permission to delete workspace',
       );
     }
-
-    // 3. Check workspace exists inside organization
 
     const workspace = await this.prisma.workspace.findFirst({
       where: {
@@ -308,8 +292,6 @@ export class WorkspacesService {
     if (!workspace) {
       throw new NotFoundException('Workspace not found');
     }
-
-    // 4. Delete workspace
 
     await this.prisma.workspace.delete({
       where: {

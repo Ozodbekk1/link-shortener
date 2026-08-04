@@ -37,10 +37,16 @@ export class CookieService {
   }
 
   private buildCookieOptions(expiry: string) {
+    const isProduction = process.env.NODE_ENV === 'production';
+
     return {
+      // `localhost` cannot reliably act as a shared parent cookie domain.
+      // localtest.me resolves all subdomains to 127.0.0.1, so this makes the
+      // cookie available to both api.localtest.me and tenant.localtest.me.
+      domain: isProduction ? '.uurl.uz' : '.localtest.me',
       httpOnly: true,
-      secure: env.NODE_ENV === 'production',
-      sameSite: 'lax' as const,
+      secure: isProduction,
+      sameSite: isProduction ? ('none' as const) : ('lax' as const),
       path: '/',
       maxAge: this.parseDurationToMs(expiry),
     };

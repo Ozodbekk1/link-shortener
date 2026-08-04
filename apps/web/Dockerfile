@@ -35,7 +35,6 @@ RUN addgroup --system --gid 1001 nodejs && \
 USER nextjs
 
 ENV NODE_ENV=production
-# Hardcode PORT=3000 here so it doesn't get overridden by outer scope
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 EXPOSE 3000

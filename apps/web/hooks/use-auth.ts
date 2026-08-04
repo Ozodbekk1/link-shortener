@@ -13,9 +13,6 @@ import {
   type VerifyOtpPayload,
 } from "@/services/auth.service"
 
-export const useMeQuery = () =>
-  useQuery({ queryKey: queryKeys.auth.me, queryFn: authService.me })
-
 export const useRegisterMutation = () =>
   useMutation({
     mutationFn: (payload: RegisterPayload) => authService.register(payload),
@@ -32,7 +29,18 @@ export const useLoginMutation = () => {
   return useMutation({
     mutationFn: (payload: LoginPayload) => authService.login(payload),
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: queryKeys.auth.me })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.users.me })
+    },
+  })
+}
+
+export const useTelegramLoginMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: authService.telegramLogin,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: queryKeys.users.me })
     },
   })
 }
@@ -46,7 +54,7 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: authService.logout,
     onSuccess: async () => {
-      await queryClient.removeQueries({ queryKey: queryKeys.auth.me })
+      queryClient.setQueryData(queryKeys.users.me, null)
     },
   })
 }

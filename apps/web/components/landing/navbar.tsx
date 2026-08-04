@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -8,6 +8,13 @@ import { ComicText } from "@/components/ui/comic-text"
 import { useTranslation } from "@/hooks/use-translation"
 import { useLocale } from "@/hooks/use-locale"
 import LanguageSwitcher from "@/components/landing/language-switcher"
+import { useAuth } from "@/common/providers/auth-provider"
+import {
+  executeRedirect,
+  getUserOrganizations,
+  resolvePostAuthRedirect,
+} from "@/lib/auth/post-auth-redirect"
+import Github from "../assets/github.png"
 
 type NavItemKey = "features" | "shortener" | "pricing" | "domains"
 
@@ -21,8 +28,26 @@ const NAV_ITEMS: { key: NavItemKey; href: string }[] = [
 export default function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [stars, setStars] = useState<number | null>(null)
+
   const { t } = useTranslation()
   const locale = useLocale()
+  const { user, isAuthenticated, isLoading } = useAuth()
+
+  const handleGoToDashboard = useCallback(() => {
+    if (!user) return
+
+    const redirectTarget = resolvePostAuthRedirect(user, locale)
+    executeRedirect(redirectTarget)
+  }, [user, locale])
+
+  const primaryOrgName = useCallback(() => {
+    if (!user) return null
+    const orgs = getUserOrganizations(user)
+    return orgs.length > 0 ? orgs[0].name : null
+  }, [user])
+
+  const orgName = primaryOrgName()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -39,6 +64,23 @@ export default function LandingNavbar() {
       document.body.style.overflow = ""
     }
   }, [mobileOpen])
+
+  useEffect(() => {
+    async function fetchStars() {
+      try {
+        const res = await fetch(
+          "https://api.github.com/repos/Ozodbekk1/link-shortener"
+        )
+
+        const data = await res.json()
+        setStars(data.stargazers_count)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    fetchStars()
+  }, [])
 
   return (
     <header
@@ -72,21 +114,46 @@ export default function LandingNavbar() {
           ))}
         </nav>
 
+        <div className="hidden items-center gap-3 rounded-lg px-4 py-3 hover:bg-gray-100 lg:flex">
+          <a
+            href="https://github.com/Ozodbekk1/link-shortener"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2"
+          >
+            <Image width={25} height={25} src={Github} alt="github icon" />
+            <span>{stars?.toLocaleString() ?? "--"}</span>
+          </a>
+        </div>
+
         <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher />
 
-          <Link
-            href={`/${locale}/auth/login`}
-            className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
-          >
-            {t("nav.login")}
-          </Link>
+          {isLoading ? (
+            <div className="h-10 w-40 animate-pulse rounded-xl bg-gray-200" />
+          ) : isAuthenticated && user ? (
+            <button
+              onClick={handleGoToDashboard}
+              className="cursor-pointer rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500"
+            >
+              {t("nav.goToDashboard")} {orgName || ""} →
+            </button>
+          ) : (
+            <>
+              <Link
+                href={`/${locale}/auth/login`}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
+              >
+                {t("nav.login")}
+              </Link>
 
-          <Link href={`/${locale}/auth/register`}>
-            <div className="w-full rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500">
-              {t("nav.getStarted")}
-            </div>
-          </Link>
+              <Link href={`/${locale}/auth/register`}>
+                <div className="w-full rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500">
+                  {t("nav.getStarted")}
+                </div>
+              </Link>
+            </>
+          )}
         </div>
 
         <button
@@ -117,23 +184,48 @@ export default function LandingNavbar() {
             </Link>
           ))}
 
+          <div className="flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-3 hover:bg-gray-100 lg:hidden">
+            <a
+              href="https://github.com/Ozodbekk1/link-shortener"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <Image width={25} height={25} src={Github} alt="github icon" />
+              <span>{stars?.toLocaleString() ?? "--"}</span>
+            </a>
+          </div>
+
           <div className="mt-4 border-t pt-4">
             <div className="mb-3 px-4">
               <LanguageSwitcher />
             </div>
 
-            <Link
-              href={`/${locale}/auth/login`}
-              className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
-            >
-              {t("nav.login")}
-            </Link>
+            {isLoading ? (
+              <div className="mx-4 h-10 animate-pulse rounded-xl bg-gray-200" />
+            ) : isAuthenticated && user ? (
+              <button
+                onClick={handleGoToDashboard}
+                className="mx-4 block w-[calc(100%-2rem)] cursor-pointer rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500"
+              >
+                {t("nav.goToDashboard")} {orgName || ""} →
+              </button>
+            ) : (
+              <>
+                <Link
+                  href={`/${locale}/auth/login`}
+                  className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+                >
+                  {t("nav.login")}
+                </Link>
 
-            <Link href={`/${locale}/auth/register`}>
-              <div className="w-full rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500">
-                {t("nav.getStarted")}
-              </div>
-            </Link>
+                <Link href={`/${locale}/auth/register`}>
+                  <div className="w-full rounded-xl bg-gray-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-rose-500">
+                    {t("nav.getStarted")}
+                  </div>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

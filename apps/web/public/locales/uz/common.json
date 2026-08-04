@@ -6,7 +6,8 @@
     "domains": "Domenlar",
     "login": "Kirish",
     "getStarted": "Boshlash →",
-    "toggleMenu": "Menyuni ochish"
+    "toggleMenu": "Menyuni ochish",
+    "goToDashboard": "O'tish"
   },
   "hero": {
     "headline": "Aqlli",
@@ -40,27 +41,50 @@
     "redirects": {
       "title": "Aqlli Yo'naltirish Qoidalari",
       "description": "Tashrif buyuruvchilarni davlat, qurilma, brauzer, til yoki vaqt asosida yo'naltiring.",
-      "tags": ["Davlat", "Qurilma", "Brauzer", "Til", "Vaqt"]
+      "tags": [
+        "Davlat",
+        "Qurilma",
+        "Brauzer",
+        "Til",
+        "Vaqt"
+      ]
     },
     "qr": {
       "title": "Chiroyli QR Kodlar",
       "description": "Brendlashtirilgan QR kodlar, maxsus ranglar va logotip bilan. PNG yoki SVG sifatida yuklab oling.",
-      "tags": ["Maxsus ranglar", "Logotip ichida", "PNG / SVG"]
+      "tags": [
+        "Maxsus ranglar",
+        "Logotip ichida",
+        "PNG / SVG"
+      ]
     },
     "domains": {
       "title": "Maxsus Domenlar",
       "description": "O'z brend domeningizdan foydalaning. uurl.uz o'rniga go.sizningkompaniyangiz.com.",
-      "tags": ["Brend domen", "Avto SSL", "Sozlash shart emas"]
+      "tags": [
+        "Brend domen",
+        "Avto SSL",
+        "Sozlash shart emas"
+      ]
     },
     "organizations": {
       "title": "Tashkilotlar",
       "description": "Kompaniya ish joylari yarating, hamkasblarni taklif qiling va ruxsatlarni boshqaring.",
-      "tags": ["Ish joyi", "A'zolar", "Rollar"]
+      "tags": [
+        "Ish joyi",
+        "A'zolar",
+        "Rollar"
+      ]
     },
     "workspaces": {
       "title": "Ish Joylari & Jamoalar",
       "description": "Havolalarni loyihalarga tartibga soling. Rollarni tayinlang, real vaqtda hamkorlik qiling.",
-      "tags": ["Loyihalar", "Ruxsatlar", "Hamkorlik", "Ulashish"]
+      "tags": [
+        "Loyihalar",
+        "Ruxsatlar",
+        "Hamkorlik",
+        "Ulashish"
+      ]
     }
   },
   "footer": {
