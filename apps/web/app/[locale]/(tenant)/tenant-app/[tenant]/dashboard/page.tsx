@@ -1,21 +1,3 @@
-import React from "react"
-import { headers } from "next/headers"
+import { DashboardPage } from "@/components/tenant/dashboard-page"
 
-const page = async () => {
-  const host = (await headers()).get("host") ?? ""
-
-  const subdomain = host.split(".")[0]
-
-  return (
-    <div>
-      tenant dashboard
-      <div>
-        Host: {host}
-        <br />
-        Subdomain: {subdomain}
-      </div>
-    </div>
-  )
-}
-
-export default page
+export default function Page() { return <DashboardPage /> }

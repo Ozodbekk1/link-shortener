@@ -13,7 +13,7 @@ export const workspacesService = {
     payload: CreateWorkspacePayload
   ): Promise<Workspace> => {
     const res = await apiClient.post<any>(
-      `/organizations/${organizationId}/workspaces`,
+      `/workspaces/${organizationId}/workspaces`,
       { body: payload }
     )
     return res?.data ?? res
@@ -24,7 +24,7 @@ export const workspacesService = {
     params?: WorkspacesQueryParams
   ): Promise<WorkspacesListResponse> => {
     const res = await apiClient.get<any>(
-      `/organizations/${organizationId}/workspaces`,
+      `/workspaces/${organizationId}/workspaces`,
       { query: params }
     )
     return res?.data ?? res
@@ -35,7 +35,7 @@ export const workspacesService = {
     workspaceId: string
   ): Promise<Workspace> => {
     const res = await apiClient.get<any>(
-      `/organizations/${organizationId}/workspaces/${workspaceId}`
+      `/workspaces/${organizationId}/workspaces/${workspaceId}`
     )
     return res?.data ?? res
   },
@@ -45,7 +45,7 @@ export const workspacesService = {
     workspaceId: string
   ): Promise<DeleteWorkspaceResponse> => {
     const res = await apiClient.delete<any>(
-      `/organizations/${organizationId}/workspaces/${workspaceId}`
+      `/workspaces/${organizationId}/workspaces/${workspaceId}`
     )
     return res?.data ?? res
   },

@@ -79,6 +79,18 @@ export class WorkspaceLinksController {
     return this.linksService.getDevicesAnalytics(workspaceId);
   }
 
+  @Get('analytics/activity')
+  @UseGuards(JwtAuthGuard)
+  getRecentActivity(
+    @Param('workspaceId') workspaceId: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.linksService.getRecentClickActivity(
+      workspaceId,
+      limit ? Number(limit) : undefined,
+    );
+  }
+
   @Get(':id/analytics')
   @UseGuards(JwtAuthGuard)
   getLinkAnalytics(

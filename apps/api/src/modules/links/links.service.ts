@@ -309,6 +309,29 @@ export class LinksService {
     };
   }
 
+  async getRecentClickActivity(workspaceId: string, limit = 25) {
+    const clicks = await this.prisma.click.findMany({
+      where: { link: { workspaceId } },
+      take: Math.min(Math.max(limit, 1), 100),
+      orderBy: { clickedAt: 'desc' },
+      select: {
+        id: true,
+        clickedAt: true,
+        country: true,
+        city: true,
+        device: true,
+        browser: true,
+        os: true,
+        referrer: true,
+        language: true,
+        userAgent: true,
+        link: { select: { id: true, shortSlug: true, title: true } },
+      },
+    });
+
+    return { activity: clicks };
+  }
+
   async getLinkAnalytics(linkId: string, workspaceId: string) {
     const link = await this.prisma.link.findFirst({
       where: { id: linkId, workspaceId },
