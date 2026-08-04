@@ -25,6 +25,9 @@ RUN apk add --no-cache \
     jpeg-dev \
     giflib-dev \
     librsvg-dev \
+    pixman-dev \
+    freetype-dev \
+    fontconfig-dev \
     python3 \
     pkgconfig
 
@@ -41,6 +44,16 @@ RUN yarn build --filter=api...
 
 
 FROM base AS runner
+
+RUN apk add --no-cache \
+    cairo \
+    pango \
+    jpeg \
+    giflib \
+    librsvg \
+    pixman \
+    freetype \
+    fontconfig
 
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
@@ -61,4 +74,3 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl --fail http://localhost:${PORT}/docs || exit 1
 
 CMD ["node", "apps/api/dist/src/main.js"]
-
