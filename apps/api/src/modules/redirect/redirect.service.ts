@@ -93,14 +93,15 @@ export class RedirectService {
     try {
       await this.recordAnalytics(link.id, {
         ip: context.ip,
-        country: undefined,
-        city: undefined,
-        region: undefined,
+        country: context.country,
+        city: context.city,
+        region: context.region,
         device: context.device,
         browser: context.browser,
         os: context.os,
         referrer: context.referrer,
         language: context.language,
+        userAgent: req.headers['user-agent'] || '',
       });
     } catch (error) {
       this.logger.error(
@@ -323,6 +324,8 @@ export class RedirectService {
     language: string | undefined;
     ip: string | undefined;
     country: string | undefined;
+    city: string | undefined;
+    region: string | undefined;
     referrer: string | undefined;
   } {
     const userAgent = req.headers['user-agent'] || '';
@@ -335,12 +338,38 @@ export class RedirectService {
       language:
         req.headers['accept-language']?.split(',')[0]?.trim() || undefined,
       ip: req.ip || req.socket.remoteAddress || undefined,
-      country: undefined,
+      country: this.getHeader(req, [
+        'cf-ipcountry',
+        'x-vercel-ip-country',
+        'x-country-code',
+      ]),
+      city: this.getHeader(req, ['cf-ipcity', 'x-vercel-ip-city', 'x-city']),
+      region: this.getHeader(req, [
+        'cf-region',
+        'x-vercel-ip-country-region',
+        'x-region',
+      ]),
       referrer:
         req.headers['referer'] ||
         (req.headers['referrer'] as string) ||
         undefined,
     };
+  }
+
+  private getHeader(req: Request, names: string[]): string | undefined {
+    for (const name of names) {
+      const value = req.headers[name];
+      const header = Array.isArray(value) ? value[0] : value;
+      if (header && header !== 'XX') {
+        try {
+          return decodeURIComponent(header).trim() || undefined;
+        } catch {
+          return header.trim() || undefined;
+        }
+      }
+    }
+
+    return undefined;
   }
 
   applyRedirectRules(
@@ -399,6 +428,7 @@ export class RedirectService {
       os?: string;
       referrer?: string;
       language?: string;
+      userAgent?: string;
     },
   ): Promise<void> {
     const now = new Date();
@@ -421,6 +451,7 @@ export class RedirectService {
           os: data.os,
           referrer: data.referrer,
           language: data.language,
+          userAgent: data.userAgent,
           isBot: false,
           clickedAt: now,
         },

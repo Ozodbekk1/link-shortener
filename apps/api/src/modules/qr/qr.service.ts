@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import * as nodeCanvas from 'canvas';
+import { JSDOM } from 'jsdom';
 import { PrismaService } from 'src/database/prisma.service';
-import { QrStyle } from './interfaces/qr-style.interface';
-import * as QRCode from 'qrcode';
+import QRCodeStyling from 'qr-code-styling';
 import sharp from 'sharp';
+import { QrStyle } from './interfaces/qr-style.interface';
 
 @Injectable()
 export class QrService {
@@ -28,45 +30,56 @@ export class QrService {
       logoSize = 0.2,
     } = style;
 
-    const qrDataUrl = await QRCode.toDataURL(text, {
+    const gradient =
+      gradientStart && gradientEnd
+        ? {
+            type: 'linear' as const,
+            rotation: this.getGradientRotation(gradientDirection),
+            colorStops: [
+              { offset: 0, color: gradientStart },
+              { offset: 1, color: gradientEnd },
+            ],
+          }
+        : undefined;
+    const qrCode = new QRCodeStyling({
+      type: 'canvas',
       width: size,
+      height: size,
+      data: text,
       margin,
-      color: {
-        dark: foregroundColor,
-        light: backgroundColor,
+      image: logoUrl,
+      jsdom: JSDOM,
+      nodeCanvas,
+      qrOptions: { errorCorrectionLevel: 'H' },
+      dotsOptions: {
+        color: gradient ? undefined : foregroundColor,
+        gradient,
+        type: dotStyle === 'dot' ? 'dots' : dotStyle,
       },
-      errorCorrectionLevel: 'H',
+      cornersSquareOptions: {
+        color: gradient ? undefined : foregroundColor,
+        gradient,
+        type: cornerStyle === 'dot' ? 'dots' : cornerStyle,
+      },
+      cornersDotOptions: {
+        color: gradient ? undefined : foregroundColor,
+        gradient,
+        type: cornerStyle === 'dot' ? 'dots' : cornerStyle,
+      },
+      backgroundOptions: { color: backgroundColor },
+      imageOptions: {
+        crossOrigin: 'anonymous',
+        imageSize: logoSize,
+        margin: 4,
+      },
     });
+    const image = await qrCode.getRawData('png');
 
-    const base64Data = qrDataUrl.replace(/^data:image\/png;base64,/, '');
-    let qrBuffer: Buffer = Buffer.from(base64Data, 'base64');
-
-    if (dotStyle !== 'square' || cornerStyle !== 'square') {
-      qrBuffer = await this.applyModuleStyles(
-        qrBuffer,
-        dotStyle,
-        cornerStyle,
-        foregroundColor,
-        backgroundColor,
-        size,
-        margin,
-      );
+    if (!image || !Buffer.isBuffer(image)) {
+      throw new Error('QR code image generation failed');
     }
 
-    if (gradientStart && gradientEnd) {
-      qrBuffer = await this.applyGradient(
-        qrBuffer,
-        gradientStart,
-        gradientEnd,
-        gradientDirection,
-      );
-    }
-
-    if (logoUrl) {
-      qrBuffer = await this.overlayLogo(qrBuffer, logoUrl, logoSize, size);
-    }
-
-    return qrBuffer;
+    return image;
   }
 
   async create(workspaceId: string, linkId: string, style: QrStyle = {}) {
@@ -81,7 +94,7 @@ export class QrService {
     }
 
     const imageBuffer = await this.generateQrImageBuffer(
-      link.originalUrl,
+      this.getShortUrl(link),
       style,
     );
 
@@ -180,7 +193,12 @@ export class QrService {
       where: { id },
       include: {
         link: {
-          select: { id: true, originalUrl: true, workspaceId: true },
+          select: {
+            id: true,
+            shortSlug: true,
+            customDomain: true,
+            workspaceId: true,
+          },
         },
       },
     });
@@ -201,7 +219,7 @@ export class QrService {
     };
 
     const imageBuffer = await this.generateQrImageBuffer(
-      qrCode.link.originalUrl,
+      this.getShortUrl(qrCode.link),
       mergedStyle,
     );
     const base64Image = imageBuffer.toString('base64');
@@ -257,7 +275,7 @@ export class QrService {
     const qrCode = await this.prisma.qRCode.findUnique({
       where: { id },
       include: {
-        link: { select: { originalUrl: true } },
+        link: { select: { shortSlug: true, customDomain: true } },
       },
     });
 
@@ -266,7 +284,31 @@ export class QrService {
     }
 
     const style = qrCode.styleJson as unknown as QrStyle;
-    return this.generateQrImageBuffer(qrCode.link.originalUrl, style);
+    return this.generateQrImageBuffer(this.getShortUrl(qrCode.link), style);
+  }
+
+  private getShortUrl(link: {
+    shortSlug: string;
+    customDomain: string | null;
+  }): string {
+    if (link.customDomain) {
+      return `https://${link.customDomain}/${link.shortSlug}`;
+    }
+
+    return `https://uurl.uz/r/${link.shortSlug}`;
+  }
+
+  private getGradientRotation(
+    direction: 'horizontal' | 'vertical' | 'diagonal',
+  ): number {
+    switch (direction) {
+      case 'vertical':
+        return Math.PI / 2;
+      case 'diagonal':
+        return Math.PI / 4;
+      default:
+        return 0;
+    }
   }
 
   private async applyModuleStyles(

@@ -50,6 +50,10 @@ export const queryKeys = {
       ["workspaces", workspaceId, "analytics", "countries"] as const,
     devices: (workspaceId: string) =>
       ["workspaces", workspaceId, "analytics", "devices"] as const,
+    activity: (workspaceId: string, limit?: number) =>
+      ["workspaces", workspaceId, "analytics", "activity", limit].filter(
+        (x) => x !== undefined
+      ) as readonly unknown[],
     singleLink: (workspaceId: string, linkId: string) =>
       ["workspaces", workspaceId, "links", linkId, "analytics"] as const,
   },

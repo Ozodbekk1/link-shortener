@@ -3,6 +3,7 @@ import type {
   AnalyticsOverview,
   CountryAnalyticsItem,
   DeviceAnalyticsResponse,
+  ClickActivityResponse,
   RealtimeAnalyticsItem,
   SingleLinkAnalyticsResponse,
 } from "@/api/types"
@@ -36,6 +37,17 @@ export const analyticsService = {
   getDevices: async (workspaceId: string): Promise<DeviceAnalyticsResponse> => {
     const res = await apiClient.get<any>(
       `/${workspaceId}/links/analytics/devices`
+    )
+    return res?.data ?? res
+  },
+
+  getRecentActivity: async (
+    workspaceId: string,
+    limit = 25
+  ): Promise<ClickActivityResponse> => {
+    const res = await apiClient.get<any>(
+      `/${workspaceId}/links/analytics/activity`,
+      { query: { limit } }
     )
     return res?.data ?? res
   },
