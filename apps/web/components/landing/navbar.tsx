@@ -14,6 +14,7 @@ import {
   getUserOrganizations,
   resolvePostAuthRedirect,
 } from "@/lib/auth/post-auth-redirect"
+import Github from "../assets/github.png"
 
 type NavItemKey = "features" | "shortener" | "pricing" | "domains"
 
@@ -27,6 +28,8 @@ const NAV_ITEMS: { key: NavItemKey; href: string }[] = [
 export default function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [stars, setStars] = useState<number | null>(null)
+
   const { t } = useTranslation()
   const locale = useLocale()
   const { user, isAuthenticated, isLoading } = useAuth()
@@ -62,6 +65,23 @@ export default function LandingNavbar() {
     }
   }, [mobileOpen])
 
+  useEffect(() => {
+    async function fetchStars() {
+      try {
+        const res = await fetch(
+          "https://api.github.com/repos/Ozodbekk1/link-shortener"
+        )
+
+        const data = await res.json()
+        setStars(data.stargazers_count)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    fetchStars()
+  }, [])
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
@@ -93,6 +113,18 @@ export default function LandingNavbar() {
             </Link>
           ))}
         </nav>
+
+        <div className="hidden items-center gap-3 rounded-lg px-4 py-3 hover:bg-gray-100 lg:flex">
+          <a
+            href="https://github.com/Ozodbekk1/link-shortener"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2"
+          >
+            <Image width={25} height={25} src={Github} alt="github icon" />
+            <span>{stars?.toLocaleString() ?? "--"}</span>
+          </a>
+        </div>
 
         <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher />
@@ -151,6 +183,18 @@ export default function LandingNavbar() {
               <ComicText fontSize={1.2}>{t(`nav.${item.key}`)}</ComicText>
             </Link>
           ))}
+
+          <div className="flex cursor-pointer items-center justify-center gap-3 rounded-lg px-4 py-3 hover:bg-gray-100 lg:hidden">
+            <a
+              href="https://github.com/Ozodbekk1/link-shortener"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <Image width={25} height={25} src={Github} alt="github icon" />
+              <span>{stars?.toLocaleString() ?? "--"}</span>
+            </a>
+          </div>
 
           <div className="mt-4 border-t pt-4">
             <div className="mb-3 px-4">
