@@ -339,6 +339,7 @@ model Click {
   os         String?
   referrer   String?
   language   String?
+  userAgent  String?  @map("user_agent")
   isBot      Boolean  @default(false) @map("is_bot")
   clickedAt  DateTime @default(now()) @map("clicked_at")
 

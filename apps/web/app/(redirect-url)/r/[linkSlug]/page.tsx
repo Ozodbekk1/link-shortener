@@ -1,3 +1,5 @@
+import { RedirectPage } from "@/components/redirect/redirect-page"
+
 export default async function RedirectLink({
   params,
 }: {
@@ -5,10 +7,5 @@ export default async function RedirectLink({
 }) {
   const { linkSlug } = await params
 
-  return (
-    <div>
-      redirect page and use this slug for original link{" "}
-      <span className="text-red-600">{linkSlug}</span>
-    </div>
-  )
+  return <RedirectPage slug={linkSlug} />
 }

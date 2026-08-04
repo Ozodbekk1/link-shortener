@@ -1,6 +1,6 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import {
   BadgeCheck,
   Bell,
@@ -52,7 +52,6 @@ interface AppSidebarProps {
 
 export function AppSidebar({ currentSubdomain }: AppSidebarProps) {
   const pathname = usePathname()
-  const router = useRouter()
   const locale = useLocale()
   const { user, logout } = useAuth()
 

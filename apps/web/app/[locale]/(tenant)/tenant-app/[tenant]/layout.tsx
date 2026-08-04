@@ -6,6 +6,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { OrgGuard } from "@/components/auth/org-guard"
+import { TenantWorkspaceProvider } from "@/components/tenant/tenant-workspace-provider"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -29,13 +30,15 @@ export default async function TenantLayout({
 
   return (
     <OrgGuard expectedTenant={tenant}>
-      <SidebarProvider>
-        <AppSidebar currentSubdomain={tenant} />
-        <SidebarInset>
-          <SidebarTrigger className="mt-1 ml-1" />
-          {children}
-        </SidebarInset>
-      </SidebarProvider>
+      <TenantWorkspaceProvider tenant={tenant}>
+        <SidebarProvider>
+          <AppSidebar currentSubdomain={tenant} />
+          <SidebarInset>
+            <SidebarTrigger className="absolute top-3 left-3 z-10" />
+            {children}
+          </SidebarInset>
+        </SidebarProvider>
+      </TenantWorkspaceProvider>
     </OrgGuard>
   )
 }

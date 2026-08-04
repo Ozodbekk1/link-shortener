@@ -473,6 +473,24 @@ export interface DeviceAnalyticsResponse {
   browsers: BrowserAnalyticsItem[]
 }
 
+export interface ClickActivityItem {
+  id: string
+  clickedAt: string
+  country: string | null
+  city: string | null
+  device: string | null
+  browser: string | null
+  os: string | null
+  referrer: string | null
+  language: string | null
+  userAgent: string | null
+  link: { id: string; shortSlug: string; title: string | null }
+}
+
+export interface ClickActivityResponse {
+  activity: ClickActivityItem[]
+}
+
 export interface DailyAnalyticsItem {
   day: string
   totalClicks: number

@@ -1,7 +1,3 @@
-import React from "react"
+import { SettingsPage } from "@/components/tenant/settings-page"
 
-const page = () => {
-  return <div>setting page in tenant</div>
-}
-
-export default page
+export default function Page() { return <SettingsPage /> }
