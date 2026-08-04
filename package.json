@@ -1,6 +1,9 @@
 {
   "name": "inks.uz",
   "private": true,
+  "resolutions": {
+    "undici": "6.19.8"
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
