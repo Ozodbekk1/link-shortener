@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     python3 \
     pkg-config \
+    glib2.0-dev \
     libcairo2-dev \
     libpango1.0-dev \
     libjpeg-dev \
@@ -28,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     librsvg2-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN yarn install --immutable
+RUN JOBS=1 yarn install --immutable
 
 COPY --from=builder /app/out/full/apps/api/prisma ./apps/api/prisma
 COPY --from=builder /app/out/full/apps/api/prisma.config.ts ./apps/api/prisma.config.ts
@@ -49,6 +50,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libjpeg62-turbo \
     libgif7 \
     librsvg2-2 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd --system --gid 1001 nodejs && \
