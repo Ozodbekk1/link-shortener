@@ -11,19 +11,23 @@ export const redirectsService = {
     const query = params?.password
       ? `?password=${encodeURIComponent(params.password)}`
       : ""
-    return `${baseUrl}/r/${encodeURIComponent(slug)}${query}`
+    const path = baseUrl
+      ? `${baseUrl}/api/r/${encodeURIComponent(slug)}`
+      : `/api/r/${encodeURIComponent(slug)}`
+    return `${path}${query}`
   },
 
   validateRedirect: async (
     slug: string,
     params?: RedirectQueryParams
   ): Promise<ValidateRedirectResponse> => {
-    const res = await apiClient.get<any>(
-      `${getRedirectApiBaseUrl()}/redirect/${encodeURIComponent(slug)}`,
-      {
+    const base = getRedirectApiBaseUrl()
+    const endpoint = base
+      ? `${base}/api/redirect/${encodeURIComponent(slug)}`
+      : `/api/redirect/${encodeURIComponent(slug)}`
+    const res = await apiClient.get<any>(endpoint, {
       query: params,
-      }
-    )
+    })
     return res?.data ?? res
   },
 
@@ -31,17 +35,21 @@ export const redirectsService = {
     slug: string,
     params?: RedirectQueryParams
   ): Promise<PreviewRedirectRulesResponse> => {
-    const res = await apiClient.get<any>(
-      `${getRedirectApiBaseUrl()}/redirect/rules/${encodeURIComponent(slug)}`,
-      {
+    const base = getRedirectApiBaseUrl()
+    const endpoint = base
+      ? `${base}/api/redirect/rules/${encodeURIComponent(slug)}`
+      : `/api/redirect/rules/${encodeURIComponent(slug)}`
+    const res = await apiClient.get<any>(endpoint, {
       query: params,
-      }
-    )
+    })
     return res?.data ?? res
   },
 }
 
 function getRedirectApiBaseUrl(): string {
+  if (typeof window === "undefined" && process.env.API_URL) {
+    return process.env.API_URL.replace(/\/+$/, "")
+  }
   const configuredUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? ""
 
   try {

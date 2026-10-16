@@ -19,7 +19,14 @@ async function bootstrap() {
 
   const allowedOrigins = env.WEB_ORIGIN
     ? env.WEB_ORIGIN.split(',').map((o) => o.trim())
-    : ['http://localhost:3000', 'https://uurl.uz'];
+    : [
+        'http://localhost:3000',
+        'https://uurl.uz',
+        ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+        ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+          ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
+          : []),
+      ];
 
   app.enableCors({
     origin: (origin, callback) => {
@@ -60,8 +67,11 @@ async function bootstrap() {
     exclude: [
       // Redirect routes must be at root level for clean short URLs
       { path: 'r/:slug', method: 0 as const }, // GET /r/:slug — Core redirect
+      { path: 'api/r/:slug', method: 0 as const }, // GET /api/r/:slug — Multi-service redirect
       { path: 'redirect/:slug', method: 0 as const }, // GET /redirect/:slug — Validate
+      { path: 'api/redirect/:slug', method: 0 as const }, // GET /api/redirect/:slug — Validate
       { path: 'redirect/rules/:slug', method: 0 as const }, // GET /redirect/rules/:slug — Rules preview
+      { path: 'api/redirect/rules/:slug', method: 0 as const }, // GET /api/redirect/rules/:slug — Rules preview
     ],
   });
   app.useGlobalPipes(
