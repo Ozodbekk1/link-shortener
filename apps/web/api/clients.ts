@@ -86,9 +86,19 @@ const toApiError = (error: unknown): ApiError => {
 }
 
 const apiInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api/v1",
   withCredentials: true,
   headers: { Accept: "application/json" },
+})
+
+apiInstance.interceptors.request.use((config) => {
+  if (typeof window === "undefined" && process.env.API_URL) {
+    const internalUrl = process.env.API_URL.replace(/\/+$/, "")
+    if (!config.baseURL || config.baseURL.startsWith("/")) {
+      config.baseURL = `${internalUrl}${config.baseURL || "/api/v1"}`
+    }
+  }
+  return config
 })
 
 let refreshPromise: Promise<void> | null = null

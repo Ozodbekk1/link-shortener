@@ -15,7 +15,7 @@ import { RedirectService } from './redirect.service';
 export class RedirectController {
   constructor(private readonly redirectService: RedirectService) {}
 
-  @Get('r/:slug')
+  @Get(['r/:slug', 'api/r/:slug'])
   @HttpCode(HttpStatus.FOUND) // 302
   async redirect(
     @Param('slug') slug: string,
@@ -32,7 +32,7 @@ export class RedirectController {
     return res.redirect(HttpStatus.FOUND, destinationUrl);
   }
 
-  @Get('redirect/:slug')
+  @Get(['redirect/:slug', 'api/redirect/:slug'])
   async validateRedirect(
     @Param('slug') slug: string,
     @Req() req: Request,
@@ -41,7 +41,7 @@ export class RedirectController {
     return this.redirectService.validateSlug(slug, req, password);
   }
 
-  @Get('redirect/rules/:slug')
+  @Get(['redirect/rules/:slug', 'api/redirect/rules/:slug'])
   async previewRules(
     @Param('slug') slug: string,
     @Req() req: Request,
