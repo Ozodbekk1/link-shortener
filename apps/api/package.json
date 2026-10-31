@@ -55,7 +55,6 @@
     "class-validator": "^0.15.1",
     "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
-    "jsdom": "^30.0.1",
     "jsonwebtoken": "^9.0.3",
     "nestjs-pino": "^4.6.1",
     "nodemailer": "^9.0.3",
