@@ -1,10 +1,17 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import * as nodeCanvas from 'canvas';
 import { JSDOM } from 'jsdom';
 import { PrismaService } from 'src/database/prisma.service';
 import QRCodeStyling from 'qr-code-styling';
 import sharp from 'sharp';
 import { QrStyle } from './interfaces/qr-style.interface';
+
+let nodeCanvas: any = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  nodeCanvas = require('canvas');
+} catch {
+  // canvas binary not present in environment
+}
 
 @Injectable()
 export class QrService {
@@ -41,15 +48,16 @@ export class QrService {
             ],
           }
         : undefined;
+    const useCanvas = Boolean(nodeCanvas);
     const qrCode = new QRCodeStyling({
-      type: 'canvas',
+      type: useCanvas ? 'canvas' : 'svg',
       width: size,
       height: size,
       data: text,
       margin,
       image: logoUrl,
       jsdom: JSDOM,
-      nodeCanvas,
+      ...(useCanvas ? { nodeCanvas } : {}),
       qrOptions: { errorCorrectionLevel: 'H' },
       dotsOptions: {
         color: gradient ? undefined : foregroundColor,
@@ -73,13 +81,25 @@ export class QrService {
         margin: 4,
       },
     });
-    const image = await qrCode.getRawData('png');
 
-    if (!image || !Buffer.isBuffer(image)) {
-      throw new Error('QR code image generation failed');
+    if (useCanvas) {
+      const image = await qrCode.getRawData('png');
+      if (!image || !Buffer.isBuffer(image)) {
+        throw new Error('QR code image generation failed');
+      }
+      return image;
     }
 
-    return image;
+    const svgData = await qrCode.getRawData('svg');
+    if (!svgData) {
+      throw new Error('QR code SVG generation failed');
+    }
+    const svgBuffer = Buffer.isBuffer(svgData)
+      ? svgData
+      : typeof (svgData as any).arrayBuffer === 'function'
+        ? Buffer.from(await (svgData as any).arrayBuffer())
+        : Buffer.from(String(svgData));
+    return await sharp(svgBuffer).png().toBuffer();
   }
 
   async create(workspaceId: string, linkId: string, style: QrStyle = {}) {

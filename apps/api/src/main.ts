@@ -1,18 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { env } from './config/env.config';
 import cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import dns from 'node:dns';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import express, { Express } from 'express';
 
 dns.setDefaultResultOrder('ipv4first');
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    bufferLogs: true,
-  });
+export function configureApp(app: INestApplication) {
   app.use(cookieParser());
   app.useLogger(app.get(Logger));
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
@@ -74,6 +73,7 @@ async function bootstrap() {
       { path: 'api/redirect/rules/:slug', method: 0 as const }, // GET /api/redirect/rules/:slug — Rules preview
     ],
   });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -89,9 +89,37 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-
   SwaggerModule.setup('docs', app, document);
-
-  await app.listen(process.env.PORT ?? 3000);
 }
-bootstrap();
+
+let cachedExpressApp: Express | null = null;
+
+export async function bootstrapServerless(): Promise<Express> {
+  if (!cachedExpressApp) {
+    const expressApp = express();
+    const app = await NestFactory.create(AppModule, new ExpressAdapter(expressApp), {
+      bufferLogs: true,
+    });
+    configureApp(app);
+    await app.init();
+    cachedExpressApp = expressApp;
+  }
+  return cachedExpressApp;
+}
+
+export default async function handler(req: any, res: any) {
+  const server = await bootstrapServerless();
+  return server(req, res);
+}
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+  configureApp(app);
+  await app.listen(process.env.PORT ?? 8080);
+}
+
+if (process.env.VERCEL !== '1' && !process.env.AWS_LAMBDA_FUNCTION_NAME) {
+  bootstrap();
+}

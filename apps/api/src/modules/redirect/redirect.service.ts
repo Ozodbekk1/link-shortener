@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { LinkStatus, RedirectType } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import type { Request } from 'express';
 import { UAParser } from 'ua-parser-js';
 

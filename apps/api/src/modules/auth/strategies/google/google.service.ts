@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { JwtService } from '../jwt/jwt.service';
 import { env } from 'src/config/env.config';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 export type GoogleOAuthUserData = {
   googleId: string;
