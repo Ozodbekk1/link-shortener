@@ -10,8 +10,16 @@ import { UpdateLinkDto } from './dto/update-link.dto';
 import { QueryLinkDto } from './dto/query-link.dto';
 import { LinkStatus, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
-import { nanoid } from 'nanoid';
+import { randomBytes } from 'node:crypto';
 import { PrismaService } from '../../database/prisma.service';
+
+/** URL-safe random ID — drop-in replacement for nanoid(size) */
+function nanoid(size: number): string {
+  const alphabet =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+  const bytes = randomBytes(size);
+  return Array.from(bytes, (b) => alphabet[b % 64]).join('');
+}
 
 @Injectable()
 export class LinksService {
