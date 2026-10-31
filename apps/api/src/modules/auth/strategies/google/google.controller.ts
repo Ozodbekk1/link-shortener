@@ -10,6 +10,7 @@ import { Throttle } from '@nestjs/throttler';
 
 interface GoogleAuthRequest extends Request {
   user: GoogleOAuthUserData;
+  query: Record<string, string | undefined>;
 }
 
 @Throttle({ default: { limit: 3, ttl: 60000 } })
