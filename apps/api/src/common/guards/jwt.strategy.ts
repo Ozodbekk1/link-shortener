@@ -2,12 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import type { UserStatus } from '@prisma/client';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { env } from 'src/config/env.config';
-import { PrismaService } from 'src/database/prisma.service';
+import { env } from '../../config/env.config';
+import { PrismaService } from '../../database/prisma.service';
 import {
   ACCESS_TOKEN_COOKIE,
   type AuthTokenPayload,
-} from 'src/modules/auth/strategies/jwt/jwt.types';
+} from '../../modules/auth/strategies/jwt/jwt.types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

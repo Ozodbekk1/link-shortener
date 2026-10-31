@@ -1,4 +1,4 @@
-jest.mock('src/config/env.config', () => ({
+jest.mock('../../config/env.config', () => ({
   env: {
     JWT_ACCESS_SECRET: 'test-access-secret',
     JWT_SECRET: 'test-secret',

@@ -1,5 +1,3 @@
-import "./GlitchText.css"
-
 export const GlitchText = ({
   children,
   speed = 1,

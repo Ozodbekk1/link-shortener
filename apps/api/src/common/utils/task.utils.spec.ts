@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserCleanupService } from './task.utils';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 describe('UserCleanupService', () => {
   let service: UserCleanupService;

@@ -7,8 +7,8 @@ import {
 } from '@nestjs/common';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { OrganizationRole } from '@prisma/client';
-import { PrismaService } from 'src/database/prisma.service';
-import { BLOCKED_DOMAINS } from 'src/common/constants/blocked.domains.constants';
+import { PrismaService } from '../../database/prisma.service';
+import { BLOCKED_DOMAINS } from '../../common/constants/blocked.domains.constants';
 
 @Injectable()
 export class OrganizationsService {

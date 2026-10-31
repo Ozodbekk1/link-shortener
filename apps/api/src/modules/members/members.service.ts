@@ -5,7 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { TeamRole } from '@prisma/client';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { AddTeamMemberDto, UpdateTeamMemberRoleDto } from './dto/member.dto';
 
 @Injectable()

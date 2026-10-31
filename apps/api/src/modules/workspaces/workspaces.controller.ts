@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { WorkspacesService } from './workspaces.service';
 

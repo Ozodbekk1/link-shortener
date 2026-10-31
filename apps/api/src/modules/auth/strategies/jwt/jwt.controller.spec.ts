@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtController } from './jwt.controller';
 import { JwtService } from './jwt.service';
-import { CookieService } from 'src/common/utils/cookie.util';
+import { CookieService } from '../../../../common/utils/cookie.util';
 
 describe('JwtController', () => {
   let controller: JwtController;

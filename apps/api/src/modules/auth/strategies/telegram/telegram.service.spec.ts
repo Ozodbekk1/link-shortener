@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TelegramService } from './telegram.service';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../../../database/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '../jwt/jwt.service';
 

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { TeamMembersService } from './members.service';
 import { AddTeamMemberDto, UpdateTeamMemberRoleDto } from './dto/member.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 
 @Controller('teams/:teamId/members')
 @UseGuards(JwtAuthGuard)

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { JwtModule as NestJwtModule } from '@nestjs/jwt';
-import { DatabaseModule } from 'src/database/database.module';
-import { CookieService } from 'src/common/utils/cookie.util';
-import { TokenService } from 'src/common/utils/jwt.util';
+import { DatabaseModule } from '../../../../database/database.module';
+import { CookieService } from '../../../../common/utils/cookie.util';
+import { TokenService } from '../../../../common/utils/jwt.util';
 import { JwtController } from './jwt.controller';
 import { JwtService } from './jwt.service';
-import { EmailService } from 'src/common/utils/sendEmail.utils';
-import { JwtStrategy } from 'src/common/guards/jwt.strategy';
+import { EmailService } from '../../../../common/utils/sendEmail.utils';
+import { JwtStrategy } from '../../../../common/guards/jwt.strategy';
 
 @Module({
   imports: [NestJwtModule.register({}), DatabaseModule],

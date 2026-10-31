@@ -16,7 +16,7 @@ import { LinksService } from './links.service';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
 import { QueryLinkDto } from './dto/query-link.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 
 @Controller(':workspaceId/links')
 export class WorkspaceLinksController {

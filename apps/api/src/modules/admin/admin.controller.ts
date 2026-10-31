@@ -7,10 +7,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { RolesGuard } from 'src/common/guards/role.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { Role } from 'src/common/constants/role.enums';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
+import { RolesGuard } from '../../common/guards/role.guard';
+import { Roles } from '../../common/decorators/role.decorator';
+import { Role } from '../../common/constants/role.enums';
 import { UserStatus } from '@prisma/client';
 
 @Controller('admin')

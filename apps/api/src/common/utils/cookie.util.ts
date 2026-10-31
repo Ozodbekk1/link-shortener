@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import type { Response } from 'express';
-import { env } from 'src/config/env.config';
+import { env } from '../../config/env.config';
 import {
   ACCESS_TOKEN_COOKIE,
   REFRESH_TOKEN_COOKIE,
-} from 'src/modules/auth/strategies/jwt/jwt.types';
+} from '../../modules/auth/strategies/jwt/jwt.types';
 
 @Injectable()
 export class CookieService {

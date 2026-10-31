@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import crypto from 'node:crypto';
-import { env } from 'src/config/env.config';
+import { env } from '../../config/env.config';
 
 @Injectable()
 export class EmailService {

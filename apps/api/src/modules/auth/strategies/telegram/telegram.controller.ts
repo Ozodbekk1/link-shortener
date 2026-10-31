@@ -7,7 +7,7 @@ import {
   Res,
 } from '@nestjs/common';
 import type { Response } from 'express';
-import { CookieService } from 'src/common/utils/cookie.util';
+import { CookieService } from '../../../../common/utils/cookie.util';
 import type { TelegramAuthPayload } from './telegram.service';
 import { TelegramService } from './telegram.service';
 import { Throttle } from '@nestjs/throttler';

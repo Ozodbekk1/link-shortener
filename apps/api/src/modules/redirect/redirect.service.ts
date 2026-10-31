@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
   Logger,
 } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import { LinkStatus, RedirectType } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import type { Request } from 'express';

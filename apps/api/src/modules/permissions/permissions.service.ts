@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { CreatePermissionDto, UpdatePermissionDto } from './dto/permission.dto';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class PermissionsService {

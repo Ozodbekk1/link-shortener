@@ -11,7 +11,7 @@ import { QueryLinkDto } from './dto/query-link.dto';
 import { LinkStatus, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class LinksService {
