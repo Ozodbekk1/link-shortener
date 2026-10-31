@@ -1,10 +1,16 @@
 import type { NextConfig } from "next"
 import path from "node:path"
 
+const isVercel = Boolean(process.env.VERCEL)
+
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: path.resolve(import.meta.dirname, "../../"),
-  },
+  ...(isVercel
+    ? {}
+    : {
+        turbopack: {
+          root: path.resolve(process.cwd(), "../../"),
+        },
+      }),
   allowedDevOrigins: ["*.localtest.me", "localtest.me"],
   async rewrites() {
     const apiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_BASE_URL
