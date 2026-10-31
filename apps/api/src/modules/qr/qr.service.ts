@@ -1,9 +1,42 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
-import { JSDOM } from 'jsdom';
 import { PrismaService } from '../../database/prisma.service';
 import QRCodeStyling from 'qr-code-styling';
 import sharp from 'sharp';
 import { QrStyle } from './interfaces/qr-style.interface';
+
+/**
+ * Minimal JSDOM-compatible shim for qr-code-styling SVG mode.
+ * qr-code-styling calls: new options.jsdom("", opts).window
+ * and then uses window.XMLSerializer to serialize the SVG element.
+ * We provide just enough surface to satisfy that without importing jsdom
+ * (which pulls in html-encoding-sniffer → @exodus/bytes, an ESM-only pkg).
+ */
+class FakeXMLSerializer {
+  serializeToString(node: any): string {
+    // SVGElement from qr-code-styling carries an outerHTML
+    if (node && typeof node.outerHTML === 'string') return node.outerHTML;
+    if (node && typeof node.toString === 'function') return node.toString();
+    return '';
+  }
+}
+class FakeWindow {
+  XMLSerializer = FakeXMLSerializer;
+  // Image stub — only needed for canvas mode which we skip on Vercel
+  Image = class {
+    onload: (() => void) | null = null;
+    set src(_: string) {
+      if (this.onload) this.onload();
+    }
+  };
+  DOMParser = class {
+    parseFromString() { return { documentElement: null }; }
+  };
+}
+class FakeJSDom {
+  window = new FakeWindow();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(_html: string, _opts?: unknown) {}
+}
 
 let nodeCanvas: any = null;
 try {
@@ -56,7 +89,7 @@ export class QrService {
       data: text,
       margin,
       image: logoUrl,
-      jsdom: JSDOM,
+      jsdom: FakeJSDom,
       ...(useCanvas ? { nodeCanvas } : {}),
       qrOptions: { errorCorrectionLevel: 'H' },
       dotsOptions: {
