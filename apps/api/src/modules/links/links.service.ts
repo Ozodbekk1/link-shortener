@@ -9,7 +9,7 @@ import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
 import { QueryLinkDto } from './dto/query-link.dto';
 import { LinkStatus, Prisma } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { nanoid } from 'nanoid';
 import { PrismaService } from 'src/database/prisma.service';
 
