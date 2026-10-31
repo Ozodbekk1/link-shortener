@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as crypto from 'crypto';
 import * as bcrypt from 'bcryptjs';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../../../database/prisma.service';
 import { JwtService } from '../jwt/jwt.service';
-import { env } from 'src/config/env.config';
+import { env } from '../../../../config/env.config';
 
 export interface TelegramAuthPayload {
   hash: string;

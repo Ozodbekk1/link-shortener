@@ -9,7 +9,7 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 import { TeamService } from './teams.service';
 import { CreateTeamDto, GetTeamsDto } from './dto/teams.dto';
 import { AuthTokenPayload } from '../auth/strategies/jwt/jwt.types';

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TelegramController } from './telegram.controller';
 import { TelegramService } from './telegram.service';
-import { CookieService } from 'src/common/utils/cookie.util';
+import { CookieService } from '../../../../common/utils/cookie.util';
 
 describe('TelegramController', () => {
   let controller: TelegramController;

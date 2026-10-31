@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import type { User } from '@prisma/client';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../../../database/prisma.service';
 import {
   ForgotPasswordDto,
   LoginDto,
@@ -15,8 +15,8 @@ import {
   verifyEmailDto,
 } from '../../dto/auth.dto';
 import type { PublicUser } from './jwt.types';
-import { TokenService } from 'src/common/utils/jwt.util';
-import { EmailService } from 'src/common/utils/sendEmail.utils';
+import { TokenService } from '../../../../common/utils/jwt.util';
+import { EmailService } from '../../../../common/utils/sendEmail.utils';
 import * as bcrypt from 'bcryptjs';
 
 type SessionResult = {

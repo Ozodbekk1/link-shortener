@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto, UpdateRoleDto, AssignRoleDto } from './dto/roles.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('roles')

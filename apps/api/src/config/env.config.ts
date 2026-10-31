@@ -4,7 +4,7 @@ import { z } from 'zod';
 config();
 
 const schema = z.object({
-  NODE_ENV: z.enum(['development', 'production', 'test']),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
   PORT: z.coerce.number().default(8080),
   DATABASE_URL: z.url(),
   JWT_SECRET: z.string().min(32),
@@ -25,4 +25,14 @@ const schema = z.object({
   GOOGLE_CALLBACK_URL: z.url(),
 });
 
-export const env = schema.parse(process.env);
+const parsed = schema.safeParse(process.env);
+
+if (!parsed.success) {
+  console.error('❌ Environment configuration error:');
+  for (const issue of parsed.error.issues) {
+    console.error(` - ${issue.path.join('.')}: ${issue.message}`);
+  }
+  throw new Error('Missing or invalid environment variables. Please check your Vercel Project Settings > Environment Variables.');
+}
+
+export const env = parsed.data;

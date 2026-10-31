@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { PermissionsService } from './permissions.service';
 import { CreatePermissionDto, UpdatePermissionDto } from './dto/permission.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { PermissionsGuard } from 'src/common/guards/permissions.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
+import { PermissionsGuard } from '../../common/guards/permissions.guard';
 import {
   PermissionAction,
   PermissionResource,
-} from 'src/common/constants/permissions.constants';
-import { RequirePermission } from 'src/common/decorators/permissions.decorator';
+} from '../../common/constants/permissions.constants';
+import { RequirePermission } from '../../common/decorators/permissions.decorator';
 
 @Controller('permissions')
 @UseGuards(JwtAuthGuard, PermissionsGuard)

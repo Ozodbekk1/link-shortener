@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { TeamRole } from '@prisma/client';
 import { CreateTeamDto, GetTeamsDto } from './dto/teams.dto';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class TeamService {

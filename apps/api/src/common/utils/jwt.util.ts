@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
-import { env } from 'src/config/env.config';
+import { env } from '../../config/env.config';
 import type { User } from '@prisma/client';
 import {
   AuthTokenPayload,
   TokenKind,
-} from 'src/modules/auth/strategies/jwt/jwt.types';
+} from '../../modules/auth/strategies/jwt/jwt.types';
 
 @Injectable()
 export class TokenService {

@@ -2,10 +2,10 @@ import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import type { Request, Response } from 'express';
 
 import { GoogleAuthService } from './google.service';
-import { GoogleAuthGuard } from 'src/common/guards/google.guard';
-import { CookieService } from 'src/common/utils/cookie.util';
+import { GoogleAuthGuard } from '../../../../common/guards/google.guard';
+import { CookieService } from '../../../../common/utils/cookie.util';
 import { type GoogleOAuthUserData } from './google.service';
-import { env } from 'src/config/env.config';
+import { env } from '../../../../config/env.config';
 import { Throttle } from '@nestjs/throttler';
 
 interface GoogleAuthRequest extends Request {

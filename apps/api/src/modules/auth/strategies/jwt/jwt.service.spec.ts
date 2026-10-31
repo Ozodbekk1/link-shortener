@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from './jwt.service';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../../../database/prisma.service';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
-import { EmailService } from 'src/common/utils/sendEmail.utils';
-import { TokenService } from 'src/common/utils/jwt.util';
+import { EmailService } from '../../../../common/utils/sendEmail.utils';
+import { TokenService } from '../../../../common/utils/jwt.util';
 import {
   BadRequestException,
   NotFoundException,

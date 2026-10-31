@@ -10,7 +10,7 @@ import {
   PERMISSIONS_KEY,
   RequiredPermission,
 } from '../decorators/permissions.decorator';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {

@@ -15,7 +15,7 @@ import { QrService } from './qr.service';
 import { GenerateQrDto } from './dto/generate-qr.dto';
 import { UpdateQrDto } from './dto/update-qr.dto';
 import { QueryQrDto } from './dto/query-qr.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 
 @Controller(':workspaceId/qr')
 export class QrController {

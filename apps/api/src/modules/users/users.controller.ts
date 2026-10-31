@@ -7,12 +7,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
+import { JwtAuthGuard } from '../../common/guards/jwt.guard';
 import type { AuthTokenPayload } from '../auth/strategies/jwt/jwt.types';
-import { RolesGuard } from 'src/common/guards/role.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { Role } from 'src/common/constants/role.enums';
-import { User } from 'src/common/decorators/user.decorator';
+import { RolesGuard } from '../../common/guards/role.guard';
+import { Roles } from '../../common/decorators/role.decorator';
+import { Role } from '../../common/constants/role.enums';
+import { User } from '../../common/decorators/user.decorator';
 
 @Controller('users')
 export class UsersController {

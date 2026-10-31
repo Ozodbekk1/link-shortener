@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TelegramController } from './telegram.controller';
 import { TelegramService } from './telegram.service';
-import { DatabaseModule } from 'src/database/database.module';
+import { DatabaseModule } from '../../../../database/database.module';
 import { JwtStrategyModule } from '../jwt/jwt.module';
 
 @Module({

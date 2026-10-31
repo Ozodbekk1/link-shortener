@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { JSDOM } from 'jsdom';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../../database/prisma.service';
 import QRCodeStyling from 'qr-code-styling';
 import sharp from 'sharp';
 import { QrStyle } from './interfaces/qr-style.interface';

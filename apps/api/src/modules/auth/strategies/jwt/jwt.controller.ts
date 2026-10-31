@@ -19,12 +19,12 @@ import {
   verifyEmailDto,
 } from '../../dto/auth.dto';
 import { REFRESH_TOKEN_COOKIE, type AuthTokenPayload } from './jwt.types';
-import { CookieService } from 'src/common/utils/cookie.util';
+import { CookieService } from '../../../../common/utils/cookie.util';
 import { JwtService } from './jwt.service';
-import { JwtAuthGuard } from 'src/common/guards/jwt.guard';
-import { RolesGuard } from 'src/common/guards/role.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
-import { Role } from 'src/common/constants/role.enums';
+import { JwtAuthGuard } from '../../../../common/guards/jwt.guard';
+import { RolesGuard } from '../../../../common/guards/role.guard';
+import { Roles } from '../../../../common/decorators/role.decorator';
+import { Role } from '../../../../common/constants/role.enums';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Throttle({ default: { limit: 3, ttl: 60000 } })
